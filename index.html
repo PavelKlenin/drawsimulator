@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width , initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./style.css">
+  <title>Document</title>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1 class="title">Draw Simulator</h1>
+    </header>
+    <main class="main">
+      <p class="lg-errors errors">Здесь будут инструкции</p>
+      <div class="data-content">
+        <p class="list-errors sm-errors errors">Здесь будут инструкции</p>
+        <textarea
+          class="list"
+          placeholder="Список участников"></textarea>
+        <p class="arrList-errors sm-errors errors">Здесь будут инструкции</p>
+        <div class="playerDiv"></div>
+        <p class="condition-errors sm-errors errors">Здесь будут инструкции</p>
+        <div class="conditions">
+          <div class="teamCondition">
+            <span class="conditions_text">Количество команд:</span>
+            <input
+              class="teamsCount conditions_count"
+              type="text"
+              maxlength="2"
+              value="3">
+          </div>
+          <div class="playersCondition">
+            <span class="conditions_text">
+              Количество&nbsp;игроков&nbsp;в&nbsp;команде&nbsp;(max):
+            </span>
+            <input
+              class="maxPlayersCount conditions_count"
+              type="text"
+              maxlength="3"
+              value="5">
+          </div>
+          <button class="divideBtn">Start draw</button>
+        </div>
+      </div>
+      <div class="teams" id="teams"></div>
+      <!-- <button class="copyText">Copy text</button> -->
+    </main>
+    <footer class="footer">developed by Pavel Klenin</footer>
+  </div>
+  <script src="./main.js"></script>
+</body>
+</html>

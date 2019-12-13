@@ -1,0 +1,354 @@
+@font-face {
+  font-family: 'Champions';
+  src: url(./fonts/champions.ttf);
+}
+
+@font-face {
+  font-family: 'Champions-Bold';
+  src: url(./fonts/champions-bold.ttf);
+  font-weight: bold;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+html, body, .container {
+  height: 100%;
+}
+
+body {
+  font-family: 'Champions', Verdana, sans-serif;
+  color: #E9E9E9;
+  background: #00103f url("./img/champions-league.jpg") no-repeat fixed;
+  background-size: cover;
+}
+
+.container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.header {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+  padding: 2em;
+}
+
+.header .title {
+  font-family: 'Champions-Bold', sans-serif;
+  text-align: center;
+}
+
+.main {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 0 auto;
+          flex: 1 0 auto;
+  padding: 3em;
+}
+
+@media (max-width: 767px) {
+  .main {
+    padding: 2em;
+  }
+}
+
+@media (max-width: 424px) {
+  .main {
+    padding: 1em;
+  }
+}
+
+.main .errors {
+  opacity: 0;
+  line-height: 2;
+  font-size: 14px;
+  font-family: 'Courier New', Courier, monospace;
+  color: #E9E9E9;
+}
+
+.main .lg-errors {
+  display: block;
+  text-align: center;
+}
+
+@media (max-width: 1023px) {
+  .main .lg-errors {
+    display: none;
+  }
+}
+
+.main .lg-errors.listErrors {
+  opacity: 1;
+  text-align: left;
+}
+
+.main .lg-errors.arrListErrors {
+  opacity: 1;
+}
+
+.main .lg-errors.conditionErrors {
+  opacity: 1;
+  text-align: right;
+}
+
+.main .sm-errors {
+  display: none;
+  margin-bottom: 0.5em;
+  text-align: center;
+}
+
+@media (max-width: 1023px) {
+  .main .sm-errors {
+    display: block;
+  }
+}
+
+.main .sm-errors.listErrors, .main .sm-errors.arrListErrors, .main .sm-errors.conditionErrors {
+  opacity: 1;
+}
+
+.main .data-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-bottom: 3em;
+}
+
+@media (max-width: 1023px) {
+  .main .data-content {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+}
+
+.main .data-content .list, .main .data-content .playerDiv, .main .data-content .conditions {
+  width: 30%;
+}
+
+@media (max-width: 1023px) {
+  .main .data-content .list, .main .data-content .playerDiv, .main .data-content .conditions {
+    margin-bottom: 2em;
+    width: 60%;
+  }
+}
+
+@media (max-width: 767px) {
+  .main .data-content .list, .main .data-content .playerDiv, .main .data-content .conditions {
+    width: 100%;
+  }
+}
+
+.main .data-content .list {
+  padding: 0.5em;
+  min-height: 300px;
+  outline: none;
+  border-radius: 0.5em;
+  font-size: 16px;
+  resize: none;
+  overflow: auto;
+  line-height: 2;
+  color: #E9E9E9;
+  background-color: transparent;
+  -webkit-transition-duration: 0.6s;
+          transition-duration: 0.6s;
+}
+
+.main .data-content .list:focus {
+  border-color: #fff;
+}
+
+.main .data-content .player {
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  border-radius: 0.5em;
+  -webkit-transition-duration: 0.6s;
+          transition-duration: 0.6s;
+  background-color: rgba(0, 16, 63, 0.7);
+  cursor: pointer;
+}
+
+.main .data-content .player:hover {
+  background-color: #E9E9E9;
+  color: #00103f;
+}
+
+.main .data-content .player.leage4Player {
+  background-color: lightsalmon;
+}
+
+.main .data-content .player.subsPlayer {
+  background-color: #eee;
+  color: #00103f;
+}
+
+.main .data-content .player.subsPlayer:hover {
+  background-color: #eee;
+  color: #00103f;
+}
+
+.main .data-content .conditions {
+  font-size: 14px;
+}
+
+@media (max-width: 1023px) {
+  .main .data-content .conditions {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: distribute;
+        justify-content: space-around;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+  }
+}
+
+.main .data-content .playersCondition, .main .data-content .teamCondition {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+}
+
+@media (max-width: 1023px) {
+  .main .data-content .playersCondition, .main .data-content .teamCondition {
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+  }
+}
+
+.main .data-content .conditions_count {
+  max-width: 30px;
+  outline: none;
+  border: none;
+  font-size: 16px;
+  text-align: center;
+  font-weight: bold;
+  background-color: transparent;
+  color: #E9E9E9;
+}
+
+.main .data-content .divideBtn {
+  margin-top: 3em;
+  padding: 1em;
+  border-radius: 1em;
+  text-transform: uppercase;
+  outline: none;
+  border: none;
+  color: #E9E9E9;
+  background-color: #4EB1BA;
+  font-weight: bold;
+  -webkit-transition-duration: 0.6s;
+          transition-duration: 0.6s;
+  cursor: pointer;
+  width: 100%;
+}
+
+.main .data-content .divideBtn:hover {
+  background-color: #E9E9E9;
+  color: #00103f;
+}
+
+.main .data-content .divideBtn:active {
+  background-color: #eee;
+  color: #00103f;
+}
+
+.main .teams {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.main .teams .newTeam {
+  -ms-flex-preferred-size: 22%;
+      flex-basis: 22%;
+}
+
+@media (max-width: 1199px) {
+  .main .teams .newTeam {
+    -ms-flex-preferred-size: 30%;
+        flex-basis: 30%;
+  }
+}
+
+@media (max-width: 991px) {
+  .main .teams .newTeam {
+    -ms-flex-preferred-size: 40%;
+        flex-basis: 40%;
+  }
+}
+
+@media (max-width: 767px) {
+  .main .teams .newTeam {
+    -ms-flex-preferred-size: 60%;
+        flex-basis: 60%;
+  }
+}
+
+@media (max-width: 575px) {
+  .main .teams .newTeam {
+    -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+  }
+}
+
+.main .teams .teamName {
+  padding: 1em;
+  font-family: 'Champions-Bold', sans-serif;
+  text-transform: uppercase;
+}
+
+.main .teams .newPlayer {
+  white-space: nowrap;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  border-radius: 0.5em;
+  -webkit-transition-duration: 0.6s;
+          transition-duration: 0.6s;
+  background-color: rgba(0, 16, 63, 0.7);
+}
+
+.main .copyText {
+  display: none;
+}
+
+.main .copyText.showBtn {
+  display: block;
+}
+
+.footer {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+  padding: 2em;
+  font-size: 12px;
+}
+/*# sourceMappingURL=style.css.map */

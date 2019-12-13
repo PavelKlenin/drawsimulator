@@ -1,0 +1,301 @@
+@font-face {
+  font-family: 'Champions';
+  src: url(./fonts/champions.ttf);
+}
+
+@font-face {
+  font-family: 'Champions-Bold';
+  src: url(./fonts/champions-bold.ttf);
+  font-weight: bold;
+}
+
+//indents
+$indent-small: 1em;
+$indent-med: 2em;
+$indent-big: 3em;
+
+//colors
+$color-dark: #00103f;
+$color-mark: #4EB1BA;
+$color-light: #E9E9E9;
+$color-gray: #eee;
+$bgrd-dark: rgba(0, 16, 63, 0.7);
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html, body, .container {
+  height: 100%;
+}
+
+body {
+  font-family: 'Champions', Verdana, sans-serif;
+  color: $color-light;
+  background: $color-dark url('./img/champions-league.jpg') no-repeat fixed;
+  background-size: cover;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.header {
+  flex: 0 0 auto;
+  padding: $indent-med;
+
+  .title {
+    font-family: 'Champions-Bold', sans-serif;
+    text-align: center;
+  }
+}
+
+.main {
+  flex: 1 0 auto;
+  padding: $indent-big;
+
+  @media (max-width: 767px) {
+    padding: $indent-med;
+  }
+
+  @media (max-width: 424px) {
+    padding: $indent-small;
+  }
+
+  .errors {
+    opacity: 0;
+    line-height: 2;
+    font-size: 14px;
+    font-family: 'Courier New', Courier, monospace;
+    color: $color-light;
+  }
+
+  .lg-errors {
+    display: block;
+    text-align: center;
+  
+    @media (max-width: 1023px) {
+      display: none;
+    }
+  
+    &.listErrors {
+      opacity: 1;
+      text-align: left;
+    }
+  
+    &.arrListErrors {
+      opacity: 1;
+    }
+  
+    &.conditionErrors {
+      opacity: 1;
+      text-align: right;
+    }
+  }
+
+  .sm-errors {
+    display: none;
+    margin-bottom: $indent-small/2;
+    text-align: center;
+  
+    @media (max-width: 1023px) {
+      display: block;
+    }
+  
+    &.listErrors, &.arrListErrors, &.conditionErrors {
+      opacity: 1;
+    }
+  }
+
+  .data-content {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: $indent-big;
+  
+    @media (max-width: 1023px) {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .list, .playerDiv, .conditions {
+      width: 30%;
+      
+      @media (max-width: 1023px) {
+        margin-bottom: $indent-med;
+        width: 60%;
+      }
+  
+      @media (max-width: 767px) {
+        width: 100%;
+      }
+    }
+  
+    .list {
+      padding: $indent-small/2;
+      min-height: 300px;
+      outline: none;
+      border-radius: $indent-small/2;
+      font-size: 16px;
+      resize: none;
+      overflow: auto;
+      line-height: 2;
+      color: $color-light;
+      background-color: transparent;
+      transition-duration: 0.6s;
+  
+      &:focus {
+        border-color: #fff;
+      }
+    }
+  
+    .player {
+      padding: $indent-small/2;
+      margin-bottom: $indent-small/2;
+      border-radius: $indent-small/2;
+      transition-duration: 0.6s;
+      background-color: $bgrd-dark;
+      cursor: pointer;
+  
+      &:hover {
+        background-color: $color-light;
+        color: $color-dark;
+      }
+  
+      &.leage4Player {
+        background-color: lightsalmon;
+      }
+  
+      &.subsPlayer {
+        background-color: $color-gray;
+        color: $color-dark;
+  
+        &:hover {
+          background-color: $color-gray;
+          color: $color-dark;
+        }
+      }
+    }
+  
+    .conditions {
+      font-size: 14px;
+  
+      @media (max-width: 1023px) {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+    }
+
+    .playersCondition, .teamCondition {
+      display: flex;
+      width: 100%;
+      flex-wrap: nowrap;
+
+      @media (max-width: 1023px) {
+        justify-content: space-between;
+      }
+    }
+  
+    .conditions_count {
+      max-width: 30px;
+      outline: none;
+      border: none;
+      font-size: 16px;
+      text-align: center;
+      font-weight: bold;
+      background-color: transparent;
+      color: $color-light;
+    }
+  
+    
+    .divideBtn {
+      margin-top: $indent-big;
+      padding: $indent-small;
+      border-radius: $indent-small;
+      text-transform: uppercase;
+      outline: none;
+      border: none;
+      color: $color-light;
+      background-color: $color-mark;
+      font-weight: bold;
+      transition-duration: 0.6s;
+      cursor: pointer;
+      width: 100%;
+  
+      &:hover {
+        background-color: $color-light;
+        color: $color-dark;
+      }
+  
+      &:active {
+        background-color: $color-gray;
+        color: $color-dark;
+      }
+    }
+  }
+
+  .teams {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  
+    .newTeam {
+      flex-basis: 22%;
+
+      @media (max-width: 1199px) {
+        flex-basis: 30%;
+      }
+
+      @media (max-width: 991px) {
+        flex-basis: 40%;
+      }
+
+      @media (max-width: 767px) {
+        flex-basis: 60%;
+      }
+
+      @media (max-width: 575px) {
+        flex-basis: 100%;
+      }
+    }
+  
+    .teamName {
+      padding: $indent-small;
+      font-family: 'Champions-Bold', sans-serif;
+      text-transform: uppercase;
+    }
+  
+    .newPlayer {
+      white-space: nowrap;
+      padding: $indent-small/2;
+      margin-bottom: $indent-small/2;
+      border-radius: $indent-small/2;
+      transition-duration: 0.6s;
+      background-color: $bgrd-dark;
+    }
+  }
+
+  .copyText {
+    display: none;
+
+    &.showBtn {
+      display: block;
+    }
+  }
+}
+
+.footer {
+  flex: 0 0 auto;
+  padding: $indent-med;
+  font-size: 12px;
+}
+
+
+
+
+
