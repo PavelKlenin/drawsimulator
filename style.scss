@@ -18,7 +18,7 @@ $indent-big: 3em;
 $color-dark: #00103f;
 $color-mark: #4EB1BA;
 $color-light: #E9E9E9;
-$color-gray: #eee;
+$color-gray: #808080;
 $bgrd-dark: rgba(0, 16, 63, 0.7);
 
 * {
@@ -32,9 +32,11 @@ html, body, .container {
 }
 
 body {
+  margin: 0 auto;
+  max-width: 1600px;
   font-family: 'Champions', Verdana, sans-serif;
   color: $color-light;
-  background: $color-dark url('./img/champions-league.jpg') no-repeat fixed;
+  background: $color-dark url('./img/champions-league.jpg') no-repeat center fixed;
   background-size: cover;
 }
 
@@ -111,6 +113,30 @@ body {
     }
   }
 
+  .btn {
+    margin-top: $indent-big;
+    padding: $indent-small;
+    border-radius: $indent-small;
+    text-transform: uppercase;
+    outline: none;
+    border: none;
+    color: $color-light;
+    background-color: $color-mark;
+    font-weight: bold;
+    transition-duration: 0.6s;
+    cursor: pointer;
+    
+    &:hover {
+      background-color: $color-light;
+      color: $color-dark;
+    }
+
+    &:active {
+      background-color: $color-gray;
+      color: $color-dark;
+    }
+  }
+
   .data-content {
     display: flex;
     justify-content: space-between;
@@ -172,6 +198,7 @@ body {
       &.subsPlayer {
         background-color: $color-gray;
         color: $color-dark;
+        cursor: auto;
   
         &:hover {
           background-color: $color-gray;
@@ -212,30 +239,8 @@ body {
       color: $color-light;
     }
   
-    
     .divideBtn {
-      margin-top: $indent-big;
-      padding: $indent-small;
-      border-radius: $indent-small;
-      text-transform: uppercase;
-      outline: none;
-      border: none;
-      color: $color-light;
-      background-color: $color-mark;
-      font-weight: bold;
-      transition-duration: 0.6s;
-      cursor: pointer;
       width: 100%;
-  
-      &:hover {
-        background-color: $color-light;
-        color: $color-dark;
-      }
-  
-      &:active {
-        background-color: $color-gray;
-        color: $color-dark;
-      }
     }
   }
 
@@ -282,6 +287,8 @@ body {
 
   .copyText {
     display: none;
+    margin: 2em auto;
+
 
     &.showBtn {
       display: block;
@@ -293,6 +300,12 @@ body {
   flex: 0 0 auto;
   padding: $indent-med;
   font-size: 12px;
+}
+
+.buffer {
+  width: 0;
+  height: 0;
+  opacity: 0;
 }
 
 

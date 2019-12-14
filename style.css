@@ -21,9 +21,11 @@ html, body, .container {
 }
 
 body {
+  margin: 0 auto;
+  max-width: 1600px;
   font-family: 'Champions', Verdana, sans-serif;
   color: #E9E9E9;
-  background: #00103f url("./img/champions-league.jpg") no-repeat fixed;
+  background: #00103f url("./img/champions-league.jpg") no-repeat center fixed;
   background-size: cover;
 }
 
@@ -117,6 +119,31 @@ body {
   opacity: 1;
 }
 
+.main .btn {
+  margin-top: 3em;
+  padding: 1em;
+  border-radius: 1em;
+  text-transform: uppercase;
+  outline: none;
+  border: none;
+  color: #E9E9E9;
+  background-color: #4EB1BA;
+  font-weight: bold;
+  -webkit-transition-duration: 0.6s;
+          transition-duration: 0.6s;
+  cursor: pointer;
+}
+
+.main .btn:hover {
+  background-color: #E9E9E9;
+  color: #00103f;
+}
+
+.main .btn:active {
+  background-color: #808080;
+  color: #00103f;
+}
+
 .main .data-content {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -195,12 +222,13 @@ body {
 }
 
 .main .data-content .player.subsPlayer {
-  background-color: #eee;
+  background-color: #808080;
   color: #00103f;
+  cursor: auto;
 }
 
 .main .data-content .player.subsPlayer:hover {
-  background-color: #eee;
+  background-color: #808080;
   color: #00103f;
 }
 
@@ -252,29 +280,7 @@ body {
 }
 
 .main .data-content .divideBtn {
-  margin-top: 3em;
-  padding: 1em;
-  border-radius: 1em;
-  text-transform: uppercase;
-  outline: none;
-  border: none;
-  color: #E9E9E9;
-  background-color: #4EB1BA;
-  font-weight: bold;
-  -webkit-transition-duration: 0.6s;
-          transition-duration: 0.6s;
-  cursor: pointer;
   width: 100%;
-}
-
-.main .data-content .divideBtn:hover {
-  background-color: #E9E9E9;
-  color: #00103f;
-}
-
-.main .data-content .divideBtn:active {
-  background-color: #eee;
-  color: #00103f;
 }
 
 .main .teams {
@@ -338,6 +344,7 @@ body {
 
 .main .copyText {
   display: none;
+  margin: 2em auto;
 }
 
 .main .copyText.showBtn {
@@ -350,5 +357,11 @@ body {
           flex: 0 0 auto;
   padding: 2em;
   font-size: 12px;
+}
+
+.buffer {
+  width: 0;
+  height: 0;
+  opacity: 0;
 }
 /*# sourceMappingURL=style.css.map */
