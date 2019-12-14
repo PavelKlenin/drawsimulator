@@ -1,7 +1,6 @@
-//TODO добавить кнопку "копировать" для списка команд
-//TODO значок загрузки перед делением
+//TODO добавить кнопку "копировать" для списка команд или значок загрузки перед делением
 //TODO плавное появление игроков
-
+//TODO проверка на одинаковых игроков
 
 
 const charList = document.querySelector('textarea');
@@ -193,7 +192,7 @@ const drawNewTeams = (newTeamsList, teamsDiv) => {
         newTeam.append(nextPlayer)
       })
     })
-    // copyBtn.classList.add('showBtn')
+    copyBtn.classList.add('showBtn')
     if (subs.length) {
       let newTeam = document.createElement('div')
       newTeam.className = 'newTeam'
@@ -279,10 +278,10 @@ document.addEventListener('DOMContentLoaded', () => {
     btnInit(playerList ,teamsCount, playersCount, playersDomList)
   })
 
-  // copyBtn.addEventListener('click', (e) => {
-  //   e.preventDefault()
-  //   copyText(teams)
-  // })
+  copyBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+    copyForWhatsapp(teams) //* copyText.js
+  })
 
 })
 
