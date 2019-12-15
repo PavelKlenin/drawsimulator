@@ -1,7 +1,4 @@
-//TODO добавить кнопку "копировать" для списка команд или значок загрузки перед делением
 //TODO плавное появление игроков
-//TODO проверка на одинаковых игроков
-
 
 const charList = document.querySelector('textarea');
 const playerDiv = document.querySelector('.playerDiv');
@@ -16,13 +13,20 @@ const listErrors = document.querySelector('.list-errors')
 const arrListErrors = document.querySelector('.arrList-errors')
 const conditionErrors = document.querySelector('.condition-errors')
 
-const resetErrors = (errors) => {
+
+//! ОБРАБОТКА ОШИБОК !//
+
+const resetErrors = (errors, DOMList = []) => {
   errors.forEach(error => {
     error.classList.remove('listErrors')
     error.classList.remove('arrListErrors')
     error.classList.remove('conditionErrors')
   })
+  DOMList.forEach(item => {
+    item.classList.remove('repeated')
+  })
 }
+
 
 const errorText = (errors, text) => {
   errors.forEach(error => {
@@ -30,7 +34,7 @@ const errorText = (errors, text) => {
   })
 }
 
-const localError = (errors, mainErrors, errorName) => {
+const localError = (errors, mainErrors, errorName, DOMList = []) => {
   let addingClass
   switch (errorName) {
     case listErrors:
@@ -43,7 +47,7 @@ const localError = (errors, mainErrors, errorName) => {
       addingClass = 'conditionErrors'
       break;
   }
-  resetErrors(errors)
+  resetErrors(errors, DOMList)
   mainErrors.classList.add(`${addingClass}`)
   errorName.classList.add(`${addingClass}`)
   const display = window.getComputedStyle(errorName).display
@@ -52,7 +56,26 @@ const localError = (errors, mainErrors, errorName) => {
     errorName.scrollIntoView({block: 'start', behavior: 'smooth'})
 }
 
-const checkErrors = (arrList, numTeams, numPlayers) => {
+const checkRepeatedPlayer = (DOMList) => {
+  DOMList.forEach((item, index) => {
+    for (let i = index + 1; i < DOMList.length; i++) {
+      if (!item.innerHTML.localeCompare(DOMList[i].innerHTML, { sensitivity: 'base' })) {
+        !item.classList.contains('repeated') ? item.classList.add('repeated') : null
+        !DOMList[i].classList.contains('repeated') ? DOMList[i].classList.add('repeated') : null
+      }
+    }
+  })
+
+  for (let i = 0; i < DOMList.length; i++) {
+    if (DOMList[i].classList.contains('repeated')) {
+      return false
+    }
+  }
+
+  return true
+}
+
+const checkErrors = (arrList, numTeams, numPlayers, DOMList = []) => {
   if (numTeams <= 0 || !parseInt(numTeams)) {
     errorText(errors, 'Введите количество команд')
     localError(errors, mainErrors, conditionErrors)
@@ -69,8 +92,14 @@ const checkErrors = (arrList, numTeams, numPlayers) => {
     errorText(errors, 'Недостаточно игроков')
     localError(errors, mainErrors, listErrors)
     return false
-  } else return true  
+  } else if (!checkRepeatedPlayer(DOMList)) {
+    errorText(errors, 'Повторяющиеся игроки')
+    localError(errors, mainErrors, arrListErrors)
+    return false
+  } return true  
 }
+
+//! ПРОВЕРКА НА ПУСТЫЕ СТРОКИ ВВОДА !//
 
 const emptyLineCheck = (array) => {
   for (let i = (array.length - 1); i >= 0; i--) {
@@ -80,10 +109,15 @@ const emptyLineCheck = (array) => {
   }
 }
 
+//! КОНВЕРТАЦИЯ ВВЕДЕННЫХ ДАННЫХ В DOM !//
+
 const charToArr = (charList) => {
   if (charList) {
     let arrList = charList.split('\n');
     emptyLineCheck(arrList)
+    arrList = arrList.map(item => {
+      return item = item[0].toUpperCase() + item.slice(1)
+    })
     return arrList;
   } else return;
 }
@@ -108,6 +142,8 @@ const drawListDom = (arrList, div, numPlayers, numTeams) => {
   }
 }
 
+//! ПРОВЕРКА НА ЛИШНИХ УЧАСТНИКОВ !//
+
 const checkSubstitutions = (list, domList, numPlayers, numTeams) => {
   const subs = list.length - numPlayers * numTeams;
   if (subs > 0) {
@@ -118,6 +154,8 @@ const checkSubstitutions = (list, domList, numPlayers, numTeams) => {
     emptyLineCheck(list)
   }
 }
+
+//! ДОБАВЛЕНИЕ СЕЯНЫХ/НЕСЕЯНЫХ УЧАСТНИКОВ !//
 
 const signBasket4 = (elem) => {
   if (elem.classList.contains('player') 
@@ -140,6 +178,8 @@ const addToBasket4 = (list, domList) => {
   return newList;
 }
 
+//! ПЕРЕМЕШИВАНИЕ СПИСКА !//
+
 const shuffle = (list) => {
   if (list) {
     let j, temp;
@@ -156,6 +196,9 @@ const shuffle = (list) => {
   }
 }
 
+//! ДЕЛЕНИЕ НА ГРУППЫ !//
+
+
 const divideTeams = (mainList, numTeams, basket4 = []) => {
   const teams = []
   mainList = [...mainList, ...basket4];
@@ -168,6 +211,8 @@ const divideTeams = (mainList, numTeams, basket4 = []) => {
   })
   return teams;
 }
+
+//! ОТОБРАЖЕНИЕ ГРУПП !//
 
 const slowView = (teams) => {
 
@@ -211,20 +256,12 @@ const drawNewTeams = (newTeamsList, teamsDiv) => {
   }
 }
 
-const copyText = (divWithText) => {
-  var range = document.createRange();
-  range.selectNode(divWithText); 
-  window.getSelection().addRange(range); 
-  document.execCommand('copy'); 
-  window.getSelection().removeAllRanges();
-}
-
-
+//! НАЖАТИЕ НА КНОПКУ !//
 
 const btnInit = (mainList, teamsInput, playersInput, domList) => {
   const numTeams = teamsInput.value;
   const numPlayers = playersInput.value;
-  if (!checkErrors(mainList, numTeams, numPlayers)) {
+  if (!checkErrors(mainList, numTeams, numPlayers, domList)) {
     return
   } else {
     let basketOneList = [...mainList]
@@ -243,10 +280,11 @@ document.addEventListener('DOMContentLoaded', () => {
   let playersDomList = [];
   let playerList =[];
 
+  //* Работа с полем ввода. Подсказки и отрисовка DOM *//
   charList.addEventListener('focus', e => {
     e.preventDefault()
     errorText(errors, 'Введите список участников.\nКаждый участник с новой строки')
-    localError(errors, mainErrors, listErrors)
+    localError(errors, mainErrors, listErrors, playersDomList)
   })
   charList.addEventListener('input', (e) => {
     e.preventDefault()
@@ -254,13 +292,13 @@ document.addEventListener('DOMContentLoaded', () => {
     playersDomList = drawListDom(playerList, playerDiv, playersCount.value, teamsCount.value)
   })
 
+  //* Отрисовка DOM в зависимости от количества участников/групп *//
   playersCount.addEventListener('input', e => {
     if (playersCount.value) {
       playerList =  charToArr(charList.value)
       playersDomList = drawListDom(playerList, playerDiv, playersCount.value, teamsCount.value)
     }
   })
-
   teamsCount.addEventListener('input', e => {
     if (teamsCount.value) {
       playerList =  charToArr(charList.value)
@@ -268,16 +306,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
+  //* Добавление/удаление сеяных/несеяных участников *//
   playerDiv.addEventListener('click', (e) => {
     e.preventDefault()
     signBasket4(e.target)
   })
 
+  //* Работа с кнопкой деления *//
   button.addEventListener('click', (e) => {
     e.preventDefault()
     btnInit(playerList ,teamsCount, playersCount, playersDomList)
   })
 
+  //* Работа с кнопкой копирования групп *//
   copyBtn.addEventListener('click', (e) => {
     e.preventDefault()
     copyForWhatsapp(teams) //* copyText.js
