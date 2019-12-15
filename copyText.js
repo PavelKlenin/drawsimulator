@@ -22,13 +22,31 @@ const copyForWhatsapp = (divForCopy) => {
     })
   })
 
-  clonedText.innerHTML = clonedText.innerHTML.slice(1)
+  if (clonedText.innerHTML[0] == '\n') {
+    clonedText.innerHTML = clonedText.innerHTML.slice(1)
+  }
   
   let focus = document.activeElement
   clonedText.focus() //* Устанавливаем фокус на текст
   clonedText.select()
-  document.execCommand('copy');
+  try {
+    document.execCommand('copy');
+  } catch (error) {
+    console.log("TCL: copyForWhatsapp -> error", error)
+    return false
+  }
   document.getSelection().removeAllRanges()
   clonedText.remove()
   focus.focus() //* Возвращаем фокус
+  return true
+}
+
+const copied = (button) => {
+  const buttonText = button.innerHTML
+  button.classList.add('pressed')
+  button.innerHTML = 'Скопировано'
+  setTimeout(() => {
+    button.classList.remove('pressed')
+    button.innerHTML = buttonText
+  }, 4000)
 }
