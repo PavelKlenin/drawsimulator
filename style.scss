@@ -184,6 +184,7 @@ body {
       border-radius: $indent-small/2;
       transition-duration: 0.6s;
       background-color: $bgrd-dark;
+      border: 1px solid transparent;
       cursor: pointer;
   
       &:hover {
@@ -205,6 +206,10 @@ body {
           color: $color-dark;
         }
       }
+
+      &.repeated {
+        border-color: red;
+      }
     }
   
     .conditions {
@@ -220,6 +225,8 @@ body {
 
     .playersCondition, .teamCondition {
       display: flex;
+      margin-bottom: 5px;
+      align-items: center;
       width: 100%;
       flex-wrap: nowrap;
 
@@ -229,14 +236,22 @@ body {
     }
   
     .conditions_count {
-      max-width: 30px;
+      margin-left: 5px;
+      padding: 1px;
+      max-width: 40px;
       outline: none;
-      border: none;
+      border: 1px solid #a9a9a9;
+      border-radius: 5px;
       font-size: 16px;
       text-align: center;
       font-weight: bold;
       background-color: transparent;
-      color: $color-light;
+      color: $color-mark;
+      transition: 0.6s;
+
+      &:focus {
+        border-color: #fff;
+      }
     }
   
     .divideBtn {
