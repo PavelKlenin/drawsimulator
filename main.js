@@ -321,7 +321,8 @@ document.addEventListener('DOMContentLoaded', () => {
   //* Работа с кнопкой копирования групп *//
   copyBtn.addEventListener('click', (e) => {
     e.preventDefault()
-    copyForWhatsapp(teams) //* copyText.js
+    copyForWhatsapp(teams) ? copied(copyBtn) : null //* copyText.js
+    
   })
 
 })

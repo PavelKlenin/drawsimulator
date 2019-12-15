@@ -369,6 +369,12 @@ body {
   display: block;
 }
 
+.main .copyText.pressed {
+  background-color: #808080;
+  color: #00103f;
+  cursor: auto;
+}
+
 .footer {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;

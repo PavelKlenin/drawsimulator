@@ -308,6 +308,12 @@ body {
     &.showBtn {
       display: block;
     }
+
+    &.pressed {
+      background-color: $color-gray;
+      color: $color-dark;
+      cursor: auto;
+    }
   }
 }
 
