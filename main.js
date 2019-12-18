@@ -116,7 +116,7 @@ const charToArr = (charList) => {
     let arrList = charList.split('\n');
     emptyLineCheck(arrList)
     arrList = arrList.map(item => {
-      return item = item[0].toUpperCase() + item.slice(1)
+      return item.replace(/\s+/g, ' ').trim()
     })
     return arrList;
   } else return;
