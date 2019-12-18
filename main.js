@@ -59,7 +59,7 @@ const localError = (errors, mainErrors, errorName, DOMList = []) => {
 const checkRepeatedPlayer = (DOMList) => {
   DOMList.forEach((item, index) => {
     for (let i = index + 1; i < DOMList.length; i++) {
-      if (!item.innerHTML.localeCompare(DOMList[i].innerHTML, { sensitivity: 'base' })) {
+      if (item.innerHTML.toUpperCase() === DOMList[i].innerHTML.toUpperCase()) {
         !item.classList.contains('repeated') ? item.classList.add('repeated') : null
         !DOMList[i].classList.contains('repeated') ? DOMList[i].classList.add('repeated') : null
       }
@@ -116,7 +116,10 @@ const charToArr = (charList) => {
     let arrList = charList.split('\n');
     emptyLineCheck(arrList)
     arrList = arrList.map(item => {
-      return item.replace(/\s+/g, ' ').trim()
+      //* убираем лишние пробелы
+      item = item.replace(/\s+/g, ' ').trim()
+      //* каждая буква после пробела, кавычек - заглавная
+      return item.replace(/(?:^|\s)\S/g, char => char.toUpperCase()) 
     })
     return arrList;
   } else return;
