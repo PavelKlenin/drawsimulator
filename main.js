@@ -291,6 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
   })
   charList.addEventListener('input', (e) => {
     e.preventDefault()
+    textAreaResize(charList)
     playerList =  charToArr(charList.value)
     playersDomList = drawListDom(playerList, playerDiv, playersCount.value, teamsCount.value)
   })
@@ -327,6 +328,5 @@ document.addEventListener('DOMContentLoaded', () => {
     copyForWhatsapp(teams) ? copied(copyBtn) : null //* copyText.js
     
   })
-
-})
+})          
 
