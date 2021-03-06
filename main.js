@@ -1,6 +1,7 @@
 const charList = document.querySelector('textarea');
 const playerDiv = document.querySelector('.playerDiv');
 const playersCount = document.querySelector('.maxPlayersCount');
+const minPlayersCount = document.querySelector('.maxPlayersCount');
 const teamsCount = document.querySelector('.teamsCount');
 const button = document.querySelector('.divideBtn');
 const copyBtn = document.querySelector('.copyText');
@@ -58,8 +59,8 @@ const checkRepeatedPlayer = (DOMList) => {
   DOMList.forEach((item, index) => {
     for (let i = index + 1; i < DOMList.length; i++) {
       if (item.innerHTML.toUpperCase() === DOMList[i].innerHTML.toUpperCase()) {
-        !item.classList.contains('repeated') ? item.classList.add('repeated') : null
-        !DOMList[i].classList.contains('repeated') ? DOMList[i].classList.add('repeated') : null
+        !item.classList.contains('repeated') ? item.classList.add('repeated') : null;
+        !DOMList[i].classList.contains('repeated') ? DOMList[i].classList.add('repeated') : null;
       }
     }
   })
@@ -88,6 +89,10 @@ const checkErrors = (arrList, numTeams, numPlayers, DOMList = []) => {
     return false
   } else if (numTeams > arrList.length) {
     errorText(errors, 'Недостаточно игроков')
+    localError(errors, mainErrors, listErrors)
+    return false
+  } else if ((numTeams * numPlayers) > arrList.length) { // Для деления без рандома
+    errorText(errors, `Необходимо ${numTeams * numPlayers} игроков`)
     localError(errors, mainErrors, listErrors)
     return false
   } else if (!checkRepeatedPlayer(DOMList)) {
@@ -213,13 +218,13 @@ const divideTeams = (mainList, numTeams, basket4 = []) => {
   return teams;
 }
 
-const divideInOrder = (mainList, numTeams, maxPlayersCount) => {
+const divideInOrder = (mainList, numTeams, minPlayersCount) => {
   const teams = [];
   const list = mainList;
   for (let i = 0; i < numTeams; i++) {
     teams[i] = [];
     list.forEach((player, index) => {
-      if (teams[i].length < maxPlayersCount) {
+      if (teams[i].length < minPlayersCount) {
         teams[i] = [...teams[i], player];
         delete list[index];
       }
@@ -283,7 +288,6 @@ const btnInit = (mainList, teamsInput, playersInput, domList) => {
     //basketFourList = shuffle(basketFourList)
     //const newTeams = divideTeams(basketOneList, numTeams, basketFourList);
     const newTeams = divideInOrder(basketOneList, numTeams, numPlayers);
-    console.log("🚀 ~ file: main.js ~ line 284 ~ btnInit ~ newTeams", newTeams)
     drawNewTeams(newTeams, teams)
     teams.scrollIntoView({block: "start", behavior: "smooth"})
   }
