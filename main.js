@@ -1,5 +1,3 @@
-//TODO плавное появление игроков
-
 const charList = document.querySelector('textarea');
 const playerDiv = document.querySelector('.playerDiv');
 const playersCount = document.querySelector('.maxPlayersCount');
@@ -215,11 +213,22 @@ const divideTeams = (mainList, numTeams, basket4 = []) => {
   return teams;
 }
 
-//! ОТОБРАЖЕНИЕ ГРУПП !//
-
-const slowView = (teams) => {
-
+const divideInOrder = (mainList, numTeams, maxPlayersCount) => {
+  const teams = [];
+  const list = mainList;
+  for (let i = 0; i < numTeams; i++) {
+    teams[i] = [];
+    list.forEach((player, index) => {
+      if (teams[i].length < maxPlayersCount) {
+        teams[i] = [...teams[i], player];
+        delete list[index];
+      }
+    })
+  }
+  return teams;
 }
+
+//! ОТОБРАЖЕНИЕ ГРУПП !//
 
 const drawNewTeams = (newTeamsList, teamsDiv) => {
   const subs = document.querySelectorAll('.subsPlayer')
@@ -240,7 +249,7 @@ const drawNewTeams = (newTeamsList, teamsDiv) => {
         newTeam.append(nextPlayer)
       })
     })
-    copyBtn.classList.add('showBtn')
+    //copyBtn.classList.add('showBtn') // Кнопка копирования составов
     if (subs.length) {
       let newTeam = document.createElement('div')
       newTeam.className = 'newTeam'
@@ -269,9 +278,12 @@ const btnInit = (mainList, teamsInput, playersInput, domList) => {
   } else {
     let basketOneList = [...mainList]
     let basketFourList = addToBasket4(basketOneList, domList)
-    basketOneList = shuffle(basketOneList)
-    basketFourList = shuffle(basketFourList)
-    const newTeams = divideTeams(basketOneList, numTeams, basketFourList);
+    //! вернуть рандом по условию
+    //basketOneList = shuffle(basketOneList)
+    //basketFourList = shuffle(basketFourList)
+    //const newTeams = divideTeams(basketOneList, numTeams, basketFourList);
+    const newTeams = divideInOrder(basketOneList, numTeams, numPlayers);
+    console.log("🚀 ~ file: main.js ~ line 284 ~ btnInit ~ newTeams", newTeams)
     drawNewTeams(newTeams, teams)
     teams.scrollIntoView({block: "start", behavior: "smooth"})
   }
