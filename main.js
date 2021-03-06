@@ -218,7 +218,7 @@ const divideTeams = (mainList, numTeams, basket4 = []) => {
   return teams;
 }
 
-const divideInOrder = (mainList, numTeams, minPlayersCount) => {
+const determDivide = (mainList, numTeams, minPlayersCount) => {
   const teams = [];
   const list = mainList;
   for (let i = 0; i < numTeams; i++) {
@@ -287,7 +287,7 @@ const btnInit = (mainList, teamsInput, playersInput, domList) => {
     //basketOneList = shuffle(basketOneList)
     //basketFourList = shuffle(basketFourList)
     //const newTeams = divideTeams(basketOneList, numTeams, basketFourList);
-    const newTeams = divideInOrder(basketOneList, numTeams, numPlayers);
+    const newTeams = determDivide(basketOneList, numTeams, numPlayers);
     drawNewTeams(newTeams, teams)
     teams.scrollIntoView({block: "start", behavior: "smooth"})
   }
