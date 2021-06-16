@@ -1,0 +1,149 @@
+@import "../../../style/variables.scss";
+
+.data-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-bottom: $indent-big;
+
+  @media (max-width: 1023px) {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+  
+  .list, .playerDiv, .conditions {
+    width: 30%;
+    
+    @media (max-width: 1023px) {
+      margin-bottom: $indent-med;
+      width: 60%;
+    }
+
+    @media (max-width: 767px) {
+      width: 100%;
+    }
+  }
+
+  .list {
+    padding: $indent-small/2;
+    min-height: 300px;
+    outline: none;
+    border-radius: $indent-small/2;
+    font-size: 16px;
+    resize: none;
+    overflow: auto;
+    line-height: 2;
+    color: $color-light;
+    background-color: transparent;
+    -webkit-transition-duration: 0.6s;
+            transition-duration: 0.6s;
+
+    &:focus {
+      border-color: #fff;
+    }
+  }
+
+  .player {
+    padding: $indent-small/2;
+    margin-bottom: $indent-small/2;
+    text-transform: capitalize;
+    border-radius: $indent-small/2;
+    -webkit-transition-duration: 0.6s;
+            transition-duration: 0.6s;
+    background-color: $bgrd-dark;
+    border: 1px solid transparent;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $color-light;
+      color: $color-dark;
+    }
+
+    &.leage4Player {
+      background-color: lightsalmon;
+    }
+
+    &.subsPlayer {
+      background-color: $color-gray;
+      color: $color-dark;
+      cursor: auto;
+
+      &:hover {
+        background-color: $color-gray;
+        color: $color-dark;
+      }
+    }
+
+    &.repeated {
+      border-color: red;
+    }
+  }
+
+  .conditions {
+    font-size: 14px;
+
+    @media (max-width: 1023px) {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
+      -webkit-box-align: start;
+          -ms-flex-align: start;
+              align-items: flex-start;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+    }
+  }
+
+  .playersCondition, .teamCondition {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-bottom: 5px;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    width: 100%;
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+
+    @media (max-width: 1023px) {
+      -webkit-box-pack: justify;
+          -ms-flex-pack: justify;
+              justify-content: space-between;
+    }
+  }
+
+  .conditions_count {
+    margin-left: 5px;
+    padding: 1px;
+    max-width: 40px;
+    outline: none;
+    border: 1px solid #a9a9a9;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+    background-color: transparent;
+    color: $color-mark;
+    -webkit-transition: 0.6s;
+    transition: 0.6s;
+
+    &:focus {
+      border-color: #fff;
+    }
+  }
+
+  .divideBtn {
+    width: 100%;
+  }
+}

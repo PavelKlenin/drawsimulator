@@ -1,0 +1,86 @@
+@import "../../style/variables.scss";
+
+.main {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 0 auto;
+          flex: 1 0 auto;
+  padding: $indent-big;
+
+  @media (max-width: 767px) {
+    padding: $indent-med;
+  }
+
+  @media (max-width: 424px) {
+    padding: $indent-small;
+  }
+
+  .errors {
+    opacity: 0;
+    line-height: 2;
+    font-size: 14px;
+    font-family: 'Courier New', Courier, monospace;
+    color: $color-light;
+  }
+
+  .lg-errors {
+    display: block;
+    text-align: center;
+  
+    @media (max-width: 1023px) {
+      display: none;
+    }
+  
+    &.listErrors {
+      opacity: 1;
+      text-align: left;
+    }
+  
+    &.arrListErrors {
+      opacity: 1;
+    }
+  
+    &.conditionErrors {
+      opacity: 1;
+      text-align: right;
+    }
+  }
+
+  .sm-errors {
+    display: none;
+    margin-bottom: $indent-small/2;
+    text-align: center;
+  
+    @media (max-width: 1023px) {
+      display: block;
+    }
+  
+    &.listErrors, &.arrListErrors, &.conditionErrors {
+      opacity: 1;
+    }
+  }
+
+  .btn {
+    margin-top: $indent-big;
+    padding: $indent-small;
+    border-radius: $indent-small;
+    text-transform: uppercase;
+    outline: none;
+    border: none;
+    color: $color-light;
+    background-color: $color-mark;
+    font-weight: bold;
+    -webkit-transition-duration: 0.6s;
+            transition-duration: 0.6s;
+    cursor: pointer;
+    
+    &:hover {
+      background-color: $color-light;
+      color: $color-dark;
+    }
+
+    &:active {
+      background-color: $color-gray;
+      color: $color-dark;
+    }
+  }
+}
