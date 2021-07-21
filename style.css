@@ -362,7 +362,11 @@ body {
   padding: 0.5em;
   margin-bottom: 0.5em;
   border-radius: 0.5em;
+<<<<<<< Updated upstream
   font-family: "Champions-Bold", sans-serif;
+=======
+  font-family: 'Champions-Bold', sans-serif;
+>>>>>>> Stashed changes
   text-transform: uppercase;
 }
 
