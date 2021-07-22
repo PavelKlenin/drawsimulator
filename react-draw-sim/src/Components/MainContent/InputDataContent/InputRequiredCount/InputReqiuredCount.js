@@ -3,10 +3,10 @@ import "../InputData.css";
 
 const InputReqiuredCount = (props) => {
   const onChangeValue = (e) => {
-    props.dispatch(props.changeCountCreator(e.target.value));
+    props.changeCountCreator(e.target.value);
   };
   const onBlurValue = (e) => {
-    props.dispatch(props.blurCountCreator(e.target.value));
+    props.blurCountCreator(e.target.value);
   }
   return (
     <div className={props.className}>

@@ -3,7 +3,7 @@ import s from "./App.module.css";
 import "./Components/MainContent/MainContent.css";
 import Footer from "./Components/Footer/Footer";
 import Header from "./Components/Header/Header";
-import InputDataContent from "./Components/MainContent/InputDataContent/InputDataContent";
+import InputDataContentContainer from "./Components/MainContent/InputDataContent/InputDataContentContainer";
 import Teams from "./Components/MainContent/Teams/Teams";
 // import MainContent from "./Components/MainContent/MainContent";
 
@@ -13,12 +13,7 @@ function App(props) {
       <Header />
       <main className="main">
         <p className="lg-errors errors">Здесь будут инструкции</p>
-        <InputDataContent
-          playerList={props.state.playerList}
-          teamsCount={props.state.teamsCount}
-          playersCount={props.state.playersCount}
-          dispatch={props.dispatch}
-        />
+        <InputDataContentContainer />
         <Teams />
       </main>
       <Footer />

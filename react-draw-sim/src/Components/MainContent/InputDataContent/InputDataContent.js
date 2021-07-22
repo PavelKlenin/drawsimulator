@@ -1,15 +1,12 @@
 import { React } from "react";
-import { inputTextCreator, playersBlurCreator, playersCountCreator, teamBlurCreator } from "../../../store/store";
 import "./InputData.css";
 import InputReqiuredCount from "./InputRequiredCount/InputReqiuredCount";
 import PlayerList from "./PlayerList/PlayerList";
-import { teamCountCreator } from "./../../../store/store";
 
 const InputDataContent = (props) => {
   const onInputChange = (e) => {
-    props.dispatch(inputTextCreator(e.target.value));
+    props.inputTextCreator(e.target.value);
   };
-
   return (
     <div className="data-content">
       <p className="list-errors sm-errors errors">Здесь будут инструкции</p>
@@ -27,8 +24,8 @@ const InputDataContent = (props) => {
           className="teamCondition"
           title="Количество команд:"
           inputClassName="teamsCount"
-          changeCountCreator={teamCountCreator}
-          blurCountCreator={teamBlurCreator}
+          changeCountCreator={props.teamCountCreator}
+          blurCountCreator={props.teamBlurCreator}
           maxLength="2"
           value={props.teamsCount}
           dispatch={props.dispatch}
@@ -37,8 +34,8 @@ const InputDataContent = (props) => {
           className="playersCondition"
           title="Количество&nbsp;игроков&nbsp;в&nbsp;команде&nbsp;(max):"
           inputClassName="maxPlayersCount"
-          changeCountCreator={playersCountCreator}
-          blurCountCreator={playersBlurCreator}
+          changeCountCreator={props.playersCountCreator}
+          blurCountCreator={props.playersBlurCreator}
           maxLength="3"
           value={props.playersCount}
           dispatch={props.dispatch}
