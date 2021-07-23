@@ -8,68 +8,79 @@ const initialState = {
   playerList: [],
   teamsCount: 3,
   playersCount: 5,
+  maxPlayers() {
+    return this.teamsCount * this.playersCount;
+  },
   teams: [],
 };
 
 const generalReducer = (state = initialState, action) => {
-  //!
-  let playerList = [];
-  let maxPlayers = calcMaxPlayers(state.teamsCount, state.playersCount);
-
   switch (action.type) {
     case ON_INPUT_TEXT:
       const arrPlayerList = charToArr(action.value);
       if (arrPlayerList) {
-        playerList = arrPlayerList.map((player, id) => {
-          return {
-            id: id + 1,
-            name: player,
-            subs: checkSubsPlayer((id = id + 1), maxPlayers),
-          };
-        });
-      }
-      return {...state, playerList}
+        return {
+          ...state,
+          playerList: arrPlayerList.map((player, id) => {
+            return {
+              id: id + 1,
+              name: player,
+              subs: checkSubsPlayer((id = id + 1), state.maxPlayers()),
+            };
+          }),
+        };
+      } else return { ...state, playerList: [] };
     case CHANGE_TEAMS_COUNT:
-      state.teamsCount = action.value;
-      maxPlayers = calcMaxPlayers(state.teamsCount, state.playersCount);
-      playerList = state.playerList.map((player) => {
-        return { ...player, subs: checkSubsPlayer(player.id, maxPlayers) };
-      });
-      return {...state, playerList}
+      return {
+        ...state,
+        teamsCount: action.value,
+        playerList:
+          action.value > 0
+            ? state.playerList.map((player) => {
+                return {
+                  ...player,
+                  subs: checkSubsPlayer(player.id, state.maxPlayers()),
+                };
+              })
+            : state.playerList,
+      };
     case CHANGE_PLAYERS_COUNT:
-      state.playersCount = action.value;
-      maxPlayers = calcMaxPlayers(state.teamsCount, state.playersCount);
-      playerList = state.playerList.map((player) => {
-        return { ...player, subs: checkSubsPlayer(player.id, maxPlayers) };
-      });
-      return {...state, playerList}
-
-      // state.playerList = playerList;
-      // return state;
+      return {
+        ...state,
+        playersCount: action.value,
+        playerList:
+          action.value > 0
+            ? state.playerList.map((player) => {
+                return {
+                  ...player,
+                  subs: checkSubsPlayer(player.id, state.maxPlayers()),
+                };
+              })
+            : state.playerList,
+      };
     case BLUR_PLAYERS_COUNT:
-      action.value > 0
-        ? (state.playersCount = action.value)
-        : (state.playersCount = 5);
-      maxPlayers = calcMaxPlayers(state.teamsCount, state.playersCount);
-      playerList = state.playerList.map((player) => {
-        return { ...player, subs: checkSubsPlayer(player.id, maxPlayers) };
-      });
-      return {...state, playerList}
-
-      // state.playerList = playerList;
-      // return state;
+      return {
+        ...state,
+        playersCount: action.value > 0 ? action.value : 5,
+        playerList: state.playerList.map((player) => {
+          return {
+            ...player,
+            subs: checkSubsPlayer(player.id, state.maxPlayers()),
+          };
+        }),
+      };
     case BLUR_TEAMS_COUNT:
-      action.value > 0
-        ? (state.teamsCount = action.value)
-        : (state.teamsCount = 3);
-      maxPlayers = calcMaxPlayers(state.teamsCount, state.playersCount);
-      playerList = state.playerList.map((player) => {
-        return { ...player, subs: checkSubsPlayer(player.id, maxPlayers) };
-      });
-      return {...state, playerList}
-
-      // state.playerList = playerList;
-      // return state;
+      debugger;
+      return {
+        ...state,
+        teamsCount: action.value > 0 ? action.value : 3, //! не устанавливает значение до playerList
+        playerList: state.playerList.map((player) => {
+          return {
+            ...player,
+            subs: checkSubsPlayer(player.id, state.maxPlayers()),
+          };
+        }),
+      };
     default:
       return state;
   }
@@ -125,5 +136,3 @@ const charToArr = (chars) => {
 const checkSubsPlayer = (playerId, maxPlayers) => {
   return playerId > maxPlayers ? true : false;
 };
-
-const calcMaxPlayers = (teamsCount, playersCount) => teamsCount * playersCount;
