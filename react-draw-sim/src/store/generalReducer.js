@@ -3,6 +3,7 @@ const CHANGE_TEAMS_COUNT = "CHANGE_TEAMS_COUNT";
 const CHANGE_PLAYERS_COUNT = "CHANGE_PLAYERS_COUNT";
 const BLUR_TEAMS_COUNT = "BLUR_TEAMS_COUNT";
 const BLUR_PLAYERS_COUNT = "BLUR_PLAYERS_COUNT";
+const UPDATE_SUBS = "UPDATE_SUBS";
 
 const initialState = {
   playerList: [],
@@ -34,53 +35,34 @@ const generalReducer = (state = initialState, action) => {
       return {
         ...state,
         teamsCount: action.value,
-        playerList:
-          action.value > 0
-            ? state.playerList.map((player) => {
-                return {
-                  ...player,
-                  subs: checkSubsPlayer(player.id, state.maxPlayers()),
-                };
-              })
-            : state.playerList,
       };
     case CHANGE_PLAYERS_COUNT:
       return {
         ...state,
         playersCount: action.value,
-        playerList:
-          action.value > 0
-            ? state.playerList.map((player) => {
-                return {
-                  ...player,
-                  subs: checkSubsPlayer(player.id, state.maxPlayers()),
-                };
-              })
-            : state.playerList,
       };
     case BLUR_PLAYERS_COUNT:
       return {
         ...state,
         playersCount: action.value > 0 ? action.value : 5,
-        playerList: state.playerList.map((player) => {
-          return {
-            ...player,
-            subs: checkSubsPlayer(player.id, state.maxPlayers()),
-          };
-        }),
       };
     case BLUR_TEAMS_COUNT:
-      debugger;
       return {
         ...state,
-        teamsCount: action.value > 0 ? action.value : 3, //! не устанавливает значение до playerList
-        playerList: state.playerList.map((player) => {
-          return {
-            ...player,
-            subs: checkSubsPlayer(player.id, state.maxPlayers()),
-          };
-        }),
+        teamsCount: action.value > 0 ? action.value : 3,
       };
+    case UPDATE_SUBS:
+      return state.maxPlayers()
+        ? {
+            ...state,
+            playerList: state.playerList.map((player) => {
+              return {
+                ...player,
+                subs: checkSubsPlayer(player.id, state.maxPlayers()),
+              };
+            }),
+          }
+        : state;
     default:
       return state;
   }
@@ -108,6 +90,10 @@ export const playersBlurCreator = (count) => {
   return { type: BLUR_PLAYERS_COUNT, value: count };
 };
 
+export const updateSubsCreator = () => {
+  return { type: UPDATE_SUBS };
+};
+
 const emptyLineCheck = (array) => {
   for (let i = array.length - 1; i >= 0; i--) {
     if (!array[i]) {
@@ -122,12 +108,9 @@ const charToArr = (chars) => {
     emptyLineCheck(arrList);
     let correctList = arrList.map((item) => {
       return item
-        .replace(/\s+/g, " ") //* убираем лишние пробелы
-        .trim()
-        .replace(/(?:^|\s)\S/g, (char) => char.toUpperCase());
-      //* каждая буква после пробела, кавычек - заглавная
-
-      // return item.replace(/(?:^|\s)\S/g, (char) => char.toUpperCase());
+        .replace(/\s+/g, " ") //* убираем
+        .trim()               //* лишние пробелы
+        .replace(/(?:^|\s)\S/g, (char) => char.toUpperCase()); //* каждая буква после пробела, кавычек - заглавная
     });
     return correctList;
   } else return;

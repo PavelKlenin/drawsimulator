@@ -4,9 +4,12 @@ import InputReqiuredCount from "./InputRequiredCount/InputReqiuredCount";
 import PlayerList from "./PlayerList/PlayerList";
 
 const InputDataContent = (props) => {
+
   const onInputChange = (e) => {
     props.inputTextCreator(e.target.value);
+    props.updateSubsCreator();
   };
+
   return (
     <div className="data-content">
       <p className="list-errors sm-errors errors">Здесь будут инструкции</p>
@@ -26,6 +29,7 @@ const InputDataContent = (props) => {
           inputClassName="teamsCount"
           changeCountCreator={props.teamCountCreator}
           blurCountCreator={props.teamBlurCreator}
+          updateSubsCreator={props.updateSubsCreator}
           maxLength="2"
           value={props.teamsCount}
           dispatch={props.dispatch}
@@ -36,6 +40,7 @@ const InputDataContent = (props) => {
           inputClassName="maxPlayersCount"
           changeCountCreator={props.playersCountCreator}
           blurCountCreator={props.playersBlurCreator}
+          updateSubsCreator={props.updateSubsCreator}
           maxLength="3"
           value={props.playersCount}
           dispatch={props.dispatch}

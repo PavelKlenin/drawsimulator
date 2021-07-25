@@ -4,9 +4,11 @@ import "../InputData.css";
 const InputReqiuredCount = (props) => {
   const onChangeValue = (e) => {
     props.changeCountCreator(e.target.value);
+    props.updateSubsCreator();
   };
   const onBlurValue = (e) => {
     props.blurCountCreator(e.target.value);
+    props.updateSubsCreator();
   }
   return (
     <div className={props.className}>

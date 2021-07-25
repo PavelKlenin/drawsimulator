@@ -5,6 +5,7 @@ import {
   playersCountCreator,
   teamBlurCreator,
   teamCountCreator,
+  updateSubsCreator,
 } from "../../../store/generalReducer";
 import InputDataContent from "./InputDataContent";
 
@@ -23,6 +24,7 @@ const mapDispatchToProps = {
   playersCountCreator,
   playersBlurCreator,
   inputTextCreator,
+  updateSubsCreator,
 };
 
 const InputDataContentContainer = connect(
