@@ -4,10 +4,14 @@ import InputReqiuredCount from "./InputRequiredCount/InputReqiuredCount";
 import PlayerList from "./PlayerList/PlayerList";
 
 const InputDataContent = (props) => {
-
   const onInputChange = (e) => {
     props.inputTextCreator(e.target.value);
     props.updateSubsCreator();
+  };
+
+  const divideTeams = () => {
+    // props.isRandom ? props.shufflePlayersCreator() : null;
+    props.divideTeamsCreator();
   };
 
   return (
@@ -45,7 +49,9 @@ const InputDataContent = (props) => {
           value={props.playersCount}
           dispatch={props.dispatch}
         />
-        <button className="divideBtn btn">Поделить</button>
+        <button onClick={divideTeams} className="divideBtn btn">
+          Поделить
+        </button>
       </div>
     </div>
   );

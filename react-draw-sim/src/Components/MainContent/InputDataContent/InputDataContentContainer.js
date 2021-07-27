@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import {
+  divideTeamsCreator,
   inputTextCreator,
   playersBlurCreator,
   playersCountCreator,
@@ -14,6 +15,8 @@ const mapStateToProps = (state) => {
     playerList: state.generalReducer.playerList,
     teamsCount: state.generalReducer.teamsCount,
     playersCount: state.generalReducer.playersCount,
+    isRandom: state.generalReducer.isRandom,
+    teams: state.generalReducer.teams,
   }
 
 };
@@ -25,6 +28,7 @@ const mapDispatchToProps = {
   playersBlurCreator,
   inputTextCreator,
   updateSubsCreator,
+  divideTeamsCreator,
 };
 
 const InputDataContentContainer = connect(
