@@ -10,9 +10,6 @@ const initialState = {
   playerList: [],
   teamsCount: 3,
   playersCount: 5,
-  maxPlayers() {
-    return this.teamsCount * this.playersCount;
-  },
   isRandom: false,
   teams: [],
 };
@@ -28,7 +25,7 @@ const generalReducer = (state = initialState, action) => {
             return {
               id: id + 1,
               name: player,
-              subs: checkSubsPlayer((id = id + 1), state.maxPlayers()),
+              subs: checkSubsPlayer((id = id + 1), maxPlayers(state)),
             };
           }),
         };
@@ -54,52 +51,49 @@ const generalReducer = (state = initialState, action) => {
         teamsCount: action.value > 0 ? action.value : 3,
       };
     case UPDATE_SUBS:
-      return state.maxPlayers()
+      return maxPlayers(state)
         ? {
             ...state,
             playerList: state.playerList.map((player) => {
               return {
                 ...player,
-                subs: checkSubsPlayer(player.id, state.maxPlayers()),
+                subs: checkSubsPlayer(player.id, maxPlayers(state)),
               };
             }),
           }
         : state;
-    case DIVIDE_TEAMS:
-      // let players = [...state.playerList]; // для распределения с удалением из массива
-      let restPlayersCount;
+    case DIVIDE_TEAMS: {
+      let restPlayersCount = state.playerList.length; // изначально кол-во оставшихся игроков равно списку;
+      let nextPlayerIndex = 0; // индекс игрока, с которого надо добавлять в след.команду;
       return {
         ...state,
         teams: createNewTeams(state).map((team, i) => {
-          if (state.playerList.length < state.maxPlayers()) {
-            debugger;
-            i === 0
-              ? (restPlayersCount = state.playerList.length)
-              : (restPlayersCount =
-                  restPlayersCount -
-                  Math.ceil(restPlayersCount / (state.teamsCount - i + 1)));
-            debugger;
-            return fillTeamWithPlayers(
-              // Math.ceil(players.length / state.teamsCount),
-              Math.ceil(restPlayersCount / (state.teamsCount - i)),
-              // при недоборе игроков необходимое количество игроков в следующую
-              // команду будет высчитваться после наполнения текущей команды
-              // для равномерного распределения
-              team,
-              // players
-              state.playerList
-            );
-          } else {
-            debugger;
-            // return fillTeamWithPlayers(state.playersCount, team, players);
-            return fillTeamWithPlayers(
-              state.playersCount,
-              team,
-              state.playerList
-            );
+          // проверка на запасную команду. Т.к. i начинается с 0, утверждение будет верно только при наличии лишней (запасной) команды
+          let isSubsTeam = +state.teamsCount === i;
+          let restTeamsCount = state.teamsCount - i; // сколько осталось команд (для расчета кол-ва игроков при недоборе игроков)
+          let computedPlayersCount; // количество игроков в каждую команду
+          isSubsTeam // если есть запасные, они будут отображаться все в одной команде
+            ? (computedPlayersCount = restPlayersCount)
+            : (computedPlayersCount =
+                state.playerList.length < maxPlayers(state) // при недоборе в каждую итерацию кол-во игроков считается относительно
+                  ? Math.ceil(restPlayersCount / restTeamsCount) // оставшегося количества игроков и команд для равномерного распределения
+                  : +state.playersCount); // преобразование в число (иначе nextPlayerIndex складывается конкатенацией)
+
+          // добавление игроков в команду
+          for (
+            let i = nextPlayerIndex;
+            i < nextPlayerIndex + computedPlayersCount;
+            i++
+          ) {
+            // проверка на наличие игрока, чтобы запасная команда не наполняла команду underfined-игроками
+            team.squad = [...team.squad, state.playerList[i]];
           }
+          restPlayersCount = restPlayersCount - computedPlayersCount; // для след.итераций из оставшихся игроков вычитается кол-во игроков в команде
+          nextPlayerIndex = nextPlayerIndex + computedPlayersCount; // индекс для след.команды равен сумме всех игроков из предыдущих команд
+          return team;
         }),
       };
+    }
     default:
       return state;
   }
@@ -163,46 +157,17 @@ const checkSubsPlayer = (playerId, maxPlayers) => {
 
 const createNewTeams = (state) => {
   let teams = [];
+  // добавление пустых команд по количеству команд (state.teamsCount)
   for (let i = 0; i < state.teamsCount; i++) {
     teams = [...teams, { id: i + 1, name: `Команда ${i + 1}`, squad: [] }];
-  } // добавление пустых команд по количеству команд (state.teamsCount)
-  if (state.playerList.length > state.maxPlayers()) {
+  }
+  // добавление пустой команды при наличии запасных
+  if (state.playerList.length > maxPlayers(state)) {
     teams = [...teams, { id: teams.length + 1, name: "Запасные", squad: [] }];
-  } // добавление пустой команды при наличии запасных
+  }
   return teams;
 };
 
-// Без удаления игроков из массива
-const fillTeamWithPlayers = (playersCount, team, playerList) => {
-  // for (let i = 0; i < team.id; i++) {
-  //   if (team[i]) {
-  //     dividedPlayersCount = dividedPlayersCount + team[i].length;
-  //   } else {
-  //     let dividedPlayersCount = 0;
-  //   }
-  // }
-  for (let i = 0; i < playersCount; i++) {
-    if (playerList[(team.id - 1) * playersCount + i + i]) {
-      // условие для запасной команды, чтобы не добирала underfined
-      team.squad = [
-        ...team.squad,
-        playerList[(team.id - 1) * playersCount + i + i],
-      ]; // ((team.id - 1) * playersCount + i) порядковый номер игрока, чтобы для текущей команды добавлялись игроки не с начала массива
-    }
-  }
-  return team;
+const maxPlayers = (state) => {
+  return state.teamsCount * state.playersCount;
 };
-
-// С удалением игроков из массива
-// const fillTeamWithPlayers = (playersCount, team, players) => {
-//   for (let i = 0; i < playersCount; i++) {
-//     if (players[i]) {
-//       // условие для запасной команды, чтобы не добирала underfined
-//       team.squad = [
-//         ...team.squad,
-//         players.shift(), // с удалением игрока из массива для того, чтобы в команду добавлялся всегда первый игрок
-//       ];
-//     }
-//   }
-//   return team;
-// };
