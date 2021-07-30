@@ -5,6 +5,7 @@ const BLUR_TEAMS_COUNT = "BLUR_TEAMS_COUNT";
 const BLUR_PLAYERS_COUNT = "BLUR_PLAYERS_COUNT";
 const UPDATE_SUBS = "UPDATE_SUBS";
 const DIVIDE_TEAMS = "DIVIDE_TEAMS";
+const TOGGLE_RANDOM = "TOGGLE_RANDOM";
 
 const initialState = {
   playerList: [],
@@ -62,12 +63,20 @@ const generalReducer = (state = initialState, action) => {
             }),
           }
         : state;
+    case TOGGLE_RANDOM:
+      return {
+        ...state,
+        isRandom: action.value,
+      };
     case DIVIDE_TEAMS: {
       let restPlayersCount = state.playerList.length; // изначально кол-во оставшихся игроков равно списку;
       let nextPlayerIndex = 0; // индекс игрока, с которого надо добавлять в след.команду;
       return {
         ...state,
         teams: createNewTeams(state).map((team, i) => {
+          let playerList = state.isRandom
+            ? shuffledList(state.playerList)
+            : state.playerList;
           // проверка на запасную команду. Т.к. i начинается с 0, утверждение будет верно только при наличии лишней (запасной) команды
           let isSubsTeam = +state.teamsCount === i;
           let restTeamsCount = state.teamsCount - i; // сколько осталось команд (для расчета кол-ва игроков при недоборе игроков)
@@ -75,7 +84,7 @@ const generalReducer = (state = initialState, action) => {
           isSubsTeam // если есть запасные, они будут отображаться все в одной команде
             ? (computedPlayersCount = restPlayersCount)
             : (computedPlayersCount =
-                state.playerList.length < maxPlayers(state) // при недоборе в каждую итерацию кол-во игроков считается относительно
+                playerList.length < maxPlayers(state) // при недоборе в каждую итерацию кол-во игроков считается относительно
                   ? Math.ceil(restPlayersCount / restTeamsCount) // оставшегося количества игроков и команд для равномерного распределения
                   : +state.playersCount); // преобразование в число (иначе nextPlayerIndex складывается конкатенацией)
 
@@ -86,7 +95,7 @@ const generalReducer = (state = initialState, action) => {
             i++
           ) {
             // проверка на наличие игрока, чтобы запасная команда не наполняла команду underfined-игроками
-            team.squad = [...team.squad, state.playerList[i]];
+            team.squad = [...team.squad, playerList[i]];
           }
           restPlayersCount = restPlayersCount - computedPlayersCount; // для след.итераций из оставшихся игроков вычитается кол-во игроков в команде
           nextPlayerIndex = nextPlayerIndex + computedPlayersCount; // индекс для след.команды равен сумме всех игроков из предыдущих команд
@@ -127,6 +136,10 @@ export const updateSubsCreator = () => {
 
 export const divideTeamsCreator = () => {
   return { type: DIVIDE_TEAMS };
+};
+
+export const ToggleRandomCreator = (value) => {
+  return { type: TOGGLE_RANDOM, value };
 };
 
 const emptyLineCheck = (array) => {
@@ -170,4 +183,14 @@ const createNewTeams = (state) => {
 
 const maxPlayers = (state) => {
   return state.teamsCount * state.playersCount;
+};
+
+// алгоритм Фишера-Йейтса - Fisher–Yates shuffle
+const shuffledList = (list) => {
+  let newList = [...list];
+  for (var i = newList.length - 1; i > 0; i--) {
+    const randomIndex = Math.floor(Math.random() * (i + 1));
+    [newList[randomIndex], newList[i]] = [newList[i], newList[randomIndex]];
+  }
+  return newList;
 };

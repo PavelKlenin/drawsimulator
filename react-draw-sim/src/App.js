@@ -4,17 +4,16 @@ import "./Components/MainContent/MainContent.css";
 import Footer from "./Components/Footer/Footer";
 import Header from "./Components/Header/Header";
 import InputDataContentContainer from "./Components/MainContent/InputDataContent/InputDataContentContainer";
-import Teams from "./Components/MainContent/Teams/Teams";
-// import MainContent from "./Components/MainContent/MainContent";
+import TeamsContainer from "./Components/MainContent/Teams/TeamsContainer";
 
-function App(props) {
+const App = () => {
   return (
     <div className={s.container}>
       <Header />
       <main className="main">
         <p className="lg-errors errors">Здесь будут инструкции</p>
         <InputDataContentContainer />
-        <Teams />
+        <TeamsContainer />
       </main>
       <Footer />
     </div>
