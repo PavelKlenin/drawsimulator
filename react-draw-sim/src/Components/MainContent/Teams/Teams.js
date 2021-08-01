@@ -6,7 +6,7 @@ const Teams = (props) => {
   return (
     <div className="teams" id="teams">
       {props.teams && props.teams.map(team => {
-        return <Team key={team.id} title={team.name} squad={team.squad} /> 
+        return <Team key={team.id} title={team.name} squad={team.squad} id="teams"/> 
       })}
     </div>
   )

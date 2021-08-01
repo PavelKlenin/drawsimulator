@@ -52,7 +52,7 @@
   resize: none;
   overflow: auto;
   line-height: 2;
-  color: #e9e9e9;
+  color: #E9E9E9;
   background-color: transparent;
   -webkit-transition-duration: 0.6s;
   transition-duration: 0.6s;
@@ -75,7 +75,7 @@
 }
 
 .data-content .player:hover {
-  background-color: #e9e9e9;
+  background-color: #E9E9E9;
   color: #00103f;
 }
 
@@ -151,13 +151,48 @@
   text-align: center;
   font-weight: bold;
   background-color: transparent;
-  color: #4eb1ba;
+  color: #4EB1BA;
   -webkit-transition: 0.6s;
   transition: 0.6s;
 }
 
 .data-content .conditions_count:focus {
   border-color: #fff;
+}
+
+.data-content .randomToggle {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  cursor: pointer;
+  height: 21px;
+  width: 21px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid #a9a9a9;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+}
+
+.data-content .randomToggle:hover {
+  border: 1px solid #E9E9E9;
+}
+
+.data-content .randomToggle:active {
+  border: 1px solid #808080;
+}
+
+.data-content .randomToggle .checked {
+  width: 75%;
+  height: 75%;
+  border-radius: 50%;
+  background-color: #4EB1BA;
 }
 
 .data-content .divideBtn {

@@ -1,17 +1,21 @@
 import { React } from "react";
-import "./InputData.css";
-import InputReqiuredCount from "./InputRequiredCount/InputReqiuredCount";
+import * as Scroll from 'react-scroll';
+import "./DataContent.css";
+import DataCountInput from "./DataCountInput/DataCountInput";
 import PlayerList from "./PlayerList/PlayerList";
+import RandomTeamToggle from "./RandomTeamToggle";
 
-const InputDataContent = (props) => {
+const DataContent = (props) => {
   const onInputChange = (e) => {
     props.inputTextCreator(e.target.value);
     props.updateSubsCreator();
   };
 
   const divideTeams = () => {
-    // props.isRandom ? props.shufflePlayersCreator() : null;
     props.divideTeamsCreator();
+    Scroll.scroller.scrollTo("teams", {
+      smooth: true,
+    })
   };
 
   return (
@@ -27,7 +31,7 @@ const InputDataContent = (props) => {
         Здесь будут инструкции
       </p>
       <div className="conditions">
-        <InputReqiuredCount
+        <DataCountInput
           className="teamCondition"
           title="Количество команд:"
           inputClassName="teamsCount"
@@ -38,7 +42,7 @@ const InputDataContent = (props) => {
           value={props.teamsCount}
           dispatch={props.dispatch}
         />
-        <InputReqiuredCount
+        <DataCountInput
           className="playersCondition"
           title="Количество&nbsp;игроков&nbsp;в&nbsp;команде&nbsp;(max):"
           inputClassName="maxPlayersCount"
@@ -49,6 +53,13 @@ const InputDataContent = (props) => {
           value={props.playersCount}
           dispatch={props.dispatch}
         />
+        <RandomTeamToggle
+          className="playersCondition"
+          inputClassName="randomToggle"
+          title="Поделить в случайном порядке: "
+          toggleRandomCreator={props.toggleRandomCreator}
+          isRandom={props.isRandom}
+        />
         <button onClick={divideTeams} className="divideBtn btn">
           Поделить
         </button>
@@ -57,4 +68,4 @@ const InputDataContent = (props) => {
   );
 };
 
-export default InputDataContent;
+export default DataContent;

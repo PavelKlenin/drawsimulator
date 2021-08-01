@@ -1,7 +1,7 @@
 import { React } from "react";
-import "../InputData.css";
+import "../DataContent.css";
 
-const InputReqiuredCount = (props) => {
+const DataCountInput = (props) => {
   const onChangeValue = (e) => {
     props.changeCountCreator(e.target.value);
     props.updateSubsCreator();
@@ -25,4 +25,4 @@ const InputReqiuredCount = (props) => {
   );
 };
 
-export default InputReqiuredCount;
+export default DataCountInput;

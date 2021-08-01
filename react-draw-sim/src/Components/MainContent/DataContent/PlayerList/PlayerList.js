@@ -1,5 +1,5 @@
 import { React } from "react";
-import "../InputData.css";
+import "../DataContent.css";
 
 const PlayerList = (props) => {
   const playerList = props.playerList.map((player) => {

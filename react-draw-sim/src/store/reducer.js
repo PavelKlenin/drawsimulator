@@ -15,7 +15,7 @@ const initialState = {
   teams: [],
 };
 
-const generalReducer = (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ON_INPUT_TEXT:
       const arrPlayerList = charToArr(action.value);
@@ -66,17 +66,18 @@ const generalReducer = (state = initialState, action) => {
     case TOGGLE_RANDOM:
       return {
         ...state,
-        isRandom: action.value,
+        // isRandom: action.value, // для checkbox
+        isRandom: !state.isRandom, // для div
       };
     case DIVIDE_TEAMS: {
       let restPlayersCount = state.playerList.length; // изначально кол-во оставшихся игроков равно списку;
       let nextPlayerIndex = 0; // индекс игрока, с которого надо добавлять в след.команду;
+      let playerList = state.isRandom
+        ? shuffledList(state.playerList)
+        : state.playerList;
       return {
         ...state,
         teams: createNewTeams(state).map((team, i) => {
-          let playerList = state.isRandom
-            ? shuffledList(state.playerList)
-            : state.playerList;
           // проверка на запасную команду. Т.к. i начинается с 0, утверждение будет верно только при наличии лишней (запасной) команды
           let isSubsTeam = +state.teamsCount === i;
           let restTeamsCount = state.teamsCount - i; // сколько осталось команд (для расчета кол-ва игроков при недоборе игроков)
@@ -108,7 +109,7 @@ const generalReducer = (state = initialState, action) => {
   }
 };
 
-export default generalReducer;
+export default reducer;
 
 export const inputTextCreator = (text) => {
   return { type: ON_INPUT_TEXT, value: text };
@@ -138,8 +139,14 @@ export const divideTeamsCreator = () => {
   return { type: DIVIDE_TEAMS };
 };
 
-export const ToggleRandomCreator = (value) => {
-  return { type: TOGGLE_RANDOM, value };
+// для checkbox
+// export const toggleRandomCreator = (value) => {
+//   return { type: TOGGLE_RANDOM, value };
+// };
+
+// для div
+export const toggleRandomCreator = () => {
+  return { type: TOGGLE_RANDOM };
 };
 
 const emptyLineCheck = (array) => {
@@ -187,10 +194,11 @@ const maxPlayers = (state) => {
 
 // алгоритм Фишера-Йейтса - Fisher–Yates shuffle
 const shuffledList = (list) => {
-  let newList = [...list];
-  for (var i = newList.length - 1; i > 0; i--) {
+  let mainList = list.filter((player) => !player.subs);
+  let subList = list.filter((player) => player.subs);
+  for (var i = mainList.length - 1; i > 0; i--) {
     const randomIndex = Math.floor(Math.random() * (i + 1));
-    [newList[randomIndex], newList[i]] = [newList[i], newList[randomIndex]];
+    [mainList[randomIndex], mainList[i]] = [mainList[i], mainList[randomIndex]];
   }
-  return newList;
+  return [...mainList, ...subList];
 };

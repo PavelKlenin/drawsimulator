@@ -46,6 +46,7 @@
     color: $color-light;
     background-color: transparent;
     -webkit-transition-duration: 0.6s;
+    -o-transition-duration: 0.6s;
     transition-duration: 0.6s;
 
     &:focus {
@@ -59,6 +60,7 @@
     text-transform: capitalize;
     border-radius: $indent-small/2;
     -webkit-transition-duration: 0.6s;
+    -o-transition-duration: 0.6s;
     transition-duration: 0.6s;
     background-color: $bgrd-dark;
     border: 1px solid transparent;
@@ -139,10 +141,45 @@
     background-color: transparent;
     color: $color-mark;
     -webkit-transition: 0.6s;
+    -o-transition: 0.6s;
     transition: 0.6s;
 
     &:focus {
       border-color: #fff;
+    }
+  }
+
+  .randomToggle {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    cursor: pointer;
+    height: 21px;
+    width: 21px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid #a9a9a9;
+    -webkit-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    &:hover {
+      border: 1px solid $color-light;
+    }
+    &:active {
+      border: 1px solid $color-gray;
+    }
+
+    .checked {
+      width: 75%;
+      height: 75%;
+      border-radius: 50%;
+      background-color: $color-mark;
     }
   }
 

@@ -3,7 +3,7 @@ import Teams from './Teams';
 
 const mapStateToProps = (state) => {
   return {
-    teams: state.generalReducer.teams,
+    teams: state.reducer.teams,
   }
 }
 

@@ -7,16 +7,17 @@ import {
   teamBlurCreator,
   teamCountCreator,
   updateSubsCreator,
-} from "../../../store/generalReducer";
-import InputDataContent from "./InputDataContent";
+  toggleRandomCreator
+} from "../../../store/reducer";
+import DataContent from "./DataContent";
 
 const mapStateToProps = (state) => {
   return {
-    playerList: state.generalReducer.playerList,
-    teamsCount: state.generalReducer.teamsCount,
-    playersCount: state.generalReducer.playersCount,
-    isRandom: state.generalReducer.isRandom,
-    teams: state.generalReducer.teams,
+    playerList: state.reducer.playerList,
+    teamsCount: state.reducer.teamsCount,
+    playersCount: state.reducer.playersCount,
+    isRandom: state.reducer.isRandom,
+    teams: state.reducer.teams,
   }
 
 };
@@ -29,11 +30,12 @@ const mapDispatchToProps = {
   inputTextCreator,
   updateSubsCreator,
   divideTeamsCreator,
+  toggleRandomCreator,
 };
 
-const InputDataContentContainer = connect(
+const DataContentContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(InputDataContent);
+)(DataContent);
 
-export default InputDataContentContainer;
+export default DataContentContainer;

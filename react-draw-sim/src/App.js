@@ -3,7 +3,7 @@ import s from "./App.module.css";
 import "./Components/MainContent/MainContent.css";
 import Footer from "./Components/Footer/Footer";
 import Header from "./Components/Header/Header";
-import InputDataContentContainer from "./Components/MainContent/InputDataContent/InputDataContentContainer";
+import DataContentContainer from "./Components/MainContent/DataContent/DataContentContainer";
 import TeamsContainer from "./Components/MainContent/Teams/TeamsContainer";
 
 const App = () => {
@@ -12,7 +12,7 @@ const App = () => {
       <Header />
       <main className="main">
         <p className="lg-errors errors">Здесь будут инструкции</p>
-        <InputDataContentContainer />
+        <DataContentContainer />
         <TeamsContainer />
       </main>
       <Footer />
