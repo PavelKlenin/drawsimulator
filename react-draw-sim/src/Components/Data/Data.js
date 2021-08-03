@@ -1,11 +1,11 @@
 import { React } from "react";
 import * as Scroll from 'react-scroll';
-import "./DataContent.css";
+import "./Data.css";
 import DataCountInput from "./DataCountInput/DataCountInput";
-import PlayerList from "./PlayerList/PlayerList";
-import RandomTeamToggle from "./RandomTeamToggle";
+import DataPlayerList from "./DataPlayerList/DataPlayerList";
+import DataRandTeamBtn from "./DataRandTeamBtn/DataRandTeamBtn";
 
-const DataContent = (props) => {
+const Data = (props) => {
   const onInputChange = (e) => {
     props.inputTextCreator(e.target.value);
     props.updateSubsCreator();
@@ -20,14 +20,14 @@ const DataContent = (props) => {
 
   return (
     <div className="data-content">
-      <p className="list-errors sm-errors errors">Здесь будут инструкции</p>
+      <p className="listErrors smErrors errors">Здесь будут инструкции</p>
       <textarea
         onChange={onInputChange}
         className="list"
         placeholder="Список участников"></textarea>
-      <p className="arrList-errors sm-errors errors">Здесь будут инструкции</p>
-      <PlayerList playerList={props.playerList} />
-      <p className="condition-errors sm-errors errors">
+      <p className="arrListErrors smErrors errors">Здесь будут инструкции</p>
+      <DataPlayerList playerList={props.playerList} />
+      <p className="conditionErrors smErrors errors">
         Здесь будут инструкции
       </p>
       <div className="conditions">
@@ -53,7 +53,7 @@ const DataContent = (props) => {
           value={props.playersCount}
           dispatch={props.dispatch}
         />
-        <RandomTeamToggle
+        <DataRandTeamBtn
           className="playersCondition"
           inputClassName="randomToggle"
           title="Поделить в случайном порядке: "
@@ -68,4 +68,4 @@ const DataContent = (props) => {
   );
 };
 
-export default DataContent;
+export default Data;

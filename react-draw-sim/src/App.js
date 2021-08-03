@@ -1,18 +1,18 @@
 import { React } from "react";
-import s from "./App.module.css";
-import "./Components/MainContent/MainContent.css";
+// import s from "./App.module.css";
+import "./App.css";
 import Footer from "./Components/Footer/Footer";
 import Header from "./Components/Header/Header";
-import DataContentContainer from "./Components/MainContent/DataContent/DataContentContainer";
-import TeamsContainer from "./Components/MainContent/Teams/TeamsContainer";
+import DataContainer from "./Components/Data/DataContainer";
+import TeamsContainer from "./Components/Teams/TeamsContainer";
 
 const App = () => {
   return (
-    <div className={s.container}>
+    <div className="container" >
       <Header />
-      <main className="main">
-        <p className="lg-errors errors">Здесь будут инструкции</p>
-        <DataContentContainer />
+      <main className="main" >
+        <p className="errors lgErrors" >Здесь будут инструкции</p>
+        <DataContainer />
         <TeamsContainer />
       </main>
       <Footer />

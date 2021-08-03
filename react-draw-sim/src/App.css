@@ -1,3 +1,14 @@
+.container {
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
 .main {
   -webkit-box-flex: 1;
   -ms-flex: 1 0 auto;
@@ -25,44 +36,44 @@
   color: #E9E9E9;
 }
 
-.main .lg-errors {
+.main .lgErrors {
   display: block;
   text-align: center;
 }
 
 @media (max-width: 1023px) {
-  .main .lg-errors {
+  .main .lgErrors {
     display: none;
   }
 }
 
-.main .lg-errors.listErrors {
+.main .lgErrors.listErrors {
   opacity: 1;
   text-align: left;
 }
 
-.main .lg-errors.arrListErrors {
+.main .lgErrors.arrListErrors {
   opacity: 1;
 }
 
-.main .lg-errors.conditionErrors {
+.main .lgErrors.conditionErrors {
   opacity: 1;
   text-align: right;
 }
 
-.main .sm-errors {
+.main .smErrors {
   display: none;
   margin-bottom: 0.5em;
   text-align: center;
 }
 
 @media (max-width: 1023px) {
-  .main .sm-errors {
+  .main .smErrors {
     display: block;
   }
 }
 
-.main .sm-errors.listErrors, .main .sm-errors.arrListErrors, .main .sm-errors.conditionErrors {
+.main .smErrors.listErrors, .main .smErrors.arrListErrors, .main .smErrors.conditionErrors {
   opacity: 1;
 }
 
@@ -90,4 +101,4 @@
   background-color: #808080;
   color: #00103f;
 }
-/*# sourceMappingURL=MainContent.css.map */
+/*# sourceMappingURL=App.module.css.map */

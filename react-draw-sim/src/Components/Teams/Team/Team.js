@@ -1,6 +1,6 @@
 import { React } from 'react';
-import Player from './PLayer';
-import "./Teams.css";
+import Player from '../Player/PLayer';
+import "../Teams.css";
 
 const Team = (props) => {
   return (

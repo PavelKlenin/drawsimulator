@@ -8,8 +8,8 @@ import {
   teamCountCreator,
   updateSubsCreator,
   toggleRandomCreator
-} from "../../../store/reducer";
-import DataContent from "./DataContent";
+} from "../../store/reducer";
+import Data from "./Data";
 
 const mapStateToProps = (state) => {
   return {
@@ -33,9 +33,9 @@ const mapDispatchToProps = {
   toggleRandomCreator,
 };
 
-const DataContentContainer = connect(
+const DataContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(DataContent);
+)(Data);
 
-export default DataContentContainer;
+export default DataContainer;

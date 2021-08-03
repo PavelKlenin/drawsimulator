@@ -1,7 +1,7 @@
 import { React } from "react";
-import "../DataContent.css";
+import "../Data.css";
 
-const PlayerList = (props) => {
+const DataPlayerList = (props) => {
   const playerList = props.playerList.map((player) => {
     return (
       <p
@@ -17,4 +17,4 @@ const PlayerList = (props) => {
   );
 };
 
-export default PlayerList;
+export default DataPlayerList;

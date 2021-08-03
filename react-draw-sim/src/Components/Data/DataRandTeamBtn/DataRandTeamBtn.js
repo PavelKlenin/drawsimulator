@@ -1,7 +1,7 @@
 import { React } from "react";
-import "./DataContent.css";
+import "../Data.css";
 
-const RandomTeamToggle = (props) => {
+const DataRandTeamBtn = (props) => {
   const toggleRandom = () => {
     // props.toggleRandomCreator(e.target.checked); // для checkbox
     props.toggleRandomCreator(); // для div
@@ -16,4 +16,4 @@ const RandomTeamToggle = (props) => {
   );
 };
 
-export default RandomTeamToggle;
+export default DataRandTeamBtn;
