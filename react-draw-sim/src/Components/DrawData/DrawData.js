@@ -1,11 +1,11 @@
 import { React } from "react";
 import * as Scroll from 'react-scroll';
-import "./Data.css";
+import "./DrawData.css";
 import DataCountInput from "./DataCountInput/DataCountInput";
 import DataPlayerList from "./DataPlayerList/DataPlayerList";
 import DataRandTeamBtn from "./DataRandTeamBtn/DataRandTeamBtn";
 
-const Data = (props) => {
+const DrawData = (props) => {
   const onInputChange = (e) => {
     props.inputTextCreator(e.target.value);
     props.updateSubsCreator();
@@ -68,4 +68,4 @@ const Data = (props) => {
   );
 };
 
-export default Data;
+export default DrawData;

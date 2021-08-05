@@ -7,9 +7,9 @@ import {
   teamBlurCreator,
   teamCountCreator,
   updateSubsCreator,
-  toggleRandomCreator
+  toggleRandomCreator,
 } from "../../store/reducer";
-import Data from "./Data";
+import DrawData from "./DrawData";
 
 const mapStateToProps = (state) => {
   return {
@@ -33,9 +33,9 @@ const mapDispatchToProps = {
   toggleRandomCreator,
 };
 
-const DataContainer = connect(
+const DrawDataContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Data);
+)(DrawData);
 
-export default DataContainer;
+export default DrawDataContainer;

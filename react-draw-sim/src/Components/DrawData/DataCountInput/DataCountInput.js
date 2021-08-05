@@ -1,5 +1,5 @@
 import { React } from "react";
-import "../Data.css";
+import "../DrawData.css";
 
 const DataCountInput = (props) => {
   const onChangeValue = (e) => {

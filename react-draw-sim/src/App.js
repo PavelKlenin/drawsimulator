@@ -3,7 +3,7 @@ import { React } from "react";
 import "./App.css";
 import Footer from "./Components/Footer/Footer";
 import Header from "./Components/Header/Header";
-import DataContainer from "./Components/Data/DataContainer";
+import DrawDataContainer from "./Components/DrawData/DrawDataContainer";
 import TeamsContainer from "./Components/Teams/TeamsContainer";
 
 const App = () => {
@@ -12,7 +12,7 @@ const App = () => {
       <Header />
       <main className="main" >
         <p className="errors lgErrors" >Здесь будут инструкции</p>
-        <DataContainer />
+        <DrawDataContainer />
         <TeamsContainer />
       </main>
       <Footer />

@@ -1,4 +1,4 @@
-@import "../../../style/variables.scss";
+@import "../../style/variables.scss";
 
 .teams {
   display: -webkit-box;
@@ -41,6 +41,10 @@
     border-radius: $indent-small/2;
     font-family: "Champions-Bold", sans-serif;
     text-transform: uppercase;
+    
+    .basicTeamName {
+      cursor: pointer;
+    }
   }
 
   .newPlayer {

@@ -50,6 +50,10 @@
   text-transform: uppercase;
 }
 
+.teams .teamName .basicTeamName {
+  cursor: pointer;
+}
+
 .teams .newPlayer {
   white-space: nowrap;
   padding: 0.5em;
