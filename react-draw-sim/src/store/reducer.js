@@ -6,11 +6,21 @@ const BLUR_PLAYERS_COUNT = "BLUR_PLAYERS_COUNT";
 const UPDATE_SUBS = "UPDATE_SUBS";
 const DIVIDE_TEAMS = "DIVIDE_TEAMS";
 const TOGGLE_RANDOM = "TOGGLE_RANDOM";
+const CHANGE_TEAM_COLOR = "CHANGE_TEAM_COLOR";
 
 const initialState = {
   playerList: [],
   teamsCount: 3,
   playersCount: 5,
+  colorList: [
+    { id: 1, color: "red", usedById: null },
+    { id: 2, color: "orange", usedById: null },
+    { id: 3, color: "blue", usedById: null },
+    { id: 4, color: "green", usedById: null },
+    { id: 5, color: "yellowGreen", usedById: null },
+    { id: 6, color: "black", usedById: null },
+    { id: 7, color: "white", usedById: null },
+  ],
   isRandom: false,
   teams: [],
 };
@@ -104,6 +114,23 @@ const reducer = (state = initialState, action) => {
         }),
       };
     }
+    case CHANGE_TEAM_COLOR: {
+      const teamsColors = [...state.colorList];
+      const currentColor = teamsColors.find(
+        (color) => color.usedById === action.teamId
+      );
+      if (currentColor) {
+        const currentIdx = teamsColors.indexOf(currentColor);
+        teamsColors[currentIdx].usedById = null;
+        setNextTeamColor(currentIdx + 1, teamsColors, action.teamId);
+      } else {
+        setNextTeamColor(0, teamsColors, action.teamId);
+      }
+      return {
+        ...state,
+        colorList: [...teamsColors],
+      };
+    }
     default:
       return state;
   }
@@ -137,6 +164,10 @@ export const updateSubsCreator = () => {
 
 export const divideTeamsCreator = () => {
   return { type: DIVIDE_TEAMS };
+};
+
+export const changeTeamColorCreator = (teamId) => {
+  return { type: CHANGE_TEAM_COLOR, teamId };
 };
 
 // для checkbox
@@ -179,7 +210,7 @@ const createNewTeams = (state) => {
   let teams = [];
   // добавление пустых команд по количеству команд (state.teamsCount)
   for (let i = 0; i < state.teamsCount; i++) {
-    teams = [...teams, { id: i + 1, name: `Команда ${i + 1}`, squad: [] }];
+    teams = [...teams, { id: i + 1, name: `Команда ${i + 1}`, squad: [], color: null }];
   }
   // добавление пустой команды при наличии запасных
   if (state.playerList.length > maxPlayers(state)) {
@@ -202,3 +233,12 @@ const shuffledList = (list) => {
   }
   return [...mainList, ...subList];
 };
+
+const setNextTeamColor = (startIdx, colorList, teamId) => {
+  for (let i = startIdx; i < colorList.length; i++) {
+    if (colorList[i].usedById === null) {
+      colorList[i].usedById = teamId;
+      break;
+    }
+  }
+}
