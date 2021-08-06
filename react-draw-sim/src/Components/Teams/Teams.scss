@@ -39,11 +39,52 @@
     padding: $indent-small/2;
     margin-bottom: $indent-small/2;
     border-radius: $indent-small/2;
+    border: 1px solid transparent;
     font-family: "Champions-Bold", sans-serif;
     text-transform: uppercase;
-    
-    .basicTeamName {
-      cursor: pointer;
+  }
+
+  .teamRed {
+    background: red;
+  }
+
+  .teamOrange {
+    background: orange;
+    color: $color-dark;
+  }
+
+  .teamBlue {
+    background: blue;
+  }
+
+  .teamGreen {
+    background: green;
+  }
+
+  .teamGreenYellow {
+    background: greenyellow;
+    color: $color-dark;
+  }
+
+  .teamBlack {
+    background: black;
+  }
+
+  .teamWhite {
+    background: white;
+    color: $color-dark;
+  }
+
+  .basicTeam {
+    cursor: pointer;
+    -webkit-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    &:hover {
+      border: 1px solid $color-light;
+    }
+    &:active {
+      border: 1px solid $color-gray;
     }
   }
 

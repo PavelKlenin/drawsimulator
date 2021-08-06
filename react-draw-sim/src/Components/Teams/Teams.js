@@ -10,8 +10,7 @@ const Teams = (props) => {
           return (
             <Team
               key={team.id}
-              title={team.name}
-              squad={team.squad}
+              {...team}
               teamId={team.id}
               id="teams"
               changeTeamColor={props.changeTeamColorCreator}

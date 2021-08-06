@@ -46,12 +46,54 @@
   padding: 0.5em;
   margin-bottom: 0.5em;
   border-radius: 0.5em;
+  border: 1px solid transparent;
   font-family: "Champions-Bold", sans-serif;
   text-transform: uppercase;
 }
 
-.teams .teamName .basicTeamName {
+.teams .teamRed {
+  background: red;
+}
+
+.teams .teamOrange {
+  background: orange;
+  color: #00103f;
+}
+
+.teams .teamBlue {
+  background: blue;
+}
+
+.teams .teamGreen {
+  background: green;
+}
+
+.teams .teamGreenYellow {
+  background: greenyellow;
+  color: #00103f;
+}
+
+.teams .teamBlack {
+  background: black;
+}
+
+.teams .teamWhite {
+  background: white;
+  color: #00103f;
+}
+
+.teams .basicTeam {
   cursor: pointer;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+}
+
+.teams .basicTeam:hover {
+  border: 1px solid #E9E9E9;
+}
+
+.teams .basicTeam:active {
+  border: 1px solid #808080;
 }
 
 .teams .newPlayer {

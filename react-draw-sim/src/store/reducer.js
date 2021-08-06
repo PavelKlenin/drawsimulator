@@ -13,13 +13,13 @@ const initialState = {
   teamsCount: 3,
   playersCount: 5,
   colorList: [
-    { id: 1, color: "red", usedById: null },
-    { id: 2, color: "orange", usedById: null },
-    { id: 3, color: "blue", usedById: null },
-    { id: 4, color: "green", usedById: null },
-    { id: 5, color: "yellowGreen", usedById: null },
-    { id: 6, color: "black", usedById: null },
-    { id: 7, color: "white", usedById: null },
+    { id: 1, color: "teamRed", usedById: null },
+    { id: 2, color: "teamOrange", usedById: null },
+    { id: 3, color: "teamBlue", usedById: null },
+    { id: 4, color: "teamGreen", usedById: null },
+    { id: 5, color: "teamGreenYellow", usedById: null },
+    { id: 6, color: "teamBlack", usedById: null },
+    { id: 7, color: "teamWhite", usedById: null },
   ],
   isRandom: false,
   teams: [],
@@ -122,13 +122,24 @@ const reducer = (state = initialState, action) => {
       if (currentColor) {
         const currentIdx = teamsColors.indexOf(currentColor);
         teamsColors[currentIdx].usedById = null;
-        setNextTeamColor(currentIdx + 1, teamsColors, action.teamId);
+        if (currentIdx < teamsColors.length) {
+          setNextTeamColor(currentIdx + 1, teamsColors, action.teamId);
+        }
       } else {
         setNextTeamColor(0, teamsColors, action.teamId);
       }
       return {
         ...state,
         colorList: [...teamsColors],
+        teams: state.teams.map(team => {
+          team.color = null;
+          state.colorList.forEach((color) => {
+            if (color.usedById === team.id) {
+              team.color = color.color;
+            }
+          });
+          return { ...team };
+        }),
       };
     }
     default:
@@ -210,11 +221,29 @@ const createNewTeams = (state) => {
   let teams = [];
   // добавление пустых команд по количеству команд (state.teamsCount)
   for (let i = 0; i < state.teamsCount; i++) {
-    teams = [...teams, { id: i + 1, name: `Команда ${i + 1}`, squad: [], color: null }];
+    teams = [
+      ...teams,
+      {
+        id: i + 1,
+        title: `Команда ${i + 1}`,
+        squad: [],
+        color: null,
+        isSub: false,
+      },
+    ];
   }
   // добавление пустой команды при наличии запасных
   if (state.playerList.length > maxPlayers(state)) {
-    teams = [...teams, { id: teams.length + 1, name: "Запасные", squad: [] }];
+    teams = [
+      ...teams,
+      {
+        id: teams.length + 1,
+        title: "Запасные",
+        squad: [],
+        color: null,
+        isSub: true,
+      },
+    ];
   }
   return teams;
 };
@@ -241,4 +270,4 @@ const setNextTeamColor = (startIdx, colorList, teamId) => {
       break;
     }
   }
-}
+};
