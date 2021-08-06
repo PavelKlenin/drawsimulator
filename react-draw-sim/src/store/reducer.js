@@ -122,16 +122,14 @@ const reducer = (state = initialState, action) => {
       if (currentColor) {
         const currentIdx = teamsColors.indexOf(currentColor);
         teamsColors[currentIdx].usedById = null;
-        if (currentIdx < teamsColors.length) {
-          setNextTeamColor(currentIdx + 1, teamsColors, action.teamId);
-        }
+        setNextTeamColor(currentIdx + 1, teamsColors, action.teamId);
       } else {
         setNextTeamColor(0, teamsColors, action.teamId);
       }
       return {
         ...state,
         colorList: [...teamsColors],
-        teams: state.teams.map(team => {
+        teams: state.teams.map((team) => {
           team.color = null;
           state.colorList.forEach((color) => {
             if (color.usedById === team.id) {
