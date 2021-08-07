@@ -83,10 +83,14 @@ const reducer = (state = initialState, action) => {
       let restPlayersCount = state.playerList.length; // изначально кол-во оставшихся игроков равно списку;
       let nextPlayerIndex = 0; // индекс игрока, с которого надо добавлять в след.команду;
       let playerList = state.isRandom
-        ? resetTeamColors(setShuffledList(state.playerList)) 
+        ? resetTeamColors(setShuffledList(state.playerList))
         : resetTeamColors(state.playerList); // JSON.parse(JSON.stringify(state.playerList)) - глубокая копия
       return {
         ...state,
+        colorList: state.colorList.map((color) => ({
+          ...color,
+          usedById: null,
+        })),
         teams: createNewTeams(state).map((team, i) => {
           // проверка на запасную команду. Т.к. i начинается с 0, утверждение будет верно только при наличии лишней (запасной) команды
           let isSubsTeam = +state.teamsCount === i;
@@ -119,21 +123,26 @@ const reducer = (state = initialState, action) => {
       const currentColor = teamsColors.find(
         (color) => color.usedById === action.teamId
       ); // ищем, используется ли цвет командой
-      if (currentColor) {                                             // если используется
-        const currentIdx = teamsColors.indexOf(currentColor);         // определяем индекс объекта цвета
-        teamsColors[currentIdx].usedById = null;                      // обнуляем текущий цвет
+      if (currentColor) {
+        // если используется
+        const currentIdx = teamsColors.indexOf(currentColor); // определяем индекс объекта цвета
+        teamsColors[currentIdx].usedById = null; // обнуляем текущий цвет
         setNextTeamColor(currentIdx + 1, teamsColors, action.teamId); // устанавливаем цвет на ближайший пустой после текущего
-      } else {                                                        // если не используется
-        setNextTeamColor(0, teamsColors, action.teamId);              // устанавливаем цвет на ближайший пустой с начала списка
+      } else {
+        // если не используется
+        setNextTeamColor(0, teamsColors, action.teamId); // устанавливаем цвет на ближайший пустой с начала списка
       }
       return {
         ...state,
         colorList: [...teamsColors],
-        teams: state.teams.map((team) => {      // обнуляем текущий цвет у команды (если не обнулить, цвет команды не будет заменяться
-          team.color = null;                    // на прозрачный в конце, а последний цвет массива будет оставаться 2 щелчка)
-          state.colorList.forEach((color) => {  // если в списке цветов цвет занят командой,
-            if (color.usedById === team.id) {   // находим его
-              team.color = color.color;         // и устанавливаем нужный цвет команде
+        teams: state.teams.map((team) => {
+          // обнуляем текущий цвет у команды (если не обнулить, цвет команды не будет заменяться
+          team.color = null; // на прозрачный в конце, а последний цвет массива будет оставаться 2 щелчка)
+          state.colorList.forEach((color) => {
+            // если в списке цветов цвет занят командой,
+            if (color.usedById === team.id) {
+              // находим его
+              team.color = color.color; // и устанавливаем нужный цвет команде
             }
           });
           return { ...team };
@@ -194,12 +203,12 @@ const emptyLineCheck = (array) => {
 // конвертация введенных игроков в массив игроков
 const convertTextToArr = (chars) => {
   if (chars) {
-    let arrList = chars.split("\n");          // разделяем по игроков по новой строке
-    emptyLineCheck(arrList);                  // пустые строки удаляются
+    let arrList = chars.split("\n"); // разделяем по игроков по новой строке
+    emptyLineCheck(arrList); // пустые строки удаляются
     let correctList = arrList.map((item) => {
       return item
-        .replace(/\s+/g, " ")                 // убираем
-        .trim()                               // лишние пробелы
+        .replace(/\s+/g, " ") // убираем
+        .trim() // лишние пробелы
         .replace(/(?:^|\s)\S/g, (char) => char.toUpperCase()); // каждая буква после пробела, кавычек - заглавная
     });
     return correctList;
