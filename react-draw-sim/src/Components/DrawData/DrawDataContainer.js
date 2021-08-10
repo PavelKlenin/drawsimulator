@@ -8,6 +8,7 @@ import {
   teamCountCreator,
   updateSubsCreator,
   toggleRandomCreator,
+  onInputChangeCreator,
 } from "../../store/reducer";
 import DrawData from "./DrawData";
 
@@ -31,6 +32,7 @@ const mapDispatchToProps = {
   updateSubsCreator,
   divideTeamsCreator,
   toggleRandomCreator,
+  onInputChangeCreator,
 };
 
 const DrawDataContainer = connect(

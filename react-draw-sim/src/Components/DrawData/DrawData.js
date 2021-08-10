@@ -7,8 +7,7 @@ import DataRandTeamBtn from "./DataRandTeamBtn/DataRandTeamBtn";
 
 const DrawData = (props) => {
   const onInputChange = (e) => {
-    props.inputTextCreator(e.target.value);
-    props.updateSubsCreator();
+    props.onInputChangeCreator(e.target.value);
   };
 
   const divideTeams = () => {

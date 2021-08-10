@@ -7,6 +7,7 @@ const UPDATE_SUBS = "UPDATE_SUBS";
 const DIVIDE_TEAMS = "DIVIDE_TEAMS";
 const TOGGLE_RANDOM = "TOGGLE_RANDOM";
 const CHANGE_TEAM_COLOR = "CHANGE_TEAM_COLOR";
+const VALIDATE = "VALIDATE";
 
 const initialState = {
   playerList: [],
@@ -23,6 +24,7 @@ const initialState = {
   ],
   isRandom: false,
   teams: [],
+  errors:[]
 };
 
 const reducer = (state = initialState, action) => {
@@ -156,42 +158,48 @@ const reducer = (state = initialState, action) => {
 
 export default reducer;
 
+// ActionCreators
 export const inputTextCreator = (text) => {
   return { type: ON_INPUT_TEXT, value: text };
 };
-
 export const teamCountCreator = (count) => {
   return { type: CHANGE_TEAMS_COUNT, value: count };
 };
-
 export const playersCountCreator = (count) => {
   return { type: CHANGE_PLAYERS_COUNT, value: count };
 };
-
 export const teamBlurCreator = (count) => {
   return { type: BLUR_TEAMS_COUNT, value: count };
 };
-
 export const playersBlurCreator = (count) => {
   return { type: BLUR_PLAYERS_COUNT, value: count };
 };
-
 export const updateSubsCreator = () => {
   return { type: UPDATE_SUBS };
 };
-
 export const divideTeamsCreator = () => {
   return { type: DIVIDE_TEAMS };
 };
-
 export const changeTeamColorCreator = (teamId) => {
   return { type: CHANGE_TEAM_COLOR, teamId };
 };
-
 export const toggleRandomCreator = () => {
   return { type: TOGGLE_RANDOM };
 };
+export const validateInput = () => {
+  return {type: VALIDATE};
+}
 
+
+//ThunkCreators
+export const onInputChangeCreator = (text) => (dispatch) => {
+  dispatch(inputTextCreator(text));
+  dispatch(updateSubsCreator)
+};
+
+
+
+// Additional functions
 const emptyLineCheck = (array) => {
   for (let i = array.length - 1; i >= 0; i--) {
     if (!array[i]) {
