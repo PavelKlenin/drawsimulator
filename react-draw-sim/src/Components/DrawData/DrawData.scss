@@ -185,5 +185,11 @@
 
   .divideBtn {
     width: 100%;
+
+    &:disabled {
+      cursor: initial;
+      background-color: $color-gray;
+      color: $color-light;
+    }
   }
 }

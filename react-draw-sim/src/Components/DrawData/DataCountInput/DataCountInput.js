@@ -4,11 +4,9 @@ import "../DrawData.css";
 const DataCountInput = (props) => {
   const onChangeValue = (e) => {
     props.changeCountCreator(e.target.value);
-    props.updateSubsCreator();
   };
   const onBlurValue = (e) => {
     props.blurCountCreator(e.target.value);
-    props.updateSubsCreator();
   }
   return (
     <div className={props.className}>
@@ -16,6 +14,7 @@ const DataCountInput = (props) => {
       <input
         onChange={onChangeValue}
         onBlur={onBlurValue}
+        onFocus={props.onFocus}
         className={`${props.inputClassName} conditions_count`}
         type="text"
         maxLength={props.maxLength}

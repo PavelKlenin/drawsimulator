@@ -1,14 +1,15 @@
 import { connect } from "react-redux";
 import {
-  divideTeamsCreator,
-  inputTextCreator,
-  playersBlurCreator,
-  playersCountCreator,
-  teamBlurCreator,
-  teamCountCreator,
-  updateSubsCreator,
+  divideTeamsTC,
+  onMaxPlayersChangeTC,
+  onMaxPlayersBlurTC,
+  onTeamCountChangeTC,
+  onTeamCountBlurTC,
   toggleRandomCreator,
-  onInputChangeCreator,
+  onInputChangeTC,
+  onInputBlurTC,
+  onInputFocus,
+  resetEnoughPlayers
 } from "../../store/reducer";
 import DrawData from "./DrawData";
 
@@ -16,23 +17,26 @@ const mapStateToProps = (state) => {
   return {
     playerList: state.reducer.playerList,
     teamsCount: state.reducer.teamsCount,
-    playersCount: state.reducer.playersCount,
+    maxPlayersCount: state.reducer.maxPlayersCount,
     isRandom: state.reducer.isRandom,
     teams: state.reducer.teams,
+    isValid: state.reducer.isValid,
+    error: state.reducer.error,
   }
 
 };
 
 const mapDispatchToProps = {
-  teamCountCreator,
-  teamBlurCreator,
-  playersCountCreator,
-  playersBlurCreator,
-  inputTextCreator,
-  updateSubsCreator,
-  divideTeamsCreator,
+  onTeamCountChangeTC,
+  onTeamCountBlurTC,
+  onMaxPlayersChangeTC,
+  onMaxPlayersBlurTC,
+  divideTeamsTC,
   toggleRandomCreator,
-  onInputChangeCreator,
+  onInputChangeTC,
+  onInputBlurTC,
+  onInputFocus,
+  resetEnoughPlayers
 };
 
 const DrawDataContainer = connect(

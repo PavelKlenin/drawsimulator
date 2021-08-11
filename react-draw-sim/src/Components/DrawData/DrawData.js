@@ -1,5 +1,5 @@
 import { React } from "react";
-import * as Scroll from 'react-scroll';
+import * as Scroll from "react-scroll";
 import "./DrawData.css";
 import DataCountInput from "./DataCountInput/DataCountInput";
 import DataPlayerList from "./DataPlayerList/DataPlayerList";
@@ -7,36 +7,52 @@ import DataRandTeamBtn from "./DataRandTeamBtn/DataRandTeamBtn";
 
 const DrawData = (props) => {
   const onInputChange = (e) => {
-    props.onInputChangeCreator(e.target.value);
+    props.onInputChangeTC(e.target.value);
   };
 
+  const onInputBlur = () => {
+    props.onInputBlurTC();
+  }
+
+  const onInputFocus = () => {
+    props.onInputFocus();
+  }
+
   const divideTeams = () => {
-    props.divideTeamsCreator();
+    props.divideTeamsTC();
+    //! Исправить
     Scroll.scroller.scrollTo("teams", {
       smooth: true,
-    })
+    });
   };
 
   return (
     <div className="data-content">
-      <p className="listErrors smErrors errors">Здесь будут инструкции</p>
+      {props.error.notEnoughPlayers && (
+        <p className="listErrors  errors">
+          {props.error.notEnoughPlayers}
+        </p> // className = smErrors
+      )}
       <textarea
         onChange={onInputChange}
+        onBlur={onInputBlur}
+        onFocus={onInputFocus}
         className="list"
         placeholder="Список участников"></textarea>
-      <p className="arrListErrors smErrors errors">Здесь будут инструкции</p>
+      {props.error.repeatedPlayers && (
+        <p className="arrListErrors errors">
+          {props.error.repeatedPlayers}
+        </p> // className = smErrors
+      )}
       <DataPlayerList playerList={props.playerList} />
-      <p className="conditionErrors smErrors errors">
-        Здесь будут инструкции
-      </p>
       <div className="conditions">
         <DataCountInput
           className="teamCondition"
           title="Количество команд:"
           inputClassName="teamsCount"
-          changeCountCreator={props.teamCountCreator}
-          blurCountCreator={props.teamBlurCreator}
-          updateSubsCreator={props.updateSubsCreator}
+          changeCountCreator={props.onTeamCountChangeTC}
+          blurCountCreator={props.onTeamCountBlurTC}
+          onFocus={props.resetEnoughPlayers}
           maxLength="2"
           value={props.teamsCount}
           dispatch={props.dispatch}
@@ -45,11 +61,10 @@ const DrawData = (props) => {
           className="playersCondition"
           title="Количество&nbsp;игроков&nbsp;в&nbsp;команде&nbsp;(max):"
           inputClassName="maxPlayersCount"
-          changeCountCreator={props.playersCountCreator}
-          blurCountCreator={props.playersBlurCreator}
-          updateSubsCreator={props.updateSubsCreator}
+          changeCountCreator={props.onMaxPlayersChangeTC}
+          blurCountCreator={props.onMaxPlayersBlurTC}
           maxLength="3"
-          value={props.playersCount}
+          value={props.maxPlayersCount}
           dispatch={props.dispatch}
         />
         <DataRandTeamBtn
@@ -59,7 +74,10 @@ const DrawData = (props) => {
           toggleRandomCreator={props.toggleRandomCreator}
           isRandom={props.isRandom}
         />
-        <button onClick={divideTeams} className="divideBtn btn">
+        <button
+          disabled={props.error.required}
+          onClick={divideTeams}
+          className="divideBtn btn">
           Поделить
         </button>
       </div>
