@@ -197,7 +197,7 @@ const reducer = (state = initialState, action) => {
           state.playerList.find((samePlayer, i) => {
             return (
               samePlayer.name.toUpperCase() === player.name.toUpperCase() &&
-              i > idx
+              i !== idx
             );
           })
         ) {
@@ -214,6 +214,7 @@ const reducer = (state = initialState, action) => {
       });
       return {
         ...state,
+        playerList: repeatedPlayers,
         error: {
           ...state.error,
           repeatedPlayers: repeatedPlayers.find((player) => player.repeated)
@@ -245,8 +246,8 @@ const reducer = (state = initialState, action) => {
           notEnoughPlayers:
             state.playerList.length < state.teamsCount * state.minPlayersCount
               ? `Недостаточно игроков. Минимальное количество - ${
-                  state.teamsCount * state.minPlayersCount
-                }`
+                state.teamsCount * state.minPlayersCount
+              }`
               : "",
         },
       };
@@ -328,9 +329,10 @@ export const onInputBlurTC = () => (dispatch) => {
   dispatch(checkEnoughPlayers());
   dispatch(checkRepeatedPlayers());
 };
-export const onInputFocus = () => (dispatch) => {
+export const onInputFocus = (text) => (dispatch) => {
   dispatch(resetEnoughPlayers());
   dispatch(resetRepeatedPlayers());
+  dispatch(inputTextCreator(text));
 };
 
 export const onTeamCountChangeTC = (count) => (dispatch) => {

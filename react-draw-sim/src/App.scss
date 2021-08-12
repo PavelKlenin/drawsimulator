@@ -15,60 +15,60 @@
   -webkit-box-flex: 1;
       -ms-flex: 1 0 auto;
           flex: 1 0 auto;
-  padding: $indent-big;
+  padding: $indent-small $indent-big $indent-big;
 
   @media (max-width: 767px) {
-    padding: $indent-med;
+    padding: $indent-small $indent-med $indent-med;
   }
 
   @media (max-width: 424px) {
-    padding: $indent-small;
+    padding: 0 $indent-small $indent-small;
   }
 
-  .errors {
-    // opacity: 0;
-    line-height: 2;
-    font-size: 14px;
-    font-family: 'Courier New', Courier, monospace;
-    color: $color-light;
-  }
+  // .errors {
+  //   // opacity: 0;
+  //   line-height: 2;
+  //   font-size: 14px;
+  //   font-family: 'Courier New', Courier, monospace;
+  //   color: $color-light;
+  // }
 
-  .lgErrors {
-    display: block;
-    text-align: center;
+  // .lgErrors {
+  //   display: block;
+  //   text-align: center;
   
-    @media (max-width: 1023px) {
-      display: none;
-    }
+  //   @media (max-width: 1023px) {
+  //     display: none;
+  //   }
   
-    &.listErrors {
-      opacity: 1;
-      text-align: left;
-    }
+  //   &.listErrors {
+  //     opacity: 1;
+  //     text-align: left;
+  //   }
   
-    &.arrListErrors {
-      opacity: 1;
-    }
+  //   &.arrListErrors {
+  //     opacity: 1;
+  //   }
   
-    &.conditionErrors {
-      opacity: 1;
-      text-align: right;
-    }
-  }
+  //   &.conditionErrors {
+  //     opacity: 1;
+  //     text-align: right;
+  //   }
+  // }
 
-  .smErrors {
-    display: none;
-    margin-bottom: $indent-small/2;
-    text-align: center;
+  // .smErrors {
+  //   display: none;
+  //   margin-bottom: $indent-small/2;
+  //   text-align: center;
   
-    @media (max-width: 1023px) {
-      display: block;
-    }
+  //   @media (max-width: 1023px) {
+  //     display: block;
+  //   }
   
-    &.listErrors, &.arrListErrors, &.conditionErrors {
-      opacity: 1;
-    }
-  }
+  //   &.listErrors, &.arrListErrors, &.conditionErrors {
+  //     opacity: 1;
+  //   }
+  // }
 
   .btn {
     margin-top: $indent-big;

@@ -1,51 +1,31 @@
 import { React } from "react";
-import * as Scroll from "react-scroll";
-import "./DrawData.css";
+// import * as Scroll from "react-scroll";
+import "./DrawData.scss";
 import DataCountInput from "./DataCountInput/DataCountInput";
 import DataPlayerList from "./DataPlayerList/DataPlayerList";
 import DataRandTeamBtn from "./DataRandTeamBtn/DataRandTeamBtn";
+import DataPlayerInput from "./DataPlayerInput/DataPlayerInput";
 
 const DrawData = (props) => {
-  const onInputChange = (e) => {
-    props.onInputChangeTC(e.target.value);
-  };
-
-  const onInputBlur = () => {
-    props.onInputBlurTC();
-  }
-
-  const onInputFocus = () => {
-    props.onInputFocus();
-  }
-
   const divideTeams = () => {
     props.divideTeamsTC();
-    //! Исправить
-    Scroll.scroller.scrollTo("teams", {
-      smooth: true,
-    });
   };
-
   return (
     <div className="data-content">
-      {props.error.notEnoughPlayers && (
-        <p className="listErrors  errors">
-          {props.error.notEnoughPlayers}
-        </p> // className = smErrors
-      )}
-      <textarea
-        onChange={onInputChange}
-        onBlur={onInputBlur}
-        onFocus={onInputFocus}
+      <DataPlayerInput
+        error={props.error.notEnoughPlayers}
+        onInputChangeTC={props.onInputChangeTC}
+        onInputBlurTC={props.onInputBlurTC}
+        onInputFocus={props.onInputFocus}
         className="list"
-        placeholder="Список участников"></textarea>
-      {props.error.repeatedPlayers && (
-        <p className="arrListErrors errors">
-          {props.error.repeatedPlayers}
-        </p> // className = smErrors
-      )}
-      <DataPlayerList playerList={props.playerList} />
+        placeholder="Список участников"
+      />
+      <DataPlayerList
+        error={props.error.repeatedPlayers}
+        playerList={props.playerList}
+      />
       <div className="conditions">
+        <p className="errors"></p>
         <DataCountInput
           className="teamCondition"
           title="Количество команд:"

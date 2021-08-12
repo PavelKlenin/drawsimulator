@@ -1,6 +1,6 @@
 import { React } from "react";
 import Team from "./Team/Team";
-import "./Teams.css";
+import "./Teams.scss";
 
 const Teams = (props) => {
   return (

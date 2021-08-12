@@ -1,6 +1,6 @@
 import { React } from "react";
 import Player from "../Player/PLayer";
-import "../Teams.css";
+import "../Teams.scss";
 
 const Team = (props) => {
   const changeTeamColor = () => {

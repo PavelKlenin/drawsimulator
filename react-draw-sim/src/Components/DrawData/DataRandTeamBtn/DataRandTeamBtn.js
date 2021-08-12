@@ -1,5 +1,5 @@
 import { React } from "react";
-import "../DrawData.css";
+import "../DrawData.scss";
 
 const DataRandTeamBtn = (props) => {
   const toggleRandom = () => {

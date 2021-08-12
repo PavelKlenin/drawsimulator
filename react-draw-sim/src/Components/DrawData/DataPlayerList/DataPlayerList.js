@@ -1,11 +1,13 @@
 import { React } from "react";
-import "../DrawData.css";
+import "../DrawData.scss";
 
 const DataPlayerList = (props) => {
   const playerList = props.playerList.map((player) => {
     return (
       <p
-        className={player.subs ? "player subsPlayer" : "player"}
+        className={`player ${player.subs ? "subsPlayer" : ""} ${
+          player.repeated ? "repeated" : ""
+        }`}
         key={player.id}>
         {player.name}
       </p>
@@ -13,7 +15,10 @@ const DataPlayerList = (props) => {
   });
 
   return (
-    <div className="playerDiv">{props.playerList ? playerList : null}</div>
+    <div className="playerDiv">
+      <p className="errors">{props.error}</p>
+      {props.playerList ? playerList : null}
+    </div>
   );
 };
 
