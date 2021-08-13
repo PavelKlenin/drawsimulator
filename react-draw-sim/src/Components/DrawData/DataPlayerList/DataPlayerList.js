@@ -13,10 +13,10 @@ const DataPlayerList = (props) => {
       </p>
     );
   });
-
+  
   return (
     <div className="playerDiv">
-      <p className="errors">{props.error}</p>
+      <p className="errors">{props.error.message}</p>
       {props.playerList ? playerList : null}
     </div>
   );

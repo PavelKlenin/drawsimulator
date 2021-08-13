@@ -1,21 +1,26 @@
-import { React } from "react";
+import { useState, React } from "react";
 import "../DrawData.scss";
 
 const DataPlayerInput = (props) => {
+  const [rows, setRows] = useState(0);
+
+  props.error.message && window.scrollTo(0, 0);
+
   const onInputChange = (e) => {
     props.onInputChangeTC(e.target.value);
+    setRows(e.target.value.split("\n").length);
   };
-  const onInputBlur = () => {
+  const onInputBlur = (e) => {
     props.onInputBlurTC();
   };
   const onInputFocus = (e) => {
     props.onInputFocus(e.target.value);
   };
   return (
-    <div className='playerInput'>
-      <p className="errors">{props.error}</p>
+    <div className="playerInput">
+      <p className="errors">{props.error.message}</p>
       <textarea
-        //TODO изменение размера при вводе
+        rows={rows}
         onChange={onInputChange}
         onBlur={onInputBlur}
         onFocus={onInputFocus}

@@ -1,27 +1,32 @@
 const ON_INPUT_TEXT = "ON_INPUT_TEXT";
-const CHANGE_TEAMS_COUNT = "CHANGE_TEAMS_COUNT";
-const BLUR_TEAMS_COUNT = "BLUR_TEAMS_COUNT";
-const CHANGE_MAX_PLAYERS_COUNT = "CHANGE_MAX_PLAYERS_COUNT";
-const BLUR_MAX_PLAYERS_COUNT = "BLUR_MAX_PLAYERS_COUNT";
-const CHANGE_MIN_PLAYERS_COUNT = "CHANGE_MIN_PLAYERS_COUNT";
-const BLUR_MIN_PLAYERS_COUNT = "BLUR_MIN_PLAYERS_COUNT";
+const CHANGE_TEAMS_COUNT = "CHANGE_TEAMS_COUNT"; //update totalTeams
+const BLUR_TEAMS_COUNT = "BLUR_TEAMS_COUNT"; //check totalTeams
+const CHANGE_MAX_PLAYERS_COUNT = "CHANGE_MAX_PLAYERS_COUNT"; //update maxPlayersInTeam
+const BLUR_MAX_PLAYERS_COUNT = "BLUR_MAX_PLAYERS_COUNT"; //check maxPlayersInTeam
+const CHANGE_MIN_PLAYERS_COUNT = "CHANGE_MIN_PLAYERS_COUNT"; //update minPlayersInTeam
+const BLUR_MIN_PLAYERS_COUNT = "BLUR_MIN_PLAYERS_COUNT"; //check minPlayersInTeam
+//const CHANGE_MIN_PLAYERS_COUNT = "CHANGE_MIN_PLAYERS_COUNT";
 const UPDATE_SUBS = "UPDATE_SUBS";
 const DIVIDE_TEAMS = "DIVIDE_TEAMS";
 const TOGGLE_RANDOM = "TOGGLE_RANDOM";
 const CHANGE_TEAM_COLOR = "CHANGE_TEAM_COLOR";
 const VALIDATE = "VALIDATE";
 const CHECK_REPEATED_PLAYERS = "CHECK_REPEATED_PLAYERS";
+const SET_REPEATED_ERR_MSG = "SET_REPEATED_ERR_MSG";
 const RESET_REPEATED_PLAYERS = "RESET_REPEATED_PLAYERS";
 const REQUIRED = "REQUIRED";
+// const SET_REQUIRED_ERR_MSG = "SET_REQUIRED_ERR_MSG";
 const RESET_REQUIRED = "RESET_REQUIRED";
 const CHECK_ENOUGH_PLAYERS = "CHECK_ENOUGH_PLAYERS";
+const SET_NOT_ENOUGH_ERR_MSG = "SET_NOT_ENOUGH_ERR_MSG";
 const RESET_ENOUGH_PLAYERS = "RESET_ENOUGH_PLAYERS";
 
 const initialState = {
   playerList: [], // { id: 1, name: player, subs: false, repeated: false,}
-  teamsCount: 3,
-  maxPlayersCount: 5,
-  minPlayersCount: 2,
+  teamsCount: 3, // totalTeams
+  maxPlayersCount: 5, // maxPlayersInTeam
+  minPlayersCount: 2, // minPlayersInTeam
+  //minPlayersCount: 6,
   colorList: [
     { id: 1, color: "teamRed", usedById: null },
     { id: 2, color: "teamOrange", usedById: null },
@@ -34,7 +39,11 @@ const initialState = {
   isRandom: false,
   teams: [], // { id: 1, title: title, squad: [], color: null, isSub: false,}
   isValid: false,
-  error: { required: "Required", notEnoughPlayers: "", repeatedPlayers: "" },
+  error: {
+    required: { isValid: false, message: "Required" },
+    notEnoughPlayers: { isValid: false, message: "" },
+    repeatedPlayers: { isValid: true, message: "" },
+  },
 };
 
 const reducer = (state = initialState, action) => {
@@ -180,7 +189,7 @@ const reducer = (state = initialState, action) => {
     case VALIDATE: {
       const isErrors = () => {
         for (let key in state.error) {
-          if (state.error[key]) {
+          if (!state.error[key].isValid) {
             return false;
           }
         }
@@ -217,44 +226,94 @@ const reducer = (state = initialState, action) => {
         playerList: repeatedPlayers,
         error: {
           ...state.error,
-          repeatedPlayers: repeatedPlayers.find((player) => player.repeated)
-            ? "Повторяющиеся игроки"
-            : "",
+          repeatedPlayers: {
+            ...state.error.repeatedPlayers,
+            isValid: !repeatedPlayers.some((player) => player.repeated),
+          },
+        },
+      };
+    }
+    case SET_REPEATED_ERR_MSG: {
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          repeatedPlayers: {
+            ...state.error.repeatedPlayers,
+            message: !state.error.repeatedPlayers.isValid
+              ? "Повторяющиеся игроки"
+              : "",
+          },
         },
       };
     }
     case RESET_REPEATED_PLAYERS:
       return {
         ...state,
-        error: { ...state.error, repeatedPlayers: "" },
+        error: {
+          ...state.error,
+          repeatedPlayers: { ...state.error.repeatedPlayers, message: "" },
+        },
       };
     case REQUIRED:
       return {
         ...state,
-        error: { ...state.error, required: action.text ? "" : "Required" },
+        error: {
+          ...state.error,
+          required: {
+            ...state.error.required,
+            isValid: action.text ? true : false,
+            message: action.text ? "" : "Required",
+          }
+        },
       };
     case RESET_REQUIRED:
       return {
         ...state,
-        error: { ...state.error, required: "" },
+        error: {
+          ...state.error,
+          required: { ...state.error.required, message: "" },
+        },
       };
     case CHECK_ENOUGH_PLAYERS:
       return {
         ...state,
         error: {
           ...state.error,
-          notEnoughPlayers:
-            state.playerList.length < state.teamsCount * state.minPlayersCount
-              ? `Недостаточно игроков. Минимальное количество - ${
-                state.teamsCount * state.minPlayersCount
-              }`
-              : "",
+          notEnoughPlayers: {
+            ...state.error.notEnoughPlayers,
+            isValid:
+              state.playerList.length >=
+              state.teamsCount * state.minPlayersCount,
+          },
+        },
+      };
+    case SET_NOT_ENOUGH_ERR_MSG:
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          notEnoughPlayers: {
+            ...state.error.notEnoughPlayers,
+            message: !state.error.notEnoughPlayers.isValid ? (
+              <pre>
+                {`Слишком мало игроков.\nМинимальное количество - ${
+                  state.teamsCount * state.minPlayersCount
+                }`}
+              </pre>
+            ) : (
+              ""
+            ),
+          },
         },
       };
     case RESET_ENOUGH_PLAYERS:
       return {
         ...state,
-        error: { ...state.error, notEnoughPlayers: "" },
+        error: {
+          ...state.error,
+          notEnoughPlayers: { ...state.error.notEnoughPlayers, message: "" },
+        },
       };
     default:
       return state;
@@ -303,6 +362,9 @@ export const validateInputs = () => {
 export const checkRepeatedPlayers = () => {
   return { type: CHECK_REPEATED_PLAYERS };
 };
+export const setRepeatedErrMsg = () => {
+  return { type: SET_REPEATED_ERR_MSG };
+};
 export const resetRepeatedPlayers = () => {
   return { type: RESET_REPEATED_PLAYERS };
 };
@@ -315,6 +377,9 @@ export const resetRequired = () => {
 export const checkEnoughPlayers = () => {
   return { type: CHECK_ENOUGH_PLAYERS };
 };
+export const setNotEnoughErrMsg = () => {
+  return { type: SET_NOT_ENOUGH_ERR_MSG };
+};
 export const resetEnoughPlayers = () => {
   return { type: RESET_ENOUGH_PLAYERS };
 };
@@ -324,15 +389,17 @@ export const onInputChangeTC = (text) => (dispatch) => {
   dispatch(inputTextCreator(text));
   dispatch(updateSubsCreator());
   dispatch(required(text));
-};
-export const onInputBlurTC = () => (dispatch) => {
   dispatch(checkEnoughPlayers());
   dispatch(checkRepeatedPlayers());
+  dispatch(validateInputs());
 };
-export const onInputFocus = (text) => (dispatch) => {
+export const onInputBlurTC = () => (dispatch) => {
+  dispatch(setRepeatedErrMsg());
+  dispatch(setNotEnoughErrMsg());
+};
+export const onInputFocus = () => (dispatch) => {
   dispatch(resetEnoughPlayers());
   dispatch(resetRepeatedPlayers());
-  dispatch(inputTextCreator(text));
 };
 
 export const onTeamCountChangeTC = (count) => (dispatch) => {
@@ -343,6 +410,7 @@ export const onTeamCountBlurTC = (count) => (dispatch) => {
   dispatch(teamBlurCreator(count));
   dispatch(updateSubsCreator());
   dispatch(checkEnoughPlayers());
+  dispatch(setNotEnoughErrMsg());
 };
 
 export const onMaxPlayersChangeTC = (count) => (dispatch) => {

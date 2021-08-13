@@ -55,7 +55,7 @@ const DrawData = (props) => {
           isRandom={props.isRandom}
         />
         <button
-          disabled={props.error.required}
+          disabled={!props.isValid}
           onClick={divideTeams}
           className="divideBtn btn">
           Поделить
