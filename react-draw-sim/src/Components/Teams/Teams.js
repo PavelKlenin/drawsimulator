@@ -1,10 +1,16 @@
+import { useRef, useEffect } from "react";
 import { React } from "react";
 import Team from "./Team/Team";
 import "./Teams.scss";
 
 const Teams = (props) => {
+  const teams = useRef();
+  useEffect(() => {
+    teams.current.scrollIntoView();
+  })
+
   return (
-    <div className="teams" id="teams">
+    <div className="teams" id="teams" ref={teams}>
       {props.teams &&
         props.teams.map((team) => {
           return (

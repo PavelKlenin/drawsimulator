@@ -1,11 +1,11 @@
-import { useState, React } from "react";
+import { useRef, useState, React } from "react";
 import "../DrawData.scss";
 
 const DataPlayerInput = (props) => {
   const [rows, setRows] = useState(0);
+  const showMsg = useRef();
 
-  props.error.message && window.scrollTo(0, 0);
-
+  props.error.message && showMsg.current.scrollIntoView();
   const onInputChange = (e) => {
     props.onInputChangeTC(e.target.value);
     setRows(e.target.value.split("\n").length);
@@ -18,7 +18,9 @@ const DataPlayerInput = (props) => {
   };
   return (
     <div className="playerInput">
-      <p className="errors">{props.error.message}</p>
+      <p className="errors" ref={showMsg}>
+        {props.error.message}
+      </p>
       <textarea
         rows={rows}
         onChange={onInputChange}

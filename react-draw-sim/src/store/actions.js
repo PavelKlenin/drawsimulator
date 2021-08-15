@@ -1,7 +1,7 @@
-import * as CONST from './consts';
+import * as CONST from "./consts";
 
 const addNewPlayersAC = (text) => {
-	return { type: CONST.ADD_NEW_PLAYERS, value: text };
+  return { type: CONST.ADD_NEW_PLAYERS, value: text };
 };
 const changeTeamsCountAC = (count) => {
   return { type: CONST.CHANGE_TEAMS_COUNT, value: count };
@@ -27,17 +27,11 @@ const checkForSubsAC = () => {
 const divideTeamsAC = () => {
   return { type: CONST.DIVIDE_TEAMS };
 };
-export const changeTeamColorAC = (teamId) => {
-  return { type: CONST.CHANGE_TEAM_COLOR, teamId };
-};
-export const toggleRandomAC = () => {
-  return { type: CONST.TOGGLE_RANDOM };
-};
 const checkValidationAC = () => {
   return { type: CONST.CHECK_VALIDATION };
 };
-const checkForRepeatedPlayersAC = () => {
-  return { type: CONST.CHECK_FOR_REPEATED_PLAYERS };
+const checkForRepeatedPlayersAC = (playerList) => {
+  return { type: CONST.CHECK_FOR_REPEATED_PLAYERS, playerList };
 };
 const setRepeatedErrMsgAC = () => {
   return { type: CONST.SET_REPEATED_ERR_MSG };
@@ -51,43 +45,71 @@ const checkForRequiredAC = (text) => {
 // const resetRequiredErrMsgAC = () => {
 //   return { type: CONST.RESET_REQUIRED_ERR_MSG };
 // };
-const checkForEnoughPlayersAC = () => {
-  return { type: CONST.CHECK_FOR_ENOUGH_PLAYERS };
+const checkForEnoughPlayersAC = (playerList, minPlayersCount) => {
+  return {
+    type: CONST.CHECK_FOR_ENOUGH_PLAYERS,
+    data: { playerList, minPlayersCount },
+  };
 };
-const setNotEnoughErrMsgAC = () => {
-  return { type: CONST.SET_NOT_ENOUGH_ERR_MSG };
+const setNotEnoughErrMsgAC = (minPlayersCount) => {
+  return { type: CONST.SET_NOT_ENOUGH_ERR_MSG, minPlayersCount };
 };
 export const resetNotEnoughErrMsgAC = () => {
   return { type: CONST.RESET_NOT_ENOUGH_ERR_MSG };
 };
+export const changeTeamColorAC = (teamId) => {
+  return { type: CONST.CHANGE_TEAM_COLOR, teamId };
+};
+export const toggleRandomAC = () => {
+  return { type: CONST.TOGGLE_RANDOM };
+};
 
 //* ThunkCreators
-export const onInputChangeTC = (text) => (dispatch) => {
+export const onInputChangeTC = (text) => (dispatch, setState) => {
   dispatch(addNewPlayersAC(text));
   dispatch(checkForSubsAC());
   dispatch(checkForRequiredAC(text));
-  dispatch(checkForEnoughPlayersAC());
-  dispatch(checkForRepeatedPlayersAC());
+  dispatch(
+    checkForEnoughPlayersAC(
+      setState().reducer.playerList,
+      minPlayersCount(setState().reducer)
+    )
+  );
+  dispatch(checkForRepeatedPlayersAC(setState().reducer.playerList));
   dispatch(checkValidationAC());
 };
-export const onInputBlurTC = () => (dispatch) => {
+export const onInputBlurTC = () => (dispatch, setState) => {
   dispatch(setRepeatedErrMsgAC());
-  dispatch(setNotEnoughErrMsgAC());
+  dispatch(setNotEnoughErrMsgAC(minPlayersCount(setState().reducer)));
 };
 export const onInputFocus = () => (dispatch) => {
   dispatch(resetNotEnoughErrMsgAC());
   dispatch(resetRepeatedErrMsgAC());
 };
 
-export const onTeamCountChangeTC = (count) => (dispatch) => {
+export const onTeamCountChangeTC = (count) => (dispatch, setState) => {
   dispatch(changeTeamsCountAC(count));
   dispatch(checkForSubsAC());
+  dispatch(
+    checkForEnoughPlayersAC(
+      setState().reducer.playerList,
+      minPlayersCount(setState().reducer)
+    )
+  );
+  dispatch(checkValidationAC());
 };
-export const onTeamCountBlurTC = (count) => (dispatch) => {
+
+export const onTeamCountBlurTC = (count) => (dispatch, setState) => {
   dispatch(checkTeamsCountAC(count));
   dispatch(checkForSubsAC());
-  dispatch(checkForEnoughPlayersAC());
-  dispatch(setNotEnoughErrMsgAC());
+  dispatch(
+    checkForEnoughPlayersAC(
+      setState().reducer.playerList,
+      minPlayersCount(setState().reducer)
+    )
+  );
+  dispatch(setNotEnoughErrMsgAC(minPlayersCount(setState().reducer)));
+  dispatch(checkValidationAC());
 };
 
 export const onMaxPlayersChangeTC = (count) => (dispatch) => {
@@ -99,7 +121,14 @@ export const onMaxPlayersBlurTC = (count) => (dispatch) => {
   dispatch(checkForSubsAC());
 };
 
-export const divideTeamsTC = () => (dispatch) => {
+export const divideTeamsTC = () => (dispatch, getState) => {
   dispatch(checkValidationAC());
-  dispatch(divideTeamsAC());
+  const isValid = getState().validation.isValid;
+  if (isValid) {
+    dispatch(divideTeamsAC());
+  }
+};
+
+const minPlayersCount = (state) => {
+  return state.totalTeams * state.minPlayersInTeam;
 };

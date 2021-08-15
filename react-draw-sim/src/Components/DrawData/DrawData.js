@@ -32,10 +32,9 @@ const DrawData = (props) => {
           inputClassName="teamsCount"
           changeCountCreator={props.onTeamCountChangeTC}
           blurCountCreator={props.onTeamCountBlurTC}
-          onFocus={props.resetEnoughPlayers}
+          onFocus={props.resetNotEnoughErrMsgAC}
           maxLength="2"
           value={props.totalTeams}
-          dispatch={props.dispatch}
         />
         <DataCountInput
           className="playersCondition"
@@ -45,13 +44,12 @@ const DrawData = (props) => {
           blurCountCreator={props.onMaxPlayersBlurTC}
           maxLength="3"
           value={props.maxPlayersInTeam}
-          dispatch={props.dispatch}
         />
         <DataRandTeamBtn
           className="playersCondition"
           inputClassName="randomToggle"
           title="Поделить в случайном порядке: "
-          toggleRandomCreator={props.toggleRandomCreator}
+          toggleRandomCreator={props.toggleRandomAC}
           isRandom={props.isRandom}
         />
         <button

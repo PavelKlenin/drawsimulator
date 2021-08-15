@@ -20,8 +20,8 @@ const mapStateToProps = (state) => {
     maxPlayersInTeam: state.reducer.maxPlayersInTeam,
     isRandom: state.reducer.isRandom,
     teams: state.reducer.teams,
-    isValid: state.reducer.isValid,
-    error: state.reducer.error,
+    isValid: state.validation.isValid,
+    error: state.validation.error,
   }
 
 };

@@ -1,4 +1,4 @@
-import * as CONST from './consts';
+import * as CONST from "./consts";
 
 const initialState = {
   playerList: [], // { id: 1, name: player, subs: false, repeated: false,}
@@ -32,12 +32,19 @@ const reducer = (state = initialState, action) => {
       if (arrPlayerList) {
         return {
           ...state,
-          playerList: arrPlayerList.map((player, id) => {
+          playerList: arrPlayerList.map((player, idx) => {
             return {
-              id: id + 1,
+              id: idx + 1,
               name: player,
-              subs: checkForSubsPlayers((id = id + 1), setMaxPlayers(state)),
-              repeated: false,
+              subs: checkForSubsPlayers((idx + 1), setMaxPlayers(state)),
+              repeated: arrPlayerList.find((samePlayer, i) => {
+                return (
+                  samePlayer.toUpperCase() === player.toUpperCase() &&
+                  i !== idx
+                );
+              })
+                ? true
+                : false,
             };
           }),
         };
@@ -94,45 +101,43 @@ const reducer = (state = initialState, action) => {
         isRandom: !state.isRandom, // для div
       };
     case CONST.DIVIDE_TEAMS: {
-      if (state.isValid) {
-        let restPlayersCount = state.playerList.length; // изначально кол-во оставшихся игроков равно списку;
-        let nextPlayerIndex = 0; // индекс игрока, с которого надо добавлять в след.команду;
-        let playerList = state.isRandom
-          ? resetTeamColors(setShuffledList(state.playerList))
-          : resetTeamColors(state.playerList); // JSON.parse(JSON.stringify(state.playerList)) - глубокая копия
-        return {
-          ...state,
-          colorList: state.colorList.map((color) => ({
-            ...color,
-            usedById: null,
-          })),
-          teams: createNewTeams(state).map((team, i) => {
-            // проверка на запасную команду. Т.к. i начинается с 0, утверждение будет верно только при наличии лишней (запасной) команды
-            let isSubsTeam = +state.totalTeams === i;
-            let restTeamsCount = state.totalTeams - i; // сколько осталось команд (для расчета кол-ва игроков при недоборе игроков)
-            let computedPlayersCount; // количество игроков в каждую команду
-            isSubsTeam // если есть запасные, они будут отображаться все в одной команде
-              ? (computedPlayersCount = restPlayersCount)
-              : (computedPlayersCount =
-                  playerList.length < setMaxPlayers(state) // при недоборе в каждую итерацию кол-во игроков считается относительно
-                    ? Math.ceil(restPlayersCount / restTeamsCount) // оставшегося количества игроков и команд для равномерного распределения
-                    : +state.maxPlayersInTeam); // преобразование в число (иначе nextPlayerIndex складывается конкатенацией)
+      let restPlayersCount = state.playerList.length; // изначально кол-во оставшихся игроков равно списку;
+      let nextPlayerIndex = 0; // индекс игрока, с которого надо добавлять в след.команду;
+      let playerList = state.isRandom
+        ? resetTeamColors(setShuffledList(state.playerList))
+        : resetTeamColors(state.playerList); // JSON.parse(JSON.stringify(state.playerList)) - глубокая копия
+      return {
+        ...state,
+        colorList: state.colorList.map((color) => ({
+          ...color,
+          usedById: null,
+        })),
+        teams: createNewTeams(state).map((team, i) => {
+          // проверка на запасную команду. Т.к. i начинается с 0, утверждение будет верно только при наличии лишней (запасной) команды
+          let isSubsTeam = +state.totalTeams === i;
+          let restTeamsCount = state.totalTeams - i; // сколько осталось команд (для расчета кол-ва игроков при недоборе игроков)
+          let computedPlayersCount; // количество игроков в каждую команду
+          isSubsTeam // если есть запасные, они будут отображаться все в одной команде
+            ? (computedPlayersCount = restPlayersCount)
+            : (computedPlayersCount =
+                playerList.length < setMaxPlayers(state) // при недоборе в каждую итерацию кол-во игроков считается относительно
+                  ? Math.ceil(restPlayersCount / restTeamsCount) // оставшегося количества игроков и команд для равномерного распределения
+                  : +state.maxPlayersInTeam); // преобразование в число (иначе nextPlayerIndex складывается конкатенацией)
 
-            // добавление игроков в команду
-            for (
-              let i = nextPlayerIndex;
-              i < nextPlayerIndex + computedPlayersCount;
-              i++
-            ) {
-              // проверка на наличие игрока, чтобы запасная команда не наполняла команду underfined-игроками
-              team.squad = [...team.squad, playerList[i]];
-            }
-            restPlayersCount = restPlayersCount - computedPlayersCount; // для след.итераций из оставшихся игроков вычитается кол-во игроков в команде
-            nextPlayerIndex = nextPlayerIndex + computedPlayersCount; // индекс для след.команды равен сумме всех игроков из предыдущих команд
-            return team;
-          }),
-        };
-      } else return state;
+          // добавление игроков в команду
+          for (
+            let i = nextPlayerIndex;
+            i < nextPlayerIndex + computedPlayersCount;
+            i++
+          ) {
+            // проверка на наличие игрока, чтобы запасная команда не наполняла команду underfined-игроками
+            team.squad = [...team.squad, playerList[i]];
+          }
+          restPlayersCount = restPlayersCount - computedPlayersCount; // для след.итераций из оставшихся игроков вычитается кол-во игроков в команде
+          nextPlayerIndex = nextPlayerIndex + computedPlayersCount; // индекс для след.команды равен сумме всех игроков из предыдущих команд
+          return team;
+        }),
+      };
     }
     case CONST.CHANGE_TEAM_COLOR: {
       const teamsColors = [...state.colorList]; // JSON.parse(JSON.stringify(state.colorList)) - глубокая копия
@@ -165,135 +170,6 @@ const reducer = (state = initialState, action) => {
         }),
       };
     }
-    case CONST.CHECK_VALIDATION: {
-      const isErrors = () => {
-        for (let key in state.error) {
-          if (!state.error[key].isValid) {
-            return false;
-          }
-        }
-        return true;
-      };
-      return {
-        ...state,
-        isValid: isErrors(),
-      };
-    }
-    case CONST.CHECK_FOR_REPEATED_PLAYERS: {
-      const repeatedPlayers = state.playerList.map((player, idx) => {
-        if (
-          state.playerList.find((samePlayer, i) => {
-            return (
-              samePlayer.name.toUpperCase() === player.name.toUpperCase() &&
-              i !== idx
-            );
-          })
-        ) {
-          return {
-            ...player,
-            repeated: true,
-          };
-        } else {
-          return {
-            ...player,
-            repeated: false,
-          };
-        }
-      });
-      return {
-        ...state,
-        playerList: repeatedPlayers,
-        error: {
-          ...state.error,
-          repeatedPlayers: {
-            ...state.error.repeatedPlayers,
-            isValid: !repeatedPlayers.some((player) => player.repeated),
-          },
-        },
-      };
-    }
-    case CONST.SET_REPEATED_ERR_MSG: {
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          repeatedPlayers: {
-            ...state.error.repeatedPlayers,
-            message: !state.error.repeatedPlayers.isValid
-              ? "Повторяющиеся игроки"
-              : "",
-          },
-        },
-      };
-    }
-    case CONST.RESET_REPEATED_ERR_MSG:
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          repeatedPlayers: { ...state.error.repeatedPlayers, message: "" },
-        },
-      };
-    case CONST.CHECK_FOR_REQUIRED:
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          required: {
-            ...state.error.required,
-            isValid: action.text ? true : false,
-            message: action.text ? "" : "Required",
-          }
-        },
-      };
-    case CONST.RESET_REQUIRED_ERR_MSG:
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          required: { ...state.error.required, message: "" },
-        },
-      };
-    case CONST.CHECK_FOR_ENOUGH_PLAYERS:
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          notEnoughPlayers: {
-            ...state.error.notEnoughPlayers,
-            isValid:
-              state.playerList.length >=
-              state.totalTeams * state.minPlayersInTeam,
-          },
-        },
-      };
-    case CONST.SET_NOT_ENOUGH_ERR_MSG:
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          notEnoughPlayers: {
-            ...state.error.notEnoughPlayers,
-            message: !state.error.notEnoughPlayers.isValid ? (
-              <pre>
-                {`Слишком мало игроков.\nМинимальное количество - ${
-                  state.totalTeams * state.minPlayersInTeam
-                }`}
-              </pre>
-            ) : (
-              ""
-            ),
-          },
-        },
-      };
-    case CONST.RESET_NOT_ENOUGH_ERR_MSG:
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          notEnoughPlayers: { ...state.error.notEnoughPlayers, message: "" },
-        },
-      };
     default:
       return state;
   }
@@ -323,8 +199,8 @@ const convertTextToArr = (chars) => {
     return correctList;
   } else return;
 };
-const checkForSubsPlayers = (playerId, setMaxPlayers) => {
-  return playerId > setMaxPlayers ? true : false;
+const checkForSubsPlayers = (playerIdx, setMaxPlayers) => {
+  return playerIdx > setMaxPlayers ? true : false;
 };
 const createNewTeams = (state) => {
   let teams = [];

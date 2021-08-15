@@ -201,8 +201,9 @@
 
   .errors {
     margin-bottom: 5px;
+    padding-top: $indent-small;
     line-height: 1;
-    min-height: $indent-med;
+    min-height: $indent-big;
     text-align: center;
     font-size: 14px;
     // font-family: "Courier New", Courier, monospace;
