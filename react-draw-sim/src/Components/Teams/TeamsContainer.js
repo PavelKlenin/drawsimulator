@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { changeTeamColorCreator } from '../../store/reducer';
+import { changeTeamColorCreator } from '../../store/actions';
 import Teams from './Teams';
 
 const mapStateToProps = (state) => {

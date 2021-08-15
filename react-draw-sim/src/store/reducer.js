@@ -1,31 +1,10 @@
-const ON_INPUT_TEXT = "ON_INPUT_TEXT";
-const CHANGE_TEAMS_COUNT = "CHANGE_TEAMS_COUNT"; //update totalTeams
-const BLUR_TEAMS_COUNT = "BLUR_TEAMS_COUNT"; //check totalTeams
-const CHANGE_MAX_PLAYERS_COUNT = "CHANGE_MAX_PLAYERS_COUNT"; //update maxPlayersInTeam
-const BLUR_MAX_PLAYERS_COUNT = "BLUR_MAX_PLAYERS_COUNT"; //check maxPlayersInTeam
-const CHANGE_MIN_PLAYERS_COUNT = "CHANGE_MIN_PLAYERS_COUNT"; //update minPlayersInTeam
-const BLUR_MIN_PLAYERS_COUNT = "BLUR_MIN_PLAYERS_COUNT"; //check minPlayersInTeam
-//const CHANGE_MIN_PLAYERS_COUNT = "CHANGE_MIN_PLAYERS_COUNT";
-const UPDATE_SUBS = "UPDATE_SUBS";
-const DIVIDE_TEAMS = "DIVIDE_TEAMS";
-const TOGGLE_RANDOM = "TOGGLE_RANDOM";
-const CHANGE_TEAM_COLOR = "CHANGE_TEAM_COLOR";
-const VALIDATE = "VALIDATE";
-const CHECK_REPEATED_PLAYERS = "CHECK_REPEATED_PLAYERS";
-const SET_REPEATED_ERR_MSG = "SET_REPEATED_ERR_MSG";
-const RESET_REPEATED_PLAYERS = "RESET_REPEATED_PLAYERS";
-const REQUIRED = "REQUIRED";
-// const SET_REQUIRED_ERR_MSG = "SET_REQUIRED_ERR_MSG";
-const RESET_REQUIRED = "RESET_REQUIRED";
-const CHECK_ENOUGH_PLAYERS = "CHECK_ENOUGH_PLAYERS";
-const SET_NOT_ENOUGH_ERR_MSG = "SET_NOT_ENOUGH_ERR_MSG";
-const RESET_ENOUGH_PLAYERS = "RESET_ENOUGH_PLAYERS";
+import * as CONST from './consts';
 
 const initialState = {
   playerList: [], // { id: 1, name: player, subs: false, repeated: false,}
-  teamsCount: 3, // totalTeams
-  maxPlayersCount: 5, // maxPlayersInTeam
-  minPlayersCount: 2, // minPlayersInTeam
+  totalTeams: 3,
+  maxPlayersInTeam: 5,
+  minPlayersInTeam: 2,
   //minPlayersCount: 6,
   colorList: [
     { id: 1, color: "teamRed", usedById: null },
@@ -48,7 +27,7 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ON_INPUT_TEXT:
+    case CONST.ON_INPUT_TEXT:
       const arrPlayerList = convertTextToArr(action.value);
       if (arrPlayerList) {
         return {
@@ -63,40 +42,40 @@ const reducer = (state = initialState, action) => {
           }),
         };
       } else return { ...state, playerList: [] };
-    case CHANGE_TEAMS_COUNT:
+    case CONST.CHANGE_TEAMS_COUNT:
       return {
         ...state,
-        teamsCount: action.value,
+        totalTeams: action.value,
       };
-    case BLUR_TEAMS_COUNT:
+    case CONST.BLUR_TEAMS_COUNT:
       return {
         ...state,
-        teamsCount: action.value > 0 ? action.value : 3,
+        totalTeams: action.value > 1 ? action.value : 3,
       };
-    case CHANGE_MAX_PLAYERS_COUNT:
+    case CONST.CHANGE_MAX_PLAYERS_COUNT:
       return {
         ...state,
-        maxPlayersCount: action.value,
+        maxPlayersInTeam: action.value,
       };
-    case BLUR_MAX_PLAYERS_COUNT:
+    case CONST.BLUR_MAX_PLAYERS_COUNT:
       return {
         ...state,
-        maxPlayersCount: action.value > 0 ? action.value : 5,
+        maxPlayersInTeam: action.value > 1 ? action.value : 5,
       };
-    case CHANGE_MIN_PLAYERS_COUNT:
+    case CONST.CHANGE_MIN_PLAYERS_COUNT:
       return {
         ...state,
-        minPlayersCount: action.value,
+        minPlayersInTeam: action.value,
       };
-    case BLUR_MIN_PLAYERS_COUNT:
+    case CONST.BLUR_MIN_PLAYERS_COUNT:
       return {
         ...state,
-        minPlayersCount:
-          action.value > 1 && action.value <= state.maxPlayersCount
+        minPlayersInTeam:
+          action.value > 1 && action.value <= state.maxPlayersInTeam
             ? action.value
-            : state.maxPlayersCount - 1,
+            : state.maxPlayersInTeam - 1,
       };
-    case UPDATE_SUBS:
+    case CONST.UPDATE_SUBS:
       return setMaxPlayers(state)
         ? {
             ...state,
@@ -108,13 +87,13 @@ const reducer = (state = initialState, action) => {
             }),
           }
         : state;
-    case TOGGLE_RANDOM:
+    case CONST.TOGGLE_RANDOM:
       return {
         ...state,
         // isRandom: action.value, // для checkbox
         isRandom: !state.isRandom, // для div
       };
-    case DIVIDE_TEAMS: {
+    case CONST.DIVIDE_TEAMS: {
       if (state.isValid) {
         let restPlayersCount = state.playerList.length; // изначально кол-во оставшихся игроков равно списку;
         let nextPlayerIndex = 0; // индекс игрока, с которого надо добавлять в след.команду;
@@ -129,15 +108,15 @@ const reducer = (state = initialState, action) => {
           })),
           teams: createNewTeams(state).map((team, i) => {
             // проверка на запасную команду. Т.к. i начинается с 0, утверждение будет верно только при наличии лишней (запасной) команды
-            let isSubsTeam = +state.teamsCount === i;
-            let restTeamsCount = state.teamsCount - i; // сколько осталось команд (для расчета кол-ва игроков при недоборе игроков)
+            let isSubsTeam = +state.totalTeams === i;
+            let restTeamsCount = state.totalTeams - i; // сколько осталось команд (для расчета кол-ва игроков при недоборе игроков)
             let computedPlayersCount; // количество игроков в каждую команду
             isSubsTeam // если есть запасные, они будут отображаться все в одной команде
               ? (computedPlayersCount = restPlayersCount)
               : (computedPlayersCount =
                   playerList.length < setMaxPlayers(state) // при недоборе в каждую итерацию кол-во игроков считается относительно
                     ? Math.ceil(restPlayersCount / restTeamsCount) // оставшегося количества игроков и команд для равномерного распределения
-                    : +state.maxPlayersCount); // преобразование в число (иначе nextPlayerIndex складывается конкатенацией)
+                    : +state.maxPlayersInTeam); // преобразование в число (иначе nextPlayerIndex складывается конкатенацией)
 
             // добавление игроков в команду
             for (
@@ -155,7 +134,7 @@ const reducer = (state = initialState, action) => {
         };
       } else return state;
     }
-    case CHANGE_TEAM_COLOR: {
+    case CONST.CHANGE_TEAM_COLOR: {
       const teamsColors = [...state.colorList]; // JSON.parse(JSON.stringify(state.colorList)) - глубокая копия
       const currentColor = teamsColors.find(
         (color) => color.usedById === action.teamId
@@ -186,7 +165,7 @@ const reducer = (state = initialState, action) => {
         }),
       };
     }
-    case VALIDATE: {
+    case CONST.VALIDATE: {
       const isErrors = () => {
         for (let key in state.error) {
           if (!state.error[key].isValid) {
@@ -200,7 +179,7 @@ const reducer = (state = initialState, action) => {
         isValid: isErrors(),
       };
     }
-    case CHECK_REPEATED_PLAYERS: {
+    case CONST.CHECK_REPEATED_PLAYERS: {
       const repeatedPlayers = state.playerList.map((player, idx) => {
         if (
           state.playerList.find((samePlayer, i) => {
@@ -233,7 +212,7 @@ const reducer = (state = initialState, action) => {
         },
       };
     }
-    case SET_REPEATED_ERR_MSG: {
+    case CONST.SET_REPEATED_ERR_MSG: {
       return {
         ...state,
         error: {
@@ -247,7 +226,7 @@ const reducer = (state = initialState, action) => {
         },
       };
     }
-    case RESET_REPEATED_PLAYERS:
+    case CONST.RESET_REPEATED_PLAYERS:
       return {
         ...state,
         error: {
@@ -255,7 +234,7 @@ const reducer = (state = initialState, action) => {
           repeatedPlayers: { ...state.error.repeatedPlayers, message: "" },
         },
       };
-    case REQUIRED:
+    case CONST.REQUIRED:
       return {
         ...state,
         error: {
@@ -267,7 +246,7 @@ const reducer = (state = initialState, action) => {
           }
         },
       };
-    case RESET_REQUIRED:
+    case CONST.RESET_REQUIRED:
       return {
         ...state,
         error: {
@@ -275,7 +254,7 @@ const reducer = (state = initialState, action) => {
           required: { ...state.error.required, message: "" },
         },
       };
-    case CHECK_ENOUGH_PLAYERS:
+    case CONST.CHECK_ENOUGH_PLAYERS:
       return {
         ...state,
         error: {
@@ -284,11 +263,11 @@ const reducer = (state = initialState, action) => {
             ...state.error.notEnoughPlayers,
             isValid:
               state.playerList.length >=
-              state.teamsCount * state.minPlayersCount,
+              state.totalTeams * state.minPlayersInTeam,
           },
         },
       };
-    case SET_NOT_ENOUGH_ERR_MSG:
+    case CONST.SET_NOT_ENOUGH_ERR_MSG:
       return {
         ...state,
         error: {
@@ -298,7 +277,7 @@ const reducer = (state = initialState, action) => {
             message: !state.error.notEnoughPlayers.isValid ? (
               <pre>
                 {`Слишком мало игроков.\nМинимальное количество - ${
-                  state.teamsCount * state.minPlayersCount
+                  state.totalTeams * state.minPlayersInTeam
                 }`}
               </pre>
             ) : (
@@ -307,7 +286,7 @@ const reducer = (state = initialState, action) => {
           },
         },
       };
-    case RESET_ENOUGH_PLAYERS:
+    case CONST.RESET_ENOUGH_PLAYERS:
       return {
         ...state,
         error: {
@@ -321,111 +300,6 @@ const reducer = (state = initialState, action) => {
 };
 
 export default reducer;
-
-//* ActionCreators
-export const inputTextCreator = (text) => {
-  return { type: ON_INPUT_TEXT, value: text };
-};
-export const teamCountCreator = (count) => {
-  return { type: CHANGE_TEAMS_COUNT, value: count };
-};
-export const maxPlayersCountCreator = (count) => {
-  return { type: CHANGE_MAX_PLAYERS_COUNT, value: count };
-};
-export const minPlayersCountCreator = (count) => {
-  return { type: CHANGE_MIN_PLAYERS_COUNT, value: count };
-};
-export const teamBlurCreator = (count) => {
-  return { type: BLUR_TEAMS_COUNT, value: count };
-};
-export const maxPlayersBlurCreator = (count) => {
-  return { type: BLUR_MAX_PLAYERS_COUNT, value: count };
-};
-export const minPlayersBlurCreator = (count) => {
-  return { type: BLUR_MIN_PLAYERS_COUNT, value: count };
-};
-export const updateSubsCreator = () => {
-  return { type: UPDATE_SUBS };
-};
-export const divideTeamsCreator = () => {
-  return { type: DIVIDE_TEAMS };
-};
-export const changeTeamColorCreator = (teamId) => {
-  return { type: CHANGE_TEAM_COLOR, teamId };
-};
-export const toggleRandomCreator = () => {
-  return { type: TOGGLE_RANDOM };
-};
-export const validateInputs = () => {
-  return { type: VALIDATE };
-};
-export const checkRepeatedPlayers = () => {
-  return { type: CHECK_REPEATED_PLAYERS };
-};
-export const setRepeatedErrMsg = () => {
-  return { type: SET_REPEATED_ERR_MSG };
-};
-export const resetRepeatedPlayers = () => {
-  return { type: RESET_REPEATED_PLAYERS };
-};
-export const required = (text) => {
-  return { type: REQUIRED, text };
-};
-export const resetRequired = () => {
-  return { type: RESET_REQUIRED };
-};
-export const checkEnoughPlayers = () => {
-  return { type: CHECK_ENOUGH_PLAYERS };
-};
-export const setNotEnoughErrMsg = () => {
-  return { type: SET_NOT_ENOUGH_ERR_MSG };
-};
-export const resetEnoughPlayers = () => {
-  return { type: RESET_ENOUGH_PLAYERS };
-};
-
-//* ThunkCreators
-export const onInputChangeTC = (text) => (dispatch) => {
-  dispatch(inputTextCreator(text));
-  dispatch(updateSubsCreator());
-  dispatch(required(text));
-  dispatch(checkEnoughPlayers());
-  dispatch(checkRepeatedPlayers());
-  dispatch(validateInputs());
-};
-export const onInputBlurTC = () => (dispatch) => {
-  dispatch(setRepeatedErrMsg());
-  dispatch(setNotEnoughErrMsg());
-};
-export const onInputFocus = () => (dispatch) => {
-  dispatch(resetEnoughPlayers());
-  dispatch(resetRepeatedPlayers());
-};
-
-export const onTeamCountChangeTC = (count) => (dispatch) => {
-  dispatch(teamCountCreator(count));
-  dispatch(updateSubsCreator());
-};
-export const onTeamCountBlurTC = (count) => (dispatch) => {
-  dispatch(teamBlurCreator(count));
-  dispatch(updateSubsCreator());
-  dispatch(checkEnoughPlayers());
-  dispatch(setNotEnoughErrMsg());
-};
-
-export const onMaxPlayersChangeTC = (count) => (dispatch) => {
-  dispatch(maxPlayersCountCreator(count));
-  dispatch(updateSubsCreator());
-};
-export const onMaxPlayersBlurTC = (count) => (dispatch) => {
-  dispatch(maxPlayersBlurCreator(count));
-  dispatch(updateSubsCreator());
-};
-
-export const divideTeamsTC = () => (dispatch) => {
-  dispatch(validateInputs());
-  dispatch(divideTeamsCreator());
-};
 
 //* Additional functions
 const emptyLineCheck = (array) => {
@@ -454,8 +328,8 @@ const checkForSubsPlayers = (playerId, setMaxPlayers) => {
 };
 const createNewTeams = (state) => {
   let teams = [];
-  // добавление пустых команд по количеству команд (state.teamsCount)
-  for (let i = 0; i < state.teamsCount; i++) {
+  // добавление пустых команд по количеству команд (state.totalTeams)
+  for (let i = 0; i < state.totalTeams; i++) {
     teams = [
       ...teams,
       {
@@ -483,7 +357,7 @@ const createNewTeams = (state) => {
   return teams;
 };
 const setMaxPlayers = (state) => {
-  return state.teamsCount * state.maxPlayersCount;
+  return state.totalTeams * state.maxPlayersInTeam;
 };
 // алгоритм Фишера-Йейтса - Fisher–Yates shuffle
 const setShuffledList = (list) => {

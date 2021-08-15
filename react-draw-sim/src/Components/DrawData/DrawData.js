@@ -34,7 +34,7 @@ const DrawData = (props) => {
           blurCountCreator={props.onTeamCountBlurTC}
           onFocus={props.resetEnoughPlayers}
           maxLength="2"
-          value={props.teamsCount}
+          value={props.totalTeams}
           dispatch={props.dispatch}
         />
         <DataCountInput
@@ -44,7 +44,7 @@ const DrawData = (props) => {
           changeCountCreator={props.onMaxPlayersChangeTC}
           blurCountCreator={props.onMaxPlayersBlurTC}
           maxLength="3"
-          value={props.maxPlayersCount}
+          value={props.maxPlayersInTeam}
           dispatch={props.dispatch}
         />
         <DataRandTeamBtn
