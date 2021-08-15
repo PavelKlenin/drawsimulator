@@ -1,105 +1,105 @@
 import * as CONST from './consts';
 
-export const inputTextCreator = (text) => {
-	return { type: CONST.ON_INPUT_TEXT, value: text };
+const addNewPlayersAC = (text) => {
+	return { type: CONST.ADD_NEW_PLAYERS, value: text };
 };
-export const teamCountCreator = (count) => {
+const changeTeamsCountAC = (count) => {
   return { type: CONST.CHANGE_TEAMS_COUNT, value: count };
 };
-export const maxPlayersCountCreator = (count) => {
-  return { type: CONST.CHANGE_MAX_PLAYERS_COUNT, value: count };
+const changeMaxTeamPlayersAC = (count) => {
+  return { type: CONST.CHANGE_MAX_TEAM_PLAYERS, value: count };
 };
-export const minPlayersCountCreator = (count) => {
-  return { type: CONST.CHANGE_MIN_PLAYERS_COUNT, value: count };
+// const changeMinTeamPlayersAC = (count) => {
+//   return { type: CONST.CHANGE_MIN_TEAM_PLAYERS, value: count };
+// };
+const checkTeamsCountAC = (count) => {
+  return { type: CONST.CHECK_TEAMS_COUNT, value: count };
 };
-export const teamBlurCreator = (count) => {
-  return { type: CONST.BLUR_TEAMS_COUNT, value: count };
+const checkMaxTeamPlayersAC = (count) => {
+  return { type: CONST.CHECK_MAX_TEAM_PLAYERS, value: count };
 };
-export const maxPlayersBlurCreator = (count) => {
-  return { type: CONST.BLUR_MAX_PLAYERS_COUNT, value: count };
+// const checkMinTeamPlayersAC = (count) => {
+//   return { type: CONST.CHECK_MIN_TEAM_PLAYERS, value: count };
+// };
+const checkForSubsAC = () => {
+  return { type: CONST.CHECK_FOR_SUBS };
 };
-export const minPlayersBlurCreator = (count) => {
-  return { type: CONST.BLUR_MIN_PLAYERS_COUNT, value: count };
-};
-export const updateSubsCreator = () => {
-  return { type: CONST.UPDATE_SUBS };
-};
-export const divideTeamsCreator = () => {
+const divideTeamsAC = () => {
   return { type: CONST.DIVIDE_TEAMS };
 };
-export const changeTeamColorCreator = (teamId) => {
+export const changeTeamColorAC = (teamId) => {
   return { type: CONST.CHANGE_TEAM_COLOR, teamId };
 };
-export const toggleRandomCreator = () => {
+export const toggleRandomAC = () => {
   return { type: CONST.TOGGLE_RANDOM };
 };
-export const validateInputs = () => {
-  return { type: CONST.VALIDATE };
+const checkValidationAC = () => {
+  return { type: CONST.CHECK_VALIDATION };
 };
-export const checkRepeatedPlayers = () => {
-  return { type: CONST.CHECK_REPEATED_PLAYERS };
+const checkForRepeatedPlayersAC = () => {
+  return { type: CONST.CHECK_FOR_REPEATED_PLAYERS };
 };
-export const setRepeatedErrMsg = () => {
+const setRepeatedErrMsgAC = () => {
   return { type: CONST.SET_REPEATED_ERR_MSG };
 };
-export const resetRepeatedPlayers = () => {
-  return { type: CONST.RESET_REPEATED_PLAYERS };
+const resetRepeatedErrMsgAC = () => {
+  return { type: CONST.RESET_REPEATED_ERR_MSG };
 };
-export const checkRequired = (text) => {
-  return { type: CONST.REQUIRED, text };
+const checkForRequiredAC = (text) => {
+  return { type: CONST.CHECK_FOR_REQUIRED, text };
 };
-export const resetRequired = () => {
-  return { type: CONST.RESET_REQUIRED };
+// const resetRequiredErrMsgAC = () => {
+//   return { type: CONST.RESET_REQUIRED_ERR_MSG };
+// };
+const checkForEnoughPlayersAC = () => {
+  return { type: CONST.CHECK_FOR_ENOUGH_PLAYERS };
 };
-export const checkEnoughPlayers = () => {
-  return { type: CONST.CHECK_ENOUGH_PLAYERS };
-};
-export const setNotEnoughErrMsg = () => {
+const setNotEnoughErrMsgAC = () => {
   return { type: CONST.SET_NOT_ENOUGH_ERR_MSG };
 };
-export const resetEnoughPlayers = () => {
-  return { type: CONST.RESET_ENOUGH_PLAYERS };
+export const resetNotEnoughErrMsgAC = () => {
+  return { type: CONST.RESET_NOT_ENOUGH_ERR_MSG };
 };
 
 //* ThunkCreators
 export const onInputChangeTC = (text) => (dispatch) => {
-  dispatch(inputTextCreator(text));
-  dispatch(updateSubsCreator());
-  dispatch(checkRequired(text));
-  dispatch(checkEnoughPlayers());
-  dispatch(checkRepeatedPlayers());
-  dispatch(validateInputs());
+  dispatch(addNewPlayersAC(text));
+  dispatch(checkForSubsAC());
+  dispatch(checkForRequiredAC(text));
+  dispatch(checkForEnoughPlayersAC());
+  dispatch(checkForRepeatedPlayersAC());
+  dispatch(checkValidationAC());
 };
 export const onInputBlurTC = () => (dispatch) => {
-  dispatch(setRepeatedErrMsg());
-  dispatch(setNotEnoughErrMsg());
+  dispatch(setRepeatedErrMsgAC());
+  dispatch(setNotEnoughErrMsgAC());
 };
 export const onInputFocus = () => (dispatch) => {
-  dispatch(resetEnoughPlayers());
-  dispatch(resetRepeatedPlayers());
+  dispatch(resetNotEnoughErrMsgAC());
+  dispatch(resetRepeatedErrMsgAC());
 };
 
 export const onTeamCountChangeTC = (count) => (dispatch) => {
-  dispatch(teamCountCreator(count));
-  dispatch(updateSubsCreator());
+  dispatch(changeTeamsCountAC(count));
+  dispatch(checkForSubsAC());
 };
 export const onTeamCountBlurTC = (count) => (dispatch) => {
-  dispatch(teamBlurCreator(count));
-  dispatch(updateSubsCreator());
-  dispatch(checkEnoughPlayers());
-  dispatch(setNotEnoughErrMsg());
+  dispatch(checkTeamsCountAC(count));
+  dispatch(checkForSubsAC());
+  dispatch(checkForEnoughPlayersAC());
+  dispatch(setNotEnoughErrMsgAC());
 };
 
 export const onMaxPlayersChangeTC = (count) => (dispatch) => {
-  dispatch(maxPlayersCountCreator(count));
-  dispatch(updateSubsCreator());
+  dispatch(changeMaxTeamPlayersAC(count));
+  dispatch(checkForSubsAC());
 };
 export const onMaxPlayersBlurTC = (count) => (dispatch) => {
-  dispatch(maxPlayersBlurCreator(count));
-  dispatch(updateSubsCreator());
+  dispatch(checkMaxTeamPlayersAC(count));
+  dispatch(checkForSubsAC());
 };
 
 export const divideTeamsTC = () => (dispatch) => {
-  dispatch(validateInputs());
-  dispatch(divideTeamsCreator());
+  dispatch(checkValidationAC());
+  dispatch(divideTeamsAC());
 };

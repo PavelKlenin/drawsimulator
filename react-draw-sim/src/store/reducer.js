@@ -27,7 +27,7 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case CONST.ON_INPUT_TEXT:
+    case CONST.ADD_NEW_PLAYERS:
       const arrPlayerList = convertTextToArr(action.value);
       if (arrPlayerList) {
         return {
@@ -47,27 +47,27 @@ const reducer = (state = initialState, action) => {
         ...state,
         totalTeams: action.value,
       };
-    case CONST.BLUR_TEAMS_COUNT:
+    case CONST.CHECK_TEAMS_COUNT:
       return {
         ...state,
-        totalTeams: action.value > 1 ? action.value : 3,
+        totalTeams: action.value > 1 ? action.value : 2,
       };
-    case CONST.CHANGE_MAX_PLAYERS_COUNT:
+    case CONST.CHANGE_MAX_TEAM_PLAYERS:
       return {
         ...state,
         maxPlayersInTeam: action.value,
       };
-    case CONST.BLUR_MAX_PLAYERS_COUNT:
+    case CONST.CHECK_MAX_TEAM_PLAYERS:
       return {
         ...state,
-        maxPlayersInTeam: action.value > 1 ? action.value : 5,
+        maxPlayersInTeam: action.value > 1 ? action.value : 2,
       };
-    case CONST.CHANGE_MIN_PLAYERS_COUNT:
+    case CONST.CHANGE_MIN_TEAM_PLAYERS:
       return {
         ...state,
         minPlayersInTeam: action.value,
       };
-    case CONST.BLUR_MIN_PLAYERS_COUNT:
+    case CONST.CHECK_MIN_TEAM_PLAYERS:
       return {
         ...state,
         minPlayersInTeam:
@@ -75,7 +75,7 @@ const reducer = (state = initialState, action) => {
             ? action.value
             : state.maxPlayersInTeam - 1,
       };
-    case CONST.UPDATE_SUBS:
+    case CONST.CHECK_FOR_SUBS:
       return setMaxPlayers(state)
         ? {
             ...state,
@@ -165,7 +165,7 @@ const reducer = (state = initialState, action) => {
         }),
       };
     }
-    case CONST.VALIDATE: {
+    case CONST.CHECK_VALIDATION: {
       const isErrors = () => {
         for (let key in state.error) {
           if (!state.error[key].isValid) {
@@ -179,7 +179,7 @@ const reducer = (state = initialState, action) => {
         isValid: isErrors(),
       };
     }
-    case CONST.CHECK_REPEATED_PLAYERS: {
+    case CONST.CHECK_FOR_REPEATED_PLAYERS: {
       const repeatedPlayers = state.playerList.map((player, idx) => {
         if (
           state.playerList.find((samePlayer, i) => {
@@ -226,7 +226,7 @@ const reducer = (state = initialState, action) => {
         },
       };
     }
-    case CONST.RESET_REPEATED_PLAYERS:
+    case CONST.RESET_REPEATED_ERR_MSG:
       return {
         ...state,
         error: {
@@ -234,7 +234,7 @@ const reducer = (state = initialState, action) => {
           repeatedPlayers: { ...state.error.repeatedPlayers, message: "" },
         },
       };
-    case CONST.REQUIRED:
+    case CONST.CHECK_FOR_REQUIRED:
       return {
         ...state,
         error: {
@@ -246,7 +246,7 @@ const reducer = (state = initialState, action) => {
           }
         },
       };
-    case CONST.RESET_REQUIRED:
+    case CONST.RESET_REQUIRED_ERR_MSG:
       return {
         ...state,
         error: {
@@ -254,7 +254,7 @@ const reducer = (state = initialState, action) => {
           required: { ...state.error.required, message: "" },
         },
       };
-    case CONST.CHECK_ENOUGH_PLAYERS:
+    case CONST.CHECK_FOR_ENOUGH_PLAYERS:
       return {
         ...state,
         error: {
@@ -286,7 +286,7 @@ const reducer = (state = initialState, action) => {
           },
         },
       };
-    case CONST.RESET_ENOUGH_PLAYERS:
+    case CONST.RESET_NOT_ENOUGH_ERR_MSG:
       return {
         ...state,
         error: {

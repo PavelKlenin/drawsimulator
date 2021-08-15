@@ -5,11 +5,11 @@ import {
   onMaxPlayersBlurTC,
   onTeamCountChangeTC,
   onTeamCountBlurTC,
-  toggleRandomCreator,
+  toggleRandomAC,
   onInputChangeTC,
   onInputBlurTC,
   onInputFocus,
-  resetEnoughPlayers
+  resetNotEnoughErrMsgAC
 } from "../../store/actions";
 import DrawData from "./DrawData";
 
@@ -32,11 +32,11 @@ const mapDispatchToProps = {
   onMaxPlayersChangeTC,
   onMaxPlayersBlurTC,
   divideTeamsTC,
-  toggleRandomCreator,
+  toggleRandomAC,
   onInputChangeTC,
   onInputBlurTC,
   onInputFocus,
-  resetEnoughPlayers
+  resetNotEnoughErrMsgAC
 };
 
 const DrawDataContainer = connect(
