@@ -1,11 +1,7 @@
 import * as CONST from "./consts";
 
 const initialState = {
-  playerList: [], // { id: 1, name: player, subs: false, repeated: false,}
-  totalTeams: 3,
-  maxPlayersInTeam: 5,
-  minPlayersInTeam: 2,
-  //minPlayersCount: 6,
+  preparedList: [],
   colorList: [
     { id: 1, color: "teamRed", usedById: null },
     { id: 2, color: "teamOrange", usedById: null },
@@ -15,114 +11,93 @@ const initialState = {
     { id: 6, color: "teamBlack", usedById: null },
     { id: 7, color: "teamWhite", usedById: null },
   ],
-  isRandom: false,
   teams: [], // { id: 1, title: title, squad: [], color: null, isSub: false,}
-  isValid: false,
-  error: {
-    required: { isValid: false, message: "Required" },
-    notEnoughPlayers: { isValid: false, message: "" },
-    repeatedPlayers: { isValid: true, message: "" },
-  },
 };
 
-const reducer = (state = initialState, action) => {
+const teamsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case CONST.ADD_NEW_PLAYERS:
-      const arrPlayerList = convertTextToArr(action.value);
-      if (arrPlayerList) {
-        return {
-          ...state,
-          playerList: arrPlayerList.map((player, idx) => {
-            return {
-              id: idx + 1,
-              name: player,
-              subs: checkForSubsPlayers((idx + 1), setMaxPlayers(state)),
-              repeated: arrPlayerList.find((samePlayer, i) => {
-                return (
-                  samePlayer.toUpperCase() === player.toUpperCase() &&
-                  i !== idx
-                );
-              })
-                ? true
-                : false,
-            };
-          }),
-        };
-      } else return { ...state, playerList: [] };
-    case CONST.CHANGE_TEAMS_COUNT:
+    case CONST.PREPARE_PLAYERLIST: {
+      const { playerList, isRandom } = { ...action.data };
       return {
         ...state,
-        totalTeams: action.value,
+        preparedList: isRandom ? shuffledList(playerList) : [...playerList],
       };
-    case CONST.CHECK_TEAMS_COUNT:
+    }
+    case CONST.PREPARE_BASKET_LIST: {
+      const { playerList, isRandom } = action.data;
+      let basket,
+        basketList = [];
+      for (let i = 1; i <= 5; i++) {
+        i === 5
+          ? (basket = playerList.filter((player) => player.basket === 0)) // чтобы игроки из корзины 0 были в конце списка
+          : (basket = playerList.filter((player) => player.basket === i));
+        if (basket) {
+          basketList = [...basketList, basket];
+        }
+      }
       return {
         ...state,
-        totalTeams: action.value > 1 ? action.value : 2,
+        preparedList: isRandom
+          ? basketList.reduce(
+              (baskets, basket) => [...baskets, ...shuffledList(basket)],
+              []
+            )
+          : basketList.reduce((baskets, basket) => [...baskets, ...basket], []),
       };
-    case CONST.CHANGE_MAX_TEAM_PLAYERS:
+    }
+    case CONST.DIVIDE_BASKET_TEAMS: {
+      const { totalTeams, maxPlayersInTeam } = { ...action.data };
+      let teams = createNewTeams({
+        playerList: state.preparedList,
+        totalTeams,
+        maxPlayersInTeam,
+      });
+      state.preparedList.forEach((player, idx) => {
+        if (!player.subs) {
+          const teamIdx = (totalTeams + idx) % totalTeams;
+          teams[teamIdx].squad = [...teams[teamIdx].squad, player];
+        } else {
+          teams[totalTeams].squad = [
+            ...teams[totalTeams].squad,
+            player,
+          ];
+        }
+      });
       return {
         ...state,
-        maxPlayersInTeam: action.value,
+        teams,
       };
-    case CONST.CHECK_MAX_TEAM_PLAYERS:
-      return {
-        ...state,
-        maxPlayersInTeam: action.value > 1 ? action.value : 2,
-      };
-    case CONST.CHANGE_MIN_TEAM_PLAYERS:
-      return {
-        ...state,
-        minPlayersInTeam: action.value,
-      };
-    case CONST.CHECK_MIN_TEAM_PLAYERS:
-      return {
-        ...state,
-        minPlayersInTeam:
-          action.value > 1 && action.value <= state.maxPlayersInTeam
-            ? action.value
-            : state.maxPlayersInTeam - 1,
-      };
-    case CONST.CHECK_FOR_SUBS:
-      return setMaxPlayers(state)
-        ? {
-            ...state,
-            playerList: state.playerList.map((player) => {
-              return {
-                ...player,
-                subs: checkForSubsPlayers(player.id, setMaxPlayers(state)),
-              };
-            }),
-          }
-        : state;
-    case CONST.TOGGLE_RANDOM:
-      return {
-        ...state,
-        // isRandom: action.value, // для checkbox
-        isRandom: !state.isRandom, // для div
-      };
-    case CONST.DIVIDE_TEAMS: {
-      let restPlayersCount = state.playerList.length; // изначально кол-во оставшихся игроков равно списку;
-      let nextPlayerIndex = 0; // индекс игрока, с которого надо добавлять в след.команду;
-      let playerList = state.isRandom
-        ? resetTeamColors(setShuffledList(state.playerList))
-        : resetTeamColors(state.playerList); // JSON.parse(JSON.stringify(state.playerList)) - глубокая копия
+    }
+    case CONST.RESET_TEAM_COLORS:
       return {
         ...state,
         colorList: state.colorList.map((color) => ({
           ...color,
           usedById: null,
         })),
-        teams: createNewTeams(state).map((team, i) => {
+      };
+    case CONST.DIVIDE_TEAMS: {
+      const preparedList = [...state.preparedList];
+      const { totalTeams, maxPlayersInTeam } = { ...action.data };
+      let restPlayersCount = preparedList.length; // изначально кол-во оставшихся игроков равно списку;
+      let nextPlayerIndex = 0; // индекс игрока, с которого надо добавлять в след.команду;
+      return {
+        ...state,
+        teams: createNewTeams({
+          playerList: preparedList,
+          totalTeams,
+          maxPlayersInTeam,
+        }).map((team, i) => {
           // проверка на запасную команду. Т.к. i начинается с 0, утверждение будет верно только при наличии лишней (запасной) команды
-          let isSubsTeam = +state.totalTeams === i;
-          let restTeamsCount = state.totalTeams - i; // сколько осталось команд (для расчета кол-ва игроков при недоборе игроков)
+          let isSubsTeam = +totalTeams === i;
+          let restTeamsCount = totalTeams - i; // сколько осталось команд (для расчета кол-ва игроков при недоборе игроков)
           let computedPlayersCount; // количество игроков в каждую команду
           isSubsTeam // если есть запасные, они будут отображаться все в одной команде
             ? (computedPlayersCount = restPlayersCount)
             : (computedPlayersCount =
-                playerList.length < setMaxPlayers(state) // при недоборе в каждую итерацию кол-во игроков считается относительно
+                preparedList.length < setMaxPlayers(action.data) // при недоборе в каждую итерацию кол-во игроков считается относительно
                   ? Math.ceil(restPlayersCount / restTeamsCount) // оставшегося количества игроков и команд для равномерного распределения
-                  : +state.maxPlayersInTeam); // преобразование в число (иначе nextPlayerIndex складывается конкатенацией)
+                  : +maxPlayersInTeam); // преобразование в число (иначе nextPlayerIndex складывается конкатенацией)
 
           // добавление игроков в команду
           for (
@@ -131,7 +106,7 @@ const reducer = (state = initialState, action) => {
             i++
           ) {
             // проверка на наличие игрока, чтобы запасная команда не наполняла команду underfined-игроками
-            team.squad = [...team.squad, playerList[i]];
+            team.squad = [...team.squad, preparedList[i]];
           }
           restPlayersCount = restPlayersCount - computedPlayersCount; // для след.итераций из оставшихся игроков вычитается кол-во игроков в команде
           nextPlayerIndex = nextPlayerIndex + computedPlayersCount; // индекс для след.команды равен сумме всех игроков из предыдущих команд
@@ -175,33 +150,9 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-export default reducer;
+export default teamsReducer;
 
 //* Additional functions
-const emptyLineCheck = (array) => {
-  for (let i = array.length - 1; i >= 0; i--) {
-    if (!array[i]) {
-      array.splice(i, 1);
-    }
-  }
-};
-// конвертация введенных игроков в массив игроков
-const convertTextToArr = (chars) => {
-  if (chars) {
-    let arrList = chars.split("\n"); // разделяем по игроков по новой строке
-    emptyLineCheck(arrList); // пустые строки удаляются
-    let correctList = arrList.map((item) => {
-      return item
-        .replace(/\s+/g, " ") // убираем
-        .trim() // лишние пробелы
-        .replace(/(?:^|\s)\S/g, (char) => char.toUpperCase()); // каждая буква после пробела, кавычек - заглавная
-    });
-    return correctList;
-  } else return;
-};
-const checkForSubsPlayers = (playerIdx, setMaxPlayers) => {
-  return playerIdx > setMaxPlayers ? true : false;
-};
 const createNewTeams = (state) => {
   let teams = [];
   // добавление пустых команд по количеству команд (state.totalTeams)
@@ -236,7 +187,7 @@ const setMaxPlayers = (state) => {
   return state.totalTeams * state.maxPlayersInTeam;
 };
 // алгоритм Фишера-Йейтса - Fisher–Yates shuffle
-const setShuffledList = (list) => {
+const shuffledList = (list) => {
   let mainList = list.filter((player) => !player.subs);
   let subList = list.filter((player) => player.subs);
   for (var i = mainList.length - 1; i > 0; i--) {
@@ -253,8 +204,4 @@ const setNextTeamColor = (startIdx, colorList, teamId) => {
       break;
     }
   }
-};
-// обнуление цветов команд для каждого нового деления
-const resetTeamColors = (playerList) => {
-  return playerList.map((player) => ({ ...player, color: null }));
 };

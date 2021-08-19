@@ -9,19 +9,20 @@ import {
   onInputChangeTC,
   onInputBlurTC,
   onInputFocus,
-  resetNotEnoughErrMsgAC
+  resetNotEnoughErrMsgAC,
+  onDataPlayerClickTC
 } from "../../store/actions";
 import DrawData from "./DrawData";
 
 const mapStateToProps = (state) => {
   return {
-    playerList: state.reducer.playerList,
-    totalTeams: state.reducer.totalTeams,
-    maxPlayersInTeam: state.reducer.maxPlayersInTeam,
-    isRandom: state.reducer.isRandom,
-    teams: state.reducer.teams,
-    isValid: state.validation.isValid,
-    error: state.validation.error,
+    playerList: state.inputDataReducer.playerList,
+    totalTeams: state.inputDataReducer.totalTeams,
+    maxPlayersInTeam: state.inputDataReducer.maxPlayersInTeam,
+    isRandom: state.inputDataReducer.isRandom,
+    teams: state.inputDataReducer.teams,
+    isValid: state.errorReducer.isValid,
+    error: state.errorReducer.error,
   }
 
 };
@@ -36,7 +37,8 @@ const mapDispatchToProps = {
   onInputChangeTC,
   onInputBlurTC,
   onInputFocus,
-  resetNotEnoughErrMsgAC
+  resetNotEnoughErrMsgAC,
+  onDataPlayerClickTC
 };
 
 const DrawDataContainer = connect(

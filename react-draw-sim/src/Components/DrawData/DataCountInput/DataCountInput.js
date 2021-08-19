@@ -11,11 +11,11 @@ const DataCountInput = (props) => {
   };
   const onFocus = () => {
     // колбэк отрабатывается только для поля, от которого зависит наличие ошибки
-    if (props.onFocus)  { 
-      props.onFocus(); 
-      // чтобы раньше времени не прокручивалось на ошибку, если изменяем поле 
+    if (props.onFocus) {
+      props.onFocus();
+      // чтобы раньше времени не прокручивалось на ошибку, если изменяем поле
       // команд, т.к. количество команд влияет на наличие ошибки
-      inputTeams.current.scrollIntoView(); 
+      props.error && inputTeams.current.scrollIntoView(); //! сделать через общий параметр onFocused
     }
   };
   return (

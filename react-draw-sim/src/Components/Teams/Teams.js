@@ -7,8 +7,7 @@ const Teams = (props) => {
   const teams = useRef();
   useEffect(() => {
     teams.current.scrollIntoView();
-  })
-
+  },[props.teams])
   return (
     <div className="teams" id="teams" ref={teams}>
       {props.teams &&
@@ -19,7 +18,7 @@ const Teams = (props) => {
               {...team}
               teamId={team.id}
               id="teams"
-              changeTeamColor={props.changeTeamColorCreator}
+              changeTeamColor={props.changeTeamColorAC}
             />
           );
         })}

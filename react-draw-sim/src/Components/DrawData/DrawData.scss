@@ -61,6 +61,8 @@
   }
 
   .player {
+    display: flex;
+    justify-content: space-between;
     padding: $indent-small/2;
     margin-bottom: $indent-small/2;
     text-transform: capitalize;
@@ -73,15 +75,16 @@
     cursor: pointer;
 
     &:hover {
+      background-color: $color-mark;
+      color: $color-dark;
+    }
+
+    &:active {
       background-color: $color-light;
       color: $color-dark;
     }
 
-    &.leage4Player {
-      background-color: lightsalmon;
-    }
-
-    &.subsPlayer {
+    &.disabledPlayer {
       background-color: $color-gray;
       color: $color-dark;
       cursor: auto;
@@ -92,8 +95,25 @@
       }
     }
 
-    &.repeated {
+    &.errorPlayer {
       border-color: red;
+    }
+
+    .basket {
+      margin-right: 5px;
+      font-weight: bold;
+    }
+    .basket1 {
+      color: red;
+    }
+    .basket2 {
+      color: green;
+    }
+    .basket3 {
+      color: blue;
+    }
+    .basket4 {
+      color: saddlebrown;
     }
   }
 

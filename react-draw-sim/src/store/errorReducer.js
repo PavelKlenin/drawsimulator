@@ -6,10 +6,11 @@ const initialState = {
     required: { isValid: false, message: "Required" },
     notEnoughPlayers: { isValid: false, message: "" },
     repeatedPlayers: { isValid: true, message: "" },
+    filledBasket: { isValid: true, message: "" },
   },
 };
 
-const validation = (state = initialState, action) => {
+const errorReducer = (state = initialState, action) => {
   switch (action.type) {
     case CONST.CHECK_VALIDATION: {
       const isErrors = () => {
@@ -76,7 +77,7 @@ const validation = (state = initialState, action) => {
         ...state,
         error: {
           ...state.error,
-          repeatedPlayers: { ...state.error.repeatedPlayers, message: "" },
+          required: { ...state.error.required, message: "" },
         },
       };
     case CONST.CHECK_FOR_ENOUGH_PLAYERS:
@@ -116,9 +117,26 @@ const validation = (state = initialState, action) => {
           notEnoughPlayers: { ...state.error.notEnoughPlayers, message: "" },
         },
       };
+    case CONST.SET_BASKET_LENGTH_ERR:
+      const { playerList, totalTeams } = { ...action.data };
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          filledBasket: {
+            ...state.error.filledBasket,
+            isValid: !playerList.some((player) => player.overflowed)
+              ? true
+              : false,
+            message: !playerList.some((player) => player.overflowed)
+              ? ""
+              : `Максимум ${totalTeams} игроков в каждой группе`,
+          },
+        },
+      };
     default:
       return state;
   }
 };
 
-export default validation;
+export default errorReducer;

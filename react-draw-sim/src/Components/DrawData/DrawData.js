@@ -21,8 +21,9 @@ const DrawData = (props) => {
         placeholder="Список участников"
       />
       <DataPlayerList
-        error={props.error.repeatedPlayers}
+        error={props.error}
         playerList={props.playerList}
+        onPlayerClick={props.onDataPlayerClickTC}
       />
       <div className="conditions">
         <p className="errors"></p>
@@ -30,6 +31,7 @@ const DrawData = (props) => {
           className="teamCondition"
           title="Количество команд:"
           inputClassName="teamsCount"
+          error={props.error.notEnoughPlayers}
           changeCountCreator={props.onTeamCountChangeTC}
           blurCountCreator={props.onTeamCountBlurTC}
           onFocus={props.resetNotEnoughErrMsgAC}

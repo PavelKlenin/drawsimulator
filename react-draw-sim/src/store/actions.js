@@ -1,7 +1,14 @@
 import * as CONST from "./consts";
 
+//* inputDataReducer
 const addNewPlayersAC = (text) => {
   return { type: CONST.ADD_NEW_PLAYERS, value: text };
+};
+export const changePlayerBasketAC = (playerId) => {
+  return { type: CONST.CHANGE_PLAYER_BASKET, playerId };
+};
+const checkBasketLengthAC = () => {
+  return { type: CONST.CHECK_BASKET_LENGTH };
 };
 const changeTeamsCountAC = (count) => {
   return { type: CONST.CHANGE_TEAMS_COUNT, value: count };
@@ -24,9 +31,34 @@ const checkMaxTeamPlayersAC = (count) => {
 const checkForSubsAC = () => {
   return { type: CONST.CHECK_FOR_SUBS };
 };
-const divideTeamsAC = () => {
-  return { type: CONST.DIVIDE_TEAMS };
+export const toggleRandomAC = () => {
+  return { type: CONST.TOGGLE_RANDOM };
 };
+
+//* teamsReducer
+const divideTeamsAC = (totalTeams, maxPlayersInTeam) => {
+  return { type: CONST.DIVIDE_TEAMS, data: { totalTeams, maxPlayersInTeam } };
+};
+const divideBasketTeamsAC = (totalTeams, maxPlayersInTeam) => {
+  return {
+    type: CONST.DIVIDE_BASKET_TEAMS,
+    data: { totalTeams, maxPlayersInTeam },
+  };
+};
+export const changeTeamColorAC = (teamId) => {
+  return { type: CONST.CHANGE_TEAM_COLOR, teamId };
+};
+export const resetTeamColorsAC = () => {
+  return { type: CONST.RESET_TEAM_COLORS };
+};
+export const preparePlayerListAC = (playerList, isRandom) => {
+  return { type: CONST.PREPARE_PLAYERLIST, data: { playerList, isRandom } };
+};
+export const prepareBasketListAC = (playerList, isRandom) => {
+  return { type: CONST.PREPARE_BASKET_LIST, data: { playerList, isRandom } };
+};
+
+//* errorReducer
 const checkValidationAC = () => {
   return { type: CONST.CHECK_VALIDATION };
 };
@@ -42,6 +74,13 @@ const resetRepeatedErrMsgAC = () => {
 const checkForRequiredAC = (text) => {
   return { type: CONST.CHECK_FOR_REQUIRED, text };
 };
+const setBasketLengthErrAC = (playerList, totalTeams) => {
+  return {
+    type: CONST.SET_BASKET_LENGTH_ERR,
+    data: { playerList, totalTeams },
+  };
+};
+
 // const resetRequiredErrMsgAC = () => {
 //   return { type: CONST.RESET_REQUIRED_ERR_MSG };
 // };
@@ -57,58 +96,57 @@ const setNotEnoughErrMsgAC = (minPlayersCount) => {
 export const resetNotEnoughErrMsgAC = () => {
   return { type: CONST.RESET_NOT_ENOUGH_ERR_MSG };
 };
-export const changeTeamColorAC = (teamId) => {
-  return { type: CONST.CHANGE_TEAM_COLOR, teamId };
-};
-export const toggleRandomAC = () => {
-  return { type: CONST.TOGGLE_RANDOM };
-};
 
 //* ThunkCreators
-export const onInputChangeTC = (text) => (dispatch, setState) => {
+export const onInputChangeTC = (text) => (dispatch, getState) => {
   dispatch(addNewPlayersAC(text));
   dispatch(checkForSubsAC());
   dispatch(checkForRequiredAC(text));
-  dispatch(
-    checkForEnoughPlayersAC(
-      setState().reducer.playerList,
-      minPlayersCount(setState().reducer)
-    )
-  );
-  dispatch(checkForRepeatedPlayersAC(setState().reducer.playerList));
+  dispatch(checkBasketLengthAC());
+  const state = getState().inputDataReducer;
+  const { playerList, totalTeams } = state;
+  dispatch(checkForEnoughPlayersAC(playerList, minPlayersCount(state)));
+  dispatch(checkForRepeatedPlayersAC(playerList));
+  dispatch(setBasketLengthErrAC(playerList, totalTeams));
+  dispatch(setRepeatedErrMsgAC());
   dispatch(checkValidationAC());
 };
-export const onInputBlurTC = () => (dispatch, setState) => {
-  dispatch(setRepeatedErrMsgAC());
-  dispatch(setNotEnoughErrMsgAC(minPlayersCount(setState().reducer)));
+export const onInputBlurTC = () => (dispatch, getState) => {
+  dispatch(setNotEnoughErrMsgAC(minPlayersCount(getState().inputDataReducer)));
 };
 export const onInputFocus = () => (dispatch) => {
   dispatch(resetNotEnoughErrMsgAC());
   dispatch(resetRepeatedErrMsgAC());
 };
 
-export const onTeamCountChangeTC = (count) => (dispatch, setState) => {
-  dispatch(changeTeamsCountAC(count));
-  dispatch(checkForSubsAC());
-  dispatch(
-    checkForEnoughPlayersAC(
-      setState().reducer.playerList,
-      minPlayersCount(setState().reducer)
-    )
-  );
+export const onDataPlayerClickTC = (playerId) => (dispatch, getState) => {
+  dispatch(changePlayerBasketAC(playerId));
+  dispatch(checkBasketLengthAC());
+  const { playerList, totalTeams } = getState().inputDataReducer;
+  dispatch(setBasketLengthErrAC(playerList, totalTeams));
   dispatch(checkValidationAC());
 };
 
-export const onTeamCountBlurTC = (count) => (dispatch, setState) => {
+export const onTeamCountChangeTC = (count) => (dispatch, getState) => {
+  dispatch(changeTeamsCountAC(count));
+  dispatch(checkForSubsAC());
+  dispatch(checkBasketLengthAC());
+  const state = getState().inputDataReducer;
+  const { playerList, totalTeams } = state;
+  dispatch(checkForEnoughPlayersAC(playerList, minPlayersCount(state)));
+  dispatch(setBasketLengthErrAC(playerList, totalTeams));
+  dispatch(checkValidationAC());
+};
+
+export const onTeamCountBlurTC = (count) => (dispatch, getState) => {
   dispatch(checkTeamsCountAC(count));
   dispatch(checkForSubsAC());
-  dispatch(
-    checkForEnoughPlayersAC(
-      setState().reducer.playerList,
-      minPlayersCount(setState().reducer)
-    )
-  );
-  dispatch(setNotEnoughErrMsgAC(minPlayersCount(setState().reducer)));
+  dispatch(checkBasketLengthAC());
+  const state = getState().inputDataReducer;
+  const { playerList, totalTeams } = state;
+  dispatch(checkForEnoughPlayersAC(playerList, minPlayersCount(state)));
+  dispatch(setNotEnoughErrMsgAC(minPlayersCount(state)));
+  dispatch(setBasketLengthErrAC(playerList, totalTeams));
   dispatch(checkValidationAC());
 };
 
@@ -123,9 +161,18 @@ export const onMaxPlayersBlurTC = (count) => (dispatch) => {
 
 export const divideTeamsTC = () => (dispatch, getState) => {
   dispatch(checkValidationAC());
-  const isValid = getState().validation.isValid;
+  const isValid = getState().errorReducer.isValid;
+  const { playerList, isRandom, totalTeams, maxPlayersInTeam } =
+    getState().inputDataReducer;
   if (isValid) {
-    dispatch(divideTeamsAC());
+    dispatch(resetTeamColorsAC());
+    if (playerList.some((player) => player.basket)) {
+      dispatch(prepareBasketListAC(playerList, isRandom));
+      dispatch(divideBasketTeamsAC(totalTeams, maxPlayersInTeam));
+    } else {
+      dispatch(preparePlayerListAC(playerList, isRandom));
+      dispatch(divideTeamsAC(totalTeams, maxPlayersInTeam));
+    }
   }
 };
 

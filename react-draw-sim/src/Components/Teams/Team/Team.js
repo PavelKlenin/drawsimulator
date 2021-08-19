@@ -1,5 +1,5 @@
 import { React } from "react";
-import Player from "../Player/PLayer";
+import TeamPlayer from "../TeamPlayer/TeamPlayer";
 import "../Teams.scss";
 
 const Team = (props) => {
@@ -18,7 +18,7 @@ const Team = (props) => {
         </h3>
       )}
       {props.squad.map((player) => {
-        return <Player key={player.id} name={player.name} />;
+        return <TeamPlayer key={player.id} name={player.name} />;
       })}
     </div>
   );

@@ -1,22 +1,24 @@
 import { React } from "react";
+import DataPlayer from "../DataPlayer/DataPlayer";
 import "../DrawData.scss";
 
 const DataPlayerList = (props) => {
   const playerList = props.playerList.map((player) => {
     return (
-      <p
-        className={`player ${player.subs ? "subsPlayer" : ""} ${
-          player.repeated ? "repeated" : ""
-        }`}
-        key={player.id}>
-        {player.name}
-      </p>
+      <DataPlayer
+        {...player}
+        error={props.error}
+        onPlayerClick={props.onPlayerClick}
+      />
     );
   });
-  
+
   return (
     <div className="playerDiv">
-      <p className="errors">{props.error.message}</p>
+      <p className="errors">
+        {props.error.repeatedPlayers.message ||
+          props.error.filledBasket.message}
+      </p>
       {props.playerList ? playerList : null}
     </div>
   );
