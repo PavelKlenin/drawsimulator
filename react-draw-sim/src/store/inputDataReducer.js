@@ -5,28 +5,17 @@ const initialState = {
   totalTeams: 3,
   maxPlayersInTeam: 5,
   minPlayersInTeam: 2,
-  //minPlayersCount: 6,
-  colorList: [
-    { id: 1, color: "teamRed", usedById: null },
-    { id: 2, color: "teamOrange", usedById: null },
-    { id: 3, color: "teamBlue", usedById: null },
-    { id: 4, color: "teamGreen", usedById: null },
-    { id: 5, color: "teamGreenYellow", usedById: null },
-    { id: 6, color: "teamBlack", usedById: null },
-    { id: 7, color: "teamWhite", usedById: null },
-  ],
+  isFocused: false,
   isRandom: false,
-  teams: [], // { id: 1, title: title, squad: [], color: null, isSub: false,}
-  isValid: false,
-  error: {
-    required: { isValid: false, message: "Required" },
-    notEnoughPlayers: { isValid: false, message: "" },
-    repeatedPlayers: { isValid: true, message: "" },
-  },
 };
 
 const inputDataReducer = (state = initialState, action) => {
   switch (action.type) {
+    case CONST.TOGGLE_FOCUS:
+      return {
+        ...state,
+        isFocused: action.isFocused,
+      };
     case CONST.ADD_NEW_PLAYERS:
       const arrPlayerList = convertTextToArr(action.value);
       if (arrPlayerList) {
@@ -62,7 +51,7 @@ const inputDataReducer = (state = initialState, action) => {
           } else return { ...player };
         }),
       };
-    case CONST.CHECK_BASKET_LENGTH:
+    case CONST.CALC_BASKET_LENGTH:
       return {
         ...state,
         playerList: state.playerList.map((player) => {
@@ -114,7 +103,7 @@ const inputDataReducer = (state = initialState, action) => {
             ? action.value
             : state.maxPlayersInTeam - 1,
       };
-    case CONST.CHECK_FOR_SUBS:
+    case CONST.UPDATE_SUBS:
       return setMaxPlayers(state)
         ? {
             ...state,

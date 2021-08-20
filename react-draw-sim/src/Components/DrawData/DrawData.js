@@ -1,5 +1,4 @@
 import { React } from "react";
-// import * as Scroll from "react-scroll";
 import "./DrawData.scss";
 import DataCountInput from "./DataCountInput/DataCountInput";
 import DataPlayerList from "./DataPlayerList/DataPlayerList";
@@ -13,10 +12,11 @@ const DrawData = (props) => {
   return (
     <div className="data-content">
       <DataPlayerInput
-        error={props.error.notEnoughPlayers}
+        isFocused={props.isFocused}
+        error={props.error.reqiuredPlayers}
         onInputChangeTC={props.onInputChangeTC}
-        onInputBlurTC={props.onInputBlurTC}
-        onInputFocus={props.onInputFocus}
+        onInputBlur={props.onInputBlurTC}
+        toggleFocus={props.toggleFocusAC}
         className="list"
         placeholder="Список участников"
       />
@@ -31,10 +31,10 @@ const DrawData = (props) => {
           className="teamCondition"
           title="Количество команд:"
           inputClassName="teamsCount"
-          error={props.error.notEnoughPlayers}
-          changeCountCreator={props.onTeamCountChangeTC}
-          blurCountCreator={props.onTeamCountBlurTC}
-          onFocus={props.resetNotEnoughErrMsgAC}
+          error={props.error.requiredPlayers}
+          onCountChange={props.onTeamCountChangeTC}
+          onCountBlur={props.onTeamCountBlurTC}
+          toggleFocus={props.toggleFocusAC}
           maxLength="2"
           value={props.totalTeams}
         />
@@ -42,8 +42,8 @@ const DrawData = (props) => {
           className="playersCondition"
           title="Количество&nbsp;игроков&nbsp;в&nbsp;команде&nbsp;(max):"
           inputClassName="maxPlayersCount"
-          changeCountCreator={props.onMaxPlayersChangeTC}
-          blurCountCreator={props.onMaxPlayersBlurTC}
+          onCountChange={props.onMaxPlayersChangeTC}
+          onCountBlur={props.onMaxPlayersBlurTC}
           maxLength="3"
           value={props.maxPlayersInTeam}
         />

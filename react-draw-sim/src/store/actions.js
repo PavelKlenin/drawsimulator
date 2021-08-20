@@ -7,8 +7,8 @@ const addNewPlayersAC = (text) => {
 export const changePlayerBasketAC = (playerId) => {
   return { type: CONST.CHANGE_PLAYER_BASKET, playerId };
 };
-const checkBasketLengthAC = () => {
-  return { type: CONST.CHECK_BASKET_LENGTH };
+const calcBasketLengthAC = () => {
+  return { type: CONST.CALC_BASKET_LENGTH };
 };
 const changeTeamsCountAC = (count) => {
   return { type: CONST.CHANGE_TEAMS_COUNT, value: count };
@@ -16,20 +16,17 @@ const changeTeamsCountAC = (count) => {
 const changeMaxTeamPlayersAC = (count) => {
   return { type: CONST.CHANGE_MAX_TEAM_PLAYERS, value: count };
 };
-// const changeMinTeamPlayersAC = (count) => {
-//   return { type: CONST.CHANGE_MIN_TEAM_PLAYERS, value: count };
-// };
 const checkTeamsCountAC = (count) => {
   return { type: CONST.CHECK_TEAMS_COUNT, value: count };
 };
 const checkMaxTeamPlayersAC = (count) => {
   return { type: CONST.CHECK_MAX_TEAM_PLAYERS, value: count };
 };
-// const checkMinTeamPlayersAC = (count) => {
-//   return { type: CONST.CHECK_MIN_TEAM_PLAYERS, value: count };
-// };
-const checkForSubsAC = () => {
-  return { type: CONST.CHECK_FOR_SUBS };
+const updateSubsAC = () => {
+  return { type: CONST.UPDATE_SUBS };
+};
+export const toggleFocusAC = (isFocused) => {
+  return { type: CONST.TOGGLE_FOCUS,  isFocused};
 };
 export const toggleRandomAC = () => {
   return { type: CONST.TOGGLE_RANDOM };
@@ -65,98 +62,75 @@ const checkValidationAC = () => {
 const checkForRepeatedPlayersAC = (playerList) => {
   return { type: CONST.CHECK_FOR_REPEATED_PLAYERS, playerList };
 };
-const setRepeatedErrMsgAC = () => {
-  return { type: CONST.SET_REPEATED_ERR_MSG };
-};
-const resetRepeatedErrMsgAC = () => {
-  return { type: CONST.RESET_REPEATED_ERR_MSG };
-};
-const checkForRequiredAC = (text) => {
-  return { type: CONST.CHECK_FOR_REQUIRED, text };
-};
-const setBasketLengthErrAC = (playerList, totalTeams) => {
+const checkBasketLengthErrAC = (playerList, totalTeams) => {
   return {
-    type: CONST.SET_BASKET_LENGTH_ERR,
+    type: CONST.CHECK_BASKET_LENGTH_ERR,
     data: { playerList, totalTeams },
   };
 };
-
-// const resetRequiredErrMsgAC = () => {
-//   return { type: CONST.RESET_REQUIRED_ERR_MSG };
-// };
-const checkForEnoughPlayersAC = (playerList, minPlayersCount) => {
+const checkRequiredPlayersAC = (playerList, minPlayersCount) => {
   return {
-    type: CONST.CHECK_FOR_ENOUGH_PLAYERS,
+    type: CONST.CHECK_REQUIRED_PLAYERS,
     data: { playerList, minPlayersCount },
   };
-};
-const setNotEnoughErrMsgAC = (minPlayersCount) => {
-  return { type: CONST.SET_NOT_ENOUGH_ERR_MSG, minPlayersCount };
-};
-export const resetNotEnoughErrMsgAC = () => {
-  return { type: CONST.RESET_NOT_ENOUGH_ERR_MSG };
 };
 
 //* ThunkCreators
 export const onInputChangeTC = (text) => (dispatch, getState) => {
   dispatch(addNewPlayersAC(text));
-  dispatch(checkForSubsAC());
-  dispatch(checkForRequiredAC(text));
-  dispatch(checkBasketLengthAC());
+  dispatch(updateSubsAC());
+  dispatch(calcBasketLengthAC());
   const state = getState().inputDataReducer;
   const { playerList, totalTeams } = state;
-  dispatch(checkForEnoughPlayersAC(playerList, minPlayersCount(state)));
+  dispatch(checkRequiredPlayersAC(playerList, minPlayersCount(state)));
   dispatch(checkForRepeatedPlayersAC(playerList));
-  dispatch(setBasketLengthErrAC(playerList, totalTeams));
-  dispatch(setRepeatedErrMsgAC());
+  dispatch(checkBasketLengthErrAC(playerList, totalTeams));
   dispatch(checkValidationAC());
 };
 export const onInputBlurTC = () => (dispatch, getState) => {
-  dispatch(setNotEnoughErrMsgAC(minPlayersCount(getState().inputDataReducer)));
-};
-export const onInputFocus = () => (dispatch) => {
-  dispatch(resetNotEnoughErrMsgAC());
-  dispatch(resetRepeatedErrMsgAC());
+  dispatch(toggleFocusAC(false));
+  const state = getState().inputDataReducer;
+  dispatch(checkRequiredPlayersAC(state.playerList, minPlayersCount(state)));
 };
 
 export const onDataPlayerClickTC = (playerId) => (dispatch, getState) => {
   dispatch(changePlayerBasketAC(playerId));
-  dispatch(checkBasketLengthAC());
+  dispatch(calcBasketLengthAC());
   const { playerList, totalTeams } = getState().inputDataReducer;
-  dispatch(setBasketLengthErrAC(playerList, totalTeams));
+  dispatch(checkBasketLengthErrAC(playerList, totalTeams));
   dispatch(checkValidationAC());
 };
 
 export const onTeamCountChangeTC = (count) => (dispatch, getState) => {
   dispatch(changeTeamsCountAC(count));
-  dispatch(checkForSubsAC());
-  dispatch(checkBasketLengthAC());
+  dispatch(updateSubsAC());
+  dispatch(calcBasketLengthAC());
   const state = getState().inputDataReducer;
   const { playerList, totalTeams } = state;
-  dispatch(checkForEnoughPlayersAC(playerList, minPlayersCount(state)));
-  dispatch(setBasketLengthErrAC(playerList, totalTeams));
+  dispatch(checkRequiredPlayersAC(playerList, minPlayersCount(state)));
+  dispatch(checkBasketLengthErrAC(playerList, totalTeams));
   dispatch(checkValidationAC());
 };
 
 export const onTeamCountBlurTC = (count) => (dispatch, getState) => {
   dispatch(checkTeamsCountAC(count));
-  dispatch(checkForSubsAC());
-  dispatch(checkBasketLengthAC());
+  dispatch(updateSubsAC());
+  dispatch(calcBasketLengthAC());
+  dispatch(toggleFocusAC(false));
   const state = getState().inputDataReducer;
   const { playerList, totalTeams } = state;
-  dispatch(checkForEnoughPlayersAC(playerList, minPlayersCount(state)));
-  dispatch(setNotEnoughErrMsgAC(minPlayersCount(state)));
-  dispatch(setBasketLengthErrAC(playerList, totalTeams));
+  dispatch(checkRequiredPlayersAC(playerList, minPlayersCount(state)));
+  dispatch(checkBasketLengthErrAC(playerList, totalTeams));
   dispatch(checkValidationAC());
 };
 
 export const onMaxPlayersChangeTC = (count) => (dispatch) => {
   dispatch(changeMaxTeamPlayersAC(count));
-  dispatch(checkForSubsAC());
+  dispatch(updateSubsAC());
 };
 export const onMaxPlayersBlurTC = (count) => (dispatch) => {
   dispatch(checkMaxTeamPlayersAC(count));
-  dispatch(checkForSubsAC());
+  dispatch(updateSubsAC());
 };
 
 export const divideTeamsTC = () => (dispatch, getState) => {

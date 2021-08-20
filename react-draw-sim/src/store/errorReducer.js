@@ -3,8 +3,7 @@ import * as CONST from "./consts";
 const initialState = {
   isValid: false,
   error: {
-    required: { isValid: false, message: "Required" },
-    notEnoughPlayers: { isValid: false, message: "" },
+    reqiuredPlayers: { isValid: false, message: "" },
     repeatedPlayers: { isValid: true, message: "" },
     filledBasket: { isValid: true, message: "" },
   },
@@ -34,90 +33,31 @@ const errorReducer = (state = initialState, action) => {
           repeatedPlayers: {
             ...state.error.repeatedPlayers,
             isValid: !action.playerList.some((player) => player.repeated),
-          },
-        },
-      };
-    }
-    case CONST.SET_REPEATED_ERR_MSG: {
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          repeatedPlayers: {
-            ...state.error.repeatedPlayers,
-            message: !state.error.repeatedPlayers.isValid
+            message: action.playerList.some((player) => player.repeated)
               ? "Повторяющиеся игроки"
               : "",
           },
         },
       };
     }
-    case CONST.RESET_REPEATED_ERR_MSG:
+    case CONST.CHECK_REQUIRED_PLAYERS:
       return {
         ...state,
         error: {
           ...state.error,
-          repeatedPlayers: { ...state.error.repeatedPlayers, message: "" },
-        },
-      };
-    case CONST.CHECK_FOR_REQUIRED:
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          required: {
-            ...state.error.required,
-            isValid: action.text ? true : false,
-            message: action.text ? "" : "Required",
-          },
-        },
-      };
-    case CONST.RESET_REQUIRED_ERR_MSG:
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          required: { ...state.error.required, message: "" },
-        },
-      };
-    case CONST.CHECK_FOR_ENOUGH_PLAYERS:
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          notEnoughPlayers: {
-            ...state.error.notEnoughPlayers,
+          reqiuredPlayers: {
+            ...state.error.reqiuredPlayers,
             isValid:
               action.data.playerList.length >= action.data.minPlayersCount,
-          },
-        },
-      };
-    case CONST.SET_NOT_ENOUGH_ERR_MSG:
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          notEnoughPlayers: {
-            ...state.error.notEnoughPlayers,
-            message: !state.error.notEnoughPlayers.isValid ? (
+            message: (
               <pre>
-                {`Слишком мало игроков.\nМинимальное количество - ${action.minPlayersCount}`}
+                {`Недостаточно игроков.\nМинимальное количество - ${action.data.minPlayersCount}`}
               </pre>
-            ) : (
-              ""
             ),
           },
         },
       };
-    case CONST.RESET_NOT_ENOUGH_ERR_MSG:
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          notEnoughPlayers: { ...state.error.notEnoughPlayers, message: "" },
-        },
-      };
-    case CONST.SET_BASKET_LENGTH_ERR:
+    case CONST.CHECK_BASKET_LENGTH_ERR:
       const { playerList, totalTeams } = { ...action.data };
       return {
         ...state,
@@ -130,7 +70,7 @@ const errorReducer = (state = initialState, action) => {
               : false,
             message: !playerList.some((player) => player.overflowed)
               ? ""
-              : `Максимум ${totalTeams} игроков в каждой группе`,
+              : `Максимум игроков в каждой группе - ${totalTeams}`,
           },
         },
       };

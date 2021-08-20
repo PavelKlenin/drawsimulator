@@ -5,21 +5,24 @@ const DataPlayerInput = (props) => {
   const [rows, setRows] = useState(0);
   const showMsg = useRef();
 
-  props.error.message && showMsg.current.scrollIntoView();
+  !props.error.isValid &&
+    props.isFocused &&
+    setTimeout(() => showMsg.current.scrollIntoView(), 500);
+
   const onInputChange = (e) => {
     props.onInputChangeTC(e.target.value);
     setRows(e.target.value.split("\n").length);
   };
-  const onInputBlur = (e) => {
-    props.onInputBlurTC();
+  const onInputBlur = () => {
+    props.onInputBlur(false);
   };
-  const onInputFocus = (e) => {
-    props.onInputFocus(e.target.value);
+  const onInputFocus = () => {
+    props.toggleFocus(true);
   };
   return (
     <div className="playerInput">
       <p className="errors" ref={showMsg}>
-        {props.error.message}
+        {!props.error.isValid && !props.isFocused && props.error.message}
       </p>
       <textarea
         rows={rows}

@@ -8,8 +8,7 @@ import {
   toggleRandomAC,
   onInputChangeTC,
   onInputBlurTC,
-  onInputFocus,
-  resetNotEnoughErrMsgAC,
+  toggleFocusAC,
   onDataPlayerClickTC
 } from "../../store/actions";
 import DrawData from "./DrawData";
@@ -20,6 +19,7 @@ const mapStateToProps = (state) => {
     totalTeams: state.inputDataReducer.totalTeams,
     maxPlayersInTeam: state.inputDataReducer.maxPlayersInTeam,
     isRandom: state.inputDataReducer.isRandom,
+    isFocused: state.inputDataReducer.isFocused,
     teams: state.inputDataReducer.teams,
     isValid: state.errorReducer.isValid,
     error: state.errorReducer.error,
@@ -36,8 +36,7 @@ const mapDispatchToProps = {
   toggleRandomAC,
   onInputChangeTC,
   onInputBlurTC,
-  onInputFocus,
-  resetNotEnoughErrMsgAC,
+  toggleFocusAC,
   onDataPlayerClickTC
 };
 
