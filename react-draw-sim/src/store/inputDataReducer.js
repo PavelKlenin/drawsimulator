@@ -5,16 +5,28 @@ const initialState = {
   totalTeams: 3,
   maxPlayersInTeam: 5,
   minPlayersInTeam: 2,
-  isFocused: false,
+  isFocused: { inputPlayers: true, inputTeams: false },
+  teamScroll: true,
   isRandom: false,
 };
 
 const inputDataReducer = (state = initialState, action) => {
   switch (action.type) {
-    case CONST.TOGGLE_FOCUS:
+    case CONST.TOGGLE_PLAYERS_FOCUS:
       return {
         ...state,
-        isFocused: action.isFocused,
+        isFocused: {
+          ...state.isFocused,
+          inputPlayers: action.isFocused,
+        },
+      };
+    case CONST.TOGGLE_TEAMS_FOCUS:
+      return {
+        ...state,
+        isFocused: {
+          ...state.isFocused,
+          inputTeams: action.isFocused,
+        },
       };
     case CONST.ADD_NEW_PLAYERS:
       const arrPlayerList = convertTextToArr(action.value);
@@ -118,83 +130,8 @@ const inputDataReducer = (state = initialState, action) => {
     case CONST.TOGGLE_RANDOM:
       return {
         ...state,
-        // isRandom: action.value, // для checkbox
-        isRandom: !state.isRandom, // для div
+        isRandom: !state.isRandom,
       };
-    /*
-      case CONST.DIVIDE_TEAMS: {
-      let restPlayersCount = state.playerList.length; // изначально кол-во оставшихся игроков равно списку;
-      let nextPlayerIndex = 0; // индекс игрока, с которого надо добавлять в след.команду;
-      let playerList = state.isRandom
-        ? setShuffledList(state.playerList)
-        : [...state.playerList]; // JSON.parse(JSON.stringify(state.playerList)) - глубокая копия
-        // ? resetTeamColors(setShuffledList(state.playerList))
-        // : resetTeamColors(state.playerList); // JSON.parse(JSON.stringify(state.playerList)) - глубокая копия
-      return {
-        ...state,
-        colorList: state.colorList.map((color) => ({
-          ...color,
-          usedById: null,
-        })),
-        teams: createNewTeams(state).map((team, i) => {
-          // проверка на запасную команду. Т.к. i начинается с 0, утверждение будет верно только при наличии лишней (запасной) команды
-          let isSubsTeam = +state.totalTeams === i;
-          let restTeamsCount = state.totalTeams - i; // сколько осталось команд (для расчета кол-ва игроков при недоборе игроков)
-          let computedPlayersCount; // количество игроков в каждую команду
-          isSubsTeam // если есть запасные, они будут отображаться все в одной команде
-            ? (computedPlayersCount = restPlayersCount)
-            : (computedPlayersCount =
-                playerList.length < setMaxPlayers(state) // при недоборе в каждую итерацию кол-во игроков считается относительно
-                  ? Math.ceil(restPlayersCount / restTeamsCount) // оставшегося количества игроков и команд для равномерного распределения
-                  : +state.maxPlayersInTeam); // преобразование в число (иначе nextPlayerIndex складывается конкатенацией)
-
-          // добавление игроков в команду
-          for (
-            let i = nextPlayerIndex;
-            i < nextPlayerIndex + computedPlayersCount;
-            i++
-          ) {
-            // проверка на наличие игрока, чтобы запасная команда не наполняла команду underfined-игроками
-            team.squad = [...team.squad, playerList[i]];
-          }
-          restPlayersCount = restPlayersCount - computedPlayersCount; // для след.итераций из оставшихся игроков вычитается кол-во игроков в команде
-          nextPlayerIndex = nextPlayerIndex + computedPlayersCount; // индекс для след.команды равен сумме всех игроков из предыдущих команд
-          return team;
-        }),
-      };
-    }
-    case CONST.CHANGE_TEAM_COLOR: {
-      const teamsColors = [...state.colorList]; // JSON.parse(JSON.stringify(state.colorList)) - глубокая копия
-      const currentColor = teamsColors.find(
-        (color) => color.usedById === action.teamId
-      ); // ищем, используется ли цвет командой
-      if (currentColor) {
-        // если используется
-        const currentIdx = teamsColors.indexOf(currentColor); // определяем индекс объекта цвета
-        teamsColors[currentIdx].usedById = null; // обнуляем текущий цвет
-        setNextTeamColor(currentIdx + 1, teamsColors, action.teamId); // устанавливаем цвет на ближайший пустой после текущего
-      } else {
-        // если не используется
-        setNextTeamColor(0, teamsColors, action.teamId); // устанавливаем цвет на ближайший пустой с начала списка
-      }
-      return {
-        ...state,
-        colorList: [...teamsColors],
-        teams: state.teams.map((team) => {
-          // обнуляем текущий цвет у команды (если не обнулить, цвет команды не будет заменяться
-          team.color = null; // на прозрачный в конце, а последний цвет массива будет оставаться 2 щелчка)
-          state.colorList.forEach((color) => {
-            // если в списке цветов цвет занят командой,
-            if (color.usedById === team.id) {
-              // находим его
-              team.color = color.color; // и устанавливаем нужный цвет команде
-            }
-          });
-          return { ...team };
-        }),
-      };
-    }
-    */
     default:
       return state;
   }
@@ -260,27 +197,3 @@ const checkForSubsPlayers = (playerIdx, setMaxPlayers) => {
 const setMaxPlayers = (state) => {
   return state.totalTeams * state.maxPlayersInTeam;
 };
-// алгоритм Фишера-Йейтса - Fisher–Yates shuffle
-// const setShuffledList = (list) => {
-//   let mainList = list.filter((player) => !player.subs);
-//   let subList = list.filter((player) => player.subs);
-//   for (var i = mainList.length - 1; i > 0; i--) {
-//     const randomIndex = Math.floor(Math.random() * (i + 1));
-//     [mainList[randomIndex], mainList[i]] = [mainList[i], mainList[randomIndex]];
-//   }
-//   return [...mainList, ...subList];
-// };
-// установка цвета на ближайший незанятый элемент массива
-// const setNextTeamColor = (startIdx, colorList, teamId) => {
-//   for (let i = startIdx; i < colorList.length; i++) {
-//     if (colorList[i].usedById === null) {
-//       colorList[i].usedById = teamId;
-//       break;
-//     }
-//   }
-// };
-
-// обнуление цветов команд для каждого нового деления
-// const resetTeamColors = (playerList) => {
-//   return playerList.map((player) => ({ ...player, color: null }));
-// };

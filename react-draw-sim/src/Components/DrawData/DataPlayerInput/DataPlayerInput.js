@@ -3,11 +3,11 @@ import "../DrawData.scss";
 
 const DataPlayerInput = (props) => {
   const [rows, setRows] = useState(0);
-  const showMsg = useRef();
+  const helpMsg = useRef();
 
-  !props.error.isValid &&
-    props.isFocused &&
-    setTimeout(() => showMsg.current.scrollIntoView(), 500);
+  if (!props.error.isValid && props.error.showErr) {
+    helpMsg.current.scrollIntoView({ block: "center" });
+  }
 
   const onInputChange = (e) => {
     props.onInputChangeTC(e.target.value);
@@ -18,11 +18,12 @@ const DataPlayerInput = (props) => {
   };
   const onInputFocus = () => {
     props.toggleFocus(true);
+    helpMsg.current.scrollIntoView();
   };
   return (
     <div className="playerInput">
-      <p className="errors" ref={showMsg}>
-        {!props.error.isValid && !props.isFocused && props.error.message}
+      <p className="errors" ref={helpMsg}>
+        {!props.error.isValid && props.error.showErr && props.error.message}
       </p>
       <textarea
         rows={rows}

@@ -25,8 +25,11 @@ const checkMaxTeamPlayersAC = (count) => {
 const updateSubsAC = () => {
   return { type: CONST.UPDATE_SUBS };
 };
-export const toggleFocusAC = (isFocused) => {
-  return { type: CONST.TOGGLE_FOCUS,  isFocused};
+export const togglePlayersFocusAC = (isFocused) => {
+  return { type: CONST.TOGGLE_PLAYERS_FOCUS, isFocused };
+};
+export const toggleTeamsFocusAC = (isFocused) => {
+  return { type: CONST.TOGGLE_TEAMS_FOCUS, isFocused };
 };
 export const toggleRandomAC = () => {
   return { type: CONST.TOGGLE_RANDOM };
@@ -35,6 +38,9 @@ export const toggleRandomAC = () => {
 //* teamsReducer
 const divideTeamsAC = (totalTeams, maxPlayersInTeam) => {
   return { type: CONST.DIVIDE_TEAMS, data: { totalTeams, maxPlayersInTeam } };
+};
+export const scrollToTeamsAC = () => {
+  return { type: CONST.SCROLL_TO_TEAMS };
 };
 const divideBasketTeamsAC = (totalTeams, maxPlayersInTeam) => {
   return {
@@ -68,10 +74,10 @@ const checkBasketLengthErrAC = (playerList, totalTeams) => {
     data: { playerList, totalTeams },
   };
 };
-const checkRequiredPlayersAC = (playerList, minPlayersCount) => {
+const checkRequiredPlayersAC = (playerList, minPlayersCount, isFocused) => {
   return {
     type: CONST.CHECK_REQUIRED_PLAYERS,
-    data: { playerList, minPlayersCount },
+    data: { playerList, minPlayersCount, isFocused },
   };
 };
 
@@ -81,16 +87,28 @@ export const onInputChangeTC = (text) => (dispatch, getState) => {
   dispatch(updateSubsAC());
   dispatch(calcBasketLengthAC());
   const state = getState().inputDataReducer;
-  const { playerList, totalTeams } = state;
-  dispatch(checkRequiredPlayersAC(playerList, minPlayersCount(state)));
+  const { playerList, totalTeams, isFocused } = state;
+  dispatch(
+    checkRequiredPlayersAC(playerList, minPlayersCount(state), isFocused)
+  );
   dispatch(checkForRepeatedPlayersAC(playerList));
   dispatch(checkBasketLengthErrAC(playerList, totalTeams));
   dispatch(checkValidationAC());
 };
 export const onInputBlurTC = () => (dispatch, getState) => {
-  dispatch(toggleFocusAC(false));
-  const state = getState().inputDataReducer;
-  dispatch(checkRequiredPlayersAC(state.playerList, minPlayersCount(state)));
+  // ждем 500мс на случай, если сразу установили фокус на поле ввода числа команд
+  // (чтобы избежать прокрутки к ошибке)
+  setTimeout(() => {
+    dispatch(togglePlayersFocusAC(false));
+    const state = getState().inputDataReducer;
+    dispatch(
+      checkRequiredPlayersAC(
+        state.playerList,
+        minPlayersCount(state),
+        state.isFocused
+      )
+    );
+  }, 500);
 };
 
 export const onDataPlayerClickTC = (playerId) => (dispatch, getState) => {
@@ -106,22 +124,30 @@ export const onTeamCountChangeTC = (count) => (dispatch, getState) => {
   dispatch(updateSubsAC());
   dispatch(calcBasketLengthAC());
   const state = getState().inputDataReducer;
-  const { playerList, totalTeams } = state;
-  dispatch(checkRequiredPlayersAC(playerList, minPlayersCount(state)));
+  const { playerList, totalTeams, isFocused } = state;
+  dispatch(
+    checkRequiredPlayersAC(playerList, minPlayersCount(state), isFocused)
+  );
   dispatch(checkBasketLengthErrAC(playerList, totalTeams));
   dispatch(checkValidationAC());
 };
 
 export const onTeamCountBlurTC = (count) => (dispatch, getState) => {
+  // ждем 500мс на случай, если сразу установили фокус на поле ввода игроков
+  // (чтобы избежать прокрутки к ошибке)
   dispatch(checkTeamsCountAC(count));
   dispatch(updateSubsAC());
   dispatch(calcBasketLengthAC());
-  dispatch(toggleFocusAC(false));
-  const state = getState().inputDataReducer;
-  const { playerList, totalTeams } = state;
-  dispatch(checkRequiredPlayersAC(playerList, minPlayersCount(state)));
-  dispatch(checkBasketLengthErrAC(playerList, totalTeams));
-  dispatch(checkValidationAC());
+  setTimeout(() => {
+    dispatch(toggleTeamsFocusAC(false));
+    const state = getState().inputDataReducer;
+    const { playerList, totalTeams, isFocused } = state;
+    dispatch(
+      checkRequiredPlayersAC(playerList, minPlayersCount(state), isFocused)
+    );
+    dispatch(checkBasketLengthErrAC(playerList, totalTeams));
+    dispatch(checkValidationAC());
+  }, 500);
 };
 
 export const onMaxPlayersChangeTC = (count) => (dispatch) => {
@@ -147,6 +173,9 @@ export const divideTeamsTC = () => (dispatch, getState) => {
       dispatch(preparePlayerListAC(playerList, isRandom));
       dispatch(divideTeamsAC(totalTeams, maxPlayersInTeam));
     }
+    // В данном случае не важно, true или false. При любой смене будет происходить прокрутка к командам.
+    // Смена просиходит только при нажатии кнопки деления
+    dispatch(scrollToTeamsAC());
   }
 };
 

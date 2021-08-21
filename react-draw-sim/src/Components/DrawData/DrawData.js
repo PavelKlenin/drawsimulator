@@ -16,7 +16,7 @@ const DrawData = (props) => {
         error={props.error.reqiuredPlayers}
         onInputChangeTC={props.onInputChangeTC}
         onInputBlur={props.onInputBlurTC}
-        toggleFocus={props.toggleFocusAC}
+        toggleFocus={props.togglePlayersFocusAC}
         className="list"
         placeholder="Список участников"
       />
@@ -34,7 +34,7 @@ const DrawData = (props) => {
           error={props.error.requiredPlayers}
           onCountChange={props.onTeamCountChangeTC}
           onCountBlur={props.onTeamCountBlurTC}
-          toggleFocus={props.toggleFocusAC}
+          toggleFocus={props.toggleTeamsFocusAC}
           maxLength="2"
           value={props.totalTeams}
         />

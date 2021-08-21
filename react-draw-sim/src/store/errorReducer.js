@@ -3,7 +3,7 @@ import * as CONST from "./consts";
 const initialState = {
   isValid: false,
   error: {
-    reqiuredPlayers: { isValid: false, message: "" },
+    reqiuredPlayers: { isValid: false, showErr: false, message: "" },
     repeatedPlayers: { isValid: true, message: "" },
     filledBasket: { isValid: true, message: "" },
   },
@@ -40,7 +40,8 @@ const errorReducer = (state = initialState, action) => {
         },
       };
     }
-    case CONST.CHECK_REQUIRED_PLAYERS:
+    case CONST.CHECK_REQUIRED_PLAYERS: {
+      const {playerList, minPlayersCount, isFocused} = {...action.data};
       return {
         ...state,
         error: {
@@ -48,15 +49,18 @@ const errorReducer = (state = initialState, action) => {
           reqiuredPlayers: {
             ...state.error.reqiuredPlayers,
             isValid:
-              action.data.playerList.length >= action.data.minPlayersCount,
+              playerList.length >= minPlayersCount,
+            showErr: !(isFocused.inputPlayers || isFocused.inputTeams),
             message: (
               <pre>
-                {`Недостаточно игроков.\nМинимальное количество - ${action.data.minPlayersCount}`}
+                {`Недостаточно игроков.\nМинимальное количество - ${minPlayersCount}`}
               </pre>
             ),
           },
         },
       };
+    }
+
     case CONST.CHECK_BASKET_LENGTH_ERR:
       const { playerList, totalTeams } = { ...action.data };
       return {

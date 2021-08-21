@@ -8,7 +8,8 @@ import {
   toggleRandomAC,
   onInputChangeTC,
   onInputBlurTC,
-  toggleFocusAC,
+  togglePlayersFocusAC,
+  toggleTeamsFocusAC,
   onDataPlayerClickTC
 } from "../../store/actions";
 import DrawData from "./DrawData";
@@ -36,7 +37,8 @@ const mapDispatchToProps = {
   toggleRandomAC,
   onInputChangeTC,
   onInputBlurTC,
-  toggleFocusAC,
+  togglePlayersFocusAC,
+  toggleTeamsFocusAC,
   onDataPlayerClickTC
 };
 

@@ -5,6 +5,7 @@ import Teams from "./Teams";
 const mapStateToProps = (state) => {
   return {
     teams: state.teamsReducer.teams,
+    teamScroll: state.teamsReducer.teamScroll,
   };
 };
 

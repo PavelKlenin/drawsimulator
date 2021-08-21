@@ -12,6 +12,7 @@ const initialState = {
     { id: 7, color: "teamWhite", usedById: null },
   ],
   teams: [], // { id: 1, title: title, squad: [], color: null, isSub: false,}
+  teamScroll: false,
 };
 
 const teamsReducer = (state = initialState, action) => {
@@ -145,6 +146,13 @@ const teamsReducer = (state = initialState, action) => {
         }),
       };
     }
+    case CONST.SCROLL_TO_TEAMS:
+      // В данном случае не важно, true или false. При любой смене будет происходить прокрутка к командам.
+      // Смена просиходит только при нажатии кнопки деления
+      return {
+        ...state,
+        teamScroll: !state.teamScroll, 
+      };
     default:
       return state;
   }
