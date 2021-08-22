@@ -11,21 +11,7 @@ const DrawData = (props) => {
   };
   return (
     <div className="data-content">
-      <DataPlayerInput
-        isFocused={props.isFocused}
-        error={props.error.reqiuredPlayers}
-        onInputChangeTC={props.onInputChangeTC}
-        onInputBlur={props.onInputBlurTC}
-        toggleFocus={props.togglePlayersFocusAC}
-        className="list"
-        placeholder="Список участников"
-      />
-      <DataPlayerList
-        error={props.error}
-        playerList={props.playerList}
-        onPlayerClick={props.onDataPlayerClickTC}
-      />
-      <div className="conditions">
+      <div className="countInputsSm">
         <p className="errors"></p>
         <DataCountInput
           className="teamCondition"
@@ -47,6 +33,45 @@ const DrawData = (props) => {
           maxLength="3"
           value={props.maxPlayersInTeam}
         />
+      </div>
+      <DataPlayerInput
+        isFocused={props.isFocused}
+        error={props.error.reqiuredPlayers}
+        onInputChangeTC={props.onInputChangeTC}
+        onInputBlur={props.onInputBlurTC}
+        toggleFocus={props.togglePlayersFocusAC}
+        className="list"
+        placeholder="Список участников"
+      />
+      <DataPlayerList
+        error={props.error}
+        playerList={props.playerList}
+        onPlayerClick={props.onDataPlayerClickTC}
+      />
+      <div className="conditions">
+        <div className="countInputsLg">
+          <p className="errors"></p>
+          <DataCountInput
+            className="teamCondition"
+            title="Количество команд:"
+            inputClassName="teamsCount"
+            error={props.error.requiredPlayers}
+            onCountChange={props.onTeamCountChangeTC}
+            onCountBlur={props.onTeamCountBlurTC}
+            toggleFocus={props.toggleTeamsFocusAC}
+            maxLength="2"
+            value={props.totalTeams}
+          />
+          <DataCountInput
+            className="playersCondition"
+            title="Количество&nbsp;игроков&nbsp;в&nbsp;команде&nbsp;(max):"
+            inputClassName="maxPlayersCount"
+            onCountChange={props.onMaxPlayersChangeTC}
+            onCountBlur={props.onMaxPlayersBlurTC}
+            maxLength="3"
+            value={props.maxPlayersInTeam}
+          />
+        </div>
         <DataRandTeamBtn
           className="playersCondition"
           inputClassName="randomToggle"

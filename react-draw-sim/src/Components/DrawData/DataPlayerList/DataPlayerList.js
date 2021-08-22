@@ -6,6 +6,7 @@ const DataPlayerList = (props) => {
   const playerList = props.playerList.map((player) => {
     return (
       <DataPlayer
+        key={player.id}
         {...player}
         error={props.error}
         onPlayerClick={props.onPlayerClick}

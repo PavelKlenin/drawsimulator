@@ -13,7 +13,6 @@ const DataPlayer = (props) => {
       className={`player ${props.subs || error ? "disabledPlayer" : ""} ${
         props.repeated || props.overflowed ? "errorPlayer" : ""
       }`}
-      key={props.id}
       onClick={onPlayerClick}>
       {props.name}
       {props.basket > 0 && (
