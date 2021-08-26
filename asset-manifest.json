@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/drawsimulator/static/css/main.2066f32c.chunk.css",
+    "main.js": "/drawsimulator/static/js/main.3ad0b756.chunk.js",
+    "main.js.map": "/drawsimulator/static/js/main.3ad0b756.chunk.js.map",
+    "runtime-main.js": "/drawsimulator/static/js/runtime-main.0f0c4c6f.js",
+    "runtime-main.js.map": "/drawsimulator/static/js/runtime-main.0f0c4c6f.js.map",
+    "static/js/2.969fb12e.chunk.js": "/drawsimulator/static/js/2.969fb12e.chunk.js",
+    "static/js/2.969fb12e.chunk.js.map": "/drawsimulator/static/js/2.969fb12e.chunk.js.map",
+    "static/js/3.5f1a206f.chunk.js": "/drawsimulator/static/js/3.5f1a206f.chunk.js",
+    "static/js/3.5f1a206f.chunk.js.map": "/drawsimulator/static/js/3.5f1a206f.chunk.js.map",
+    "index.html": "/drawsimulator/index.html",
+    "static/css/main.2066f32c.chunk.css.map": "/drawsimulator/static/css/main.2066f32c.chunk.css.map",
+    "static/js/2.969fb12e.chunk.js.LICENSE.txt": "/drawsimulator/static/js/2.969fb12e.chunk.js.LICENSE.txt",
+    "static/media/index.scss": "/drawsimulator/static/media/champions.d147915e.ttf"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.0f0c4c6f.js",
+    "static/js/2.969fb12e.chunk.js",
+    "static/css/main.2066f32c.chunk.css",
+    "static/js/main.3ad0b756.chunk.js"
+  ]
+}
