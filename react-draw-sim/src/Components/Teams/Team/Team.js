@@ -10,14 +10,13 @@ const Team = (props) => {
   // происходить прокрутка к командам; props.teamScroll меняется только при делении
   const team = useRef();
   useEffect(() => {
-    team.current.scrollIntoView();
-  }, [props.teamScroll]);
+    props.teamId === 1 && team.current.scrollIntoView();
+  }, [props.teamScroll, props.teamId]);
 
   const changeTeamColor = () => {
     props.changeTeamColor(props.teamId);
     setClicked(true);
   };
-
   return (
     <div className="newTeam" ref={team}>
       {props.isSub ? (

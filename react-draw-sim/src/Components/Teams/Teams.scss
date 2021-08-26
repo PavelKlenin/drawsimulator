@@ -4,6 +4,7 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  padding-top: $indent-big;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   -ms-flex-pack: distribute;
@@ -35,9 +36,15 @@
   }
 
   .teamName {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     background: transparent;
     padding: $indent-small/2;
     margin-bottom: $indent-small/2;

@@ -41,21 +41,16 @@ const errorReducer = (state = initialState, action) => {
       };
     }
     case CONST.CHECK_REQUIRED_PLAYERS: {
-      const {playerList, minPlayersCount, isFocused} = {...action.data};
+      const { playerList, minPlayersCount, isFocused } = { ...action.data };
       return {
         ...state,
         error: {
           ...state.error,
           reqiuredPlayers: {
             ...state.error.reqiuredPlayers,
-            isValid:
-              playerList.length >= minPlayersCount,
+            isValid: playerList.length >= minPlayersCount,
             showErr: !(isFocused.inputPlayers || isFocused.inputTeams),
-            message: (
-              <pre>
-                {`Недостаточно игроков.\nМинимальное количество - ${minPlayersCount}`}
-              </pre>
-            ),
+            message: `Недостаточно игроков.\nМинимальное количество - ${minPlayersCount}`,
           },
         },
       };

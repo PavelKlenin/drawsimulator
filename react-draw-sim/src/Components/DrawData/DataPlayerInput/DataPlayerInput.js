@@ -22,9 +22,9 @@ const DataPlayerInput = (props) => {
   };
   return (
     <div className="playerInput">
-      <p className="errors" ref={helpMsg}>
+      <pre className="errors" ref={helpMsg}>
         {!props.error.isValid && props.error.showErr && props.error.message}
-      </p>
+      </pre>
       <textarea
         rows={rows}
         onChange={onInputChange}
