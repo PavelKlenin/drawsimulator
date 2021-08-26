@@ -1,0 +1,9 @@
+@import "../../style/variables.scss";
+
+.footer {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+  padding: $indent-med;
+  font-size: 12px;
+}

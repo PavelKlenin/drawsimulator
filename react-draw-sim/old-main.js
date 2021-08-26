@@ -14,93 +14,90 @@ const conditionErrors = document.querySelector('.condition-errors')
 
 
 //! ОБРАБОТКА ОШИБОК !//
-
-const resetErrors = (errors, DOMList = []) => {
-  errors.forEach(error => {
-    error.classList.remove('listErrors')
-    error.classList.remove('arrListErrors')
-    error.classList.remove('conditionErrors')
-  })
-  DOMList.forEach(item => {
-    item.classList.remove('repeated')
-  })
-}
-
-
-const errorText = (errors, text) => {
-  errors.forEach(error => {
-    error.innerHTML = text
-  })
-}
-
-const localError = (errors, mainErrors, errorName, DOMList = []) => {
-  let addingClass
-  switch (errorName) {
-    case listErrors:
-      addingClass = 'listErrors'
-      break;
-    case arrListErrors:
-      addingClass = 'arrListErrors'
-      break;
-    default:
-      addingClass = 'conditionErrors'
-      break;
+{
+  const resetErrors = (errors, DOMList = []) => {
+    errors.forEach(error => {
+      error.classList.remove('listErrors')
+      error.classList.remove('arrListErrors')
+      error.classList.remove('conditionErrors')
+    })
+    DOMList.forEach(item => {
+      item.classList.remove('repeated')
+    })
   }
-  resetErrors(errors, DOMList)
-  mainErrors.classList.add(`${addingClass}`)
-  errorName.classList.add(`${addingClass}`)
-  const display = window.getComputedStyle(errorName).display
-  display == 'none' ? 
-    mainErrors.scrollIntoView({block: 'start', behavior: 'smooth'}) :
-    errorName.scrollIntoView({block: 'start', behavior: 'smooth'})
-}
-
-const checkRepeatedPlayer = (DOMList) => {
-  DOMList.forEach((item, index) => {
-    for (let i = index + 1; i < DOMList.length; i++) {
-      if (item.innerHTML.toUpperCase() === DOMList[i].innerHTML.toUpperCase()) {
-        !item.classList.contains('repeated') ? item.classList.add('repeated') : null;
-        !DOMList[i].classList.contains('repeated') ? DOMList[i].classList.add('repeated') : null;
+  const errorText = (errors, text) => {
+    errors.forEach(error => {
+      error.innerHTML = text
+    })
+  }
+  const localError = (errors, mainErrors, errorName, DOMList = []) => {
+    let addingClass
+    switch (errorName) {
+      case listErrors:
+        addingClass = 'listErrors'
+        break;
+      case arrListErrors:
+        addingClass = 'arrListErrors'
+        break;
+      default:
+        addingClass = 'conditionErrors'
+        break;
+    }
+    resetErrors(errors, DOMList)
+    mainErrors.classList.add(`${addingClass}`)
+    errorName.classList.add(`${addingClass}`)
+    const display = window.getComputedStyle(errorName).display
+    display == 'none' ? 
+      mainErrors.scrollIntoView({block: 'start', behavior: 'smooth'}) :
+      errorName.scrollIntoView({block: 'start', behavior: 'smooth'})
+  }
+  const checkRepeatedPlayer = (DOMList) => {
+    DOMList.forEach((item, index) => {
+      for (let i = index + 1; i < DOMList.length; i++) {
+        if (item.innerHTML.toUpperCase() === DOMList[i].innerHTML.toUpperCase()) {
+          !item.classList.contains('repeated') ? item.classList.add('repeated') : null;
+          !DOMList[i].classList.contains('repeated') ? DOMList[i].classList.add('repeated') : null;
+        }
+      }
+    })
+  
+    for (let i = 0; i < DOMList.length; i++) {
+      if (DOMList[i].classList.contains('repeated')) {
+        return false
       }
     }
-  })
-
-  for (let i = 0; i < DOMList.length; i++) {
-    if (DOMList[i].classList.contains('repeated')) {
-      return false
-    }
+  
+    return true
   }
-
-  return true
+  const checkErrors = (arrList, numTeams, numPlayers, DOMList = []) => {
+    if (numTeams <= 0 || !parseInt(numTeams)) {
+      errorText(errors, 'Введите количество команд')
+      localError(errors, mainErrors, conditionErrors)
+      return false
+    } else if (numPlayers <= 0 || !parseInt(numPlayers)) {
+      errorText(errors, 'Введите количество игроков')
+      localError(errors, mainErrors, conditionErrors)
+      return false
+    } else if (!arrList || !arrList[0]) {
+      errorText(errors, 'Недостаточно игроков')
+      localError(errors, mainErrors, listErrors)
+      return false
+    } else if (numTeams > arrList.length) {
+      errorText(errors, 'Недостаточно игроков')
+      localError(errors, mainErrors, listErrors)
+      return false
+    } else if ((numTeams * numPlayers) > arrList.length) { // Для деления без рандома
+      errorText(errors, `Необходимо ${numTeams * numPlayers} игроков`)
+      localError(errors, mainErrors, listErrors)
+      return false
+    } else if (!checkRepeatedPlayer(DOMList)) {
+      errorText(errors, 'Повторяющиеся игроки')
+      localError(errors, mainErrors, arrListErrors)
+      return false
+    } return true  
+  }
 }
 
-const checkErrors = (arrList, numTeams, numPlayers, DOMList = []) => {
-  if (numTeams <= 0 || !parseInt(numTeams)) {
-    errorText(errors, 'Введите количество команд')
-    localError(errors, mainErrors, conditionErrors)
-    return false
-  } else if (numPlayers <= 0 || !parseInt(numPlayers)) {
-    errorText(errors, 'Введите количество игроков')
-    localError(errors, mainErrors, conditionErrors)
-    return false
-  } else if (!arrList || !arrList[0]) {
-    errorText(errors, 'Недостаточно игроков')
-    localError(errors, mainErrors, listErrors)
-    return false
-  } else if (numTeams > arrList.length) {
-    errorText(errors, 'Недостаточно игроков')
-    localError(errors, mainErrors, listErrors)
-    return false
-  } else if ((numTeams * numPlayers) > arrList.length) { // Для деления без рандома
-    errorText(errors, `Необходимо ${numTeams * numPlayers} игроков`)
-    localError(errors, mainErrors, listErrors)
-    return false
-  } else if (!checkRepeatedPlayer(DOMList)) {
-    errorText(errors, 'Повторяющиеся игроки')
-    localError(errors, mainErrors, arrListErrors)
-    return false
-  } return true  
-}
 
 //! ПРОВЕРКА НА ПУСТЫЕ СТРОКИ ВВОДА !//
 

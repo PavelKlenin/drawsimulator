@@ -134,7 +134,8 @@ body {
     background-color: $color-mark;
     font-weight: bold;
     -webkit-transition-duration: 0.6s;
-            transition-duration: 0.6s;
+            -o-transition-duration: 0.6s;
+       transition-duration: 0.6s;
     cursor: pointer;
     
     &:hover {
@@ -192,7 +193,8 @@ body {
       color: $color-light;
       background-color: transparent;
       -webkit-transition-duration: 0.6s;
-              transition-duration: 0.6s;
+              -o-transition-duration: 0.6s;
+         transition-duration: 0.6s;
   
       &:focus {
         border-color: #fff;
@@ -205,7 +207,8 @@ body {
       text-transform: capitalize;
       border-radius: $indent-small/2;
       -webkit-transition-duration: 0.6s;
-              transition-duration: 0.6s;
+              -o-transition-duration: 0.6s;
+         transition-duration: 0.6s;
       background-color: $bgrd-dark;
       border: 1px solid transparent;
       cursor: pointer;
@@ -284,6 +287,7 @@ body {
       background-color: transparent;
       color: $color-mark;
       -webkit-transition: 0.6s;
+      -o-transition: 0.6s;
       transition: 0.6s;
 
       &:focus {
@@ -331,7 +335,10 @@ body {
     }
   
     .teamName {
-      padding: $indent-small;
+      background: transparent;
+      padding: $indent-small/2;
+      margin-bottom: $indent-small/2;
+      border-radius: $indent-small/2;
       font-family: 'Champions-Bold', sans-serif;
       text-transform: uppercase;
     }
@@ -342,7 +349,8 @@ body {
       margin-bottom: $indent-small/2;
       border-radius: $indent-small/2;
       -webkit-transition-duration: 0.6s;
-              transition-duration: 0.6s;
+              -o-transition-duration: 0.6s;
+         transition-duration: 0.6s;
       background-color: $bgrd-dark;
     }
   }

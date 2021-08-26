@@ -1,0 +1,13 @@
+@import "../../style/variables.scss";
+
+.header {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  padding: $indent-med;
+
+  .title {
+    font-family: "Champions-Bold", sans-serif;
+    text-align: center;
+  }
+}

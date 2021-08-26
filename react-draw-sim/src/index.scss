@@ -1,0 +1,36 @@
+@import "./style/variables.scss";
+
+@font-face {
+  font-family: 'Champions';
+  src: url(./fonts/champions.ttf);
+}
+
+@font-face {
+  font-family: 'Champions-Bold';
+  src: url(./fonts/champions-bold.ttf);
+  font-weight: bold;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0 auto;
+  max-width: 1600px;
+  font-family: 'Champions', Verdana, sans-serif;
+  color: $color-light;
+  background: $color-dark url('./img/champions-league.jpg') no-repeat center fixed;
+  background-size: cover;
+}
