@@ -65,8 +65,8 @@
     display: -ms-flexbox;
     display: flex;
     -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
     padding: $indent-small/2;
     margin-bottom: $indent-small/2;
     text-transform: capitalize;
@@ -181,7 +181,7 @@
 
   .countInputsSm {
     display: none;
-    
+
     @media (max-width: 1023px) {
       display: block;
     }

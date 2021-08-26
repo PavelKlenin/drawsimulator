@@ -35,6 +35,9 @@
   }
 
   .teamName {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background: transparent;
     padding: $indent-small/2;
     margin-bottom: $indent-small/2;

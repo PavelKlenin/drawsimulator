@@ -69,12 +69,12 @@ const errorReducer = (state = initialState, action) => {
           ...state.error,
           filledBasket: {
             ...state.error.filledBasket,
-            isValid: !playerList.some((player) => player.overflowed)
+            isValid: !playerList.some((player) => player.filledBasket)
               ? true
               : false,
-            message: !playerList.some((player) => player.overflowed)
+            message: !playerList.some((player) => player.filledBasket)
               ? ""
-              : `Максимум игроков в каждой группе - ${totalTeams}`,
+              : `Максимум игроков в каждой "корзине" - ${totalTeams}`,
           },
         },
       };

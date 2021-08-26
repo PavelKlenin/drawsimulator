@@ -1,12 +1,11 @@
 import * as CONST from "./consts";
 
 const initialState = {
-  playerList: [], // { id: 1, name: player, subs: false, basket: 0, repeated: false,}
+  playerList: [], // { id: 1, name: player, subs: false, basket: 0, filledBasket: false, repeated: false,}
   totalTeams: 3,
   maxPlayersInTeam: 5,
   minPlayersInTeam: 2,
   isFocused: { inputPlayers: true, inputTeams: false },
-  teamScroll: true,
   isRandom: false,
 };
 
@@ -39,7 +38,7 @@ const inputDataReducer = (state = initialState, action) => {
               name: player,
               subs: checkForSubsPlayers(idx + 1, setMaxPlayers(state)),
               basket: state.playerList[idx] ? state.playerList[idx].basket : 0,
-              overflowed: false,
+              filledBasket: false,
               repeated: arrPlayerList.find((samePlayer, i) => {
                 return (
                   samePlayer.toUpperCase() === player.toUpperCase() && i !== idx
@@ -69,7 +68,7 @@ const inputDataReducer = (state = initialState, action) => {
         playerList: state.playerList.map((player) => {
           return {
             ...player,
-            overflowed:
+            filledBasket:
               state.playerList.filter(
                 (p) =>
                   player.basket &&

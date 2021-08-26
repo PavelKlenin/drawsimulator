@@ -13,6 +13,7 @@ import {
   onDataPlayerClickTC
 } from "../../store/actions";
 import DrawData from "./DrawData";
+import { PLAYER_BASKET_TIP } from '../../store/tooltipReducer';
 
 const mapStateToProps = (state) => {
   return {
@@ -24,6 +25,7 @@ const mapStateToProps = (state) => {
     teams: state.inputDataReducer.teams,
     isValid: state.errorReducer.isValid,
     error: state.errorReducer.error,
+    basketTipName: PLAYER_BASKET_TIP, 
   }
 
 };

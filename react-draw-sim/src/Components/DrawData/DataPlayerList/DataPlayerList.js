@@ -9,6 +9,7 @@ const DataPlayerList = (props) => {
         key={player.id}
         {...player}
         error={props.error}
+        basketTipName={props.basketTipName}
         onPlayerClick={props.onPlayerClick}
       />
     );

@@ -44,6 +44,7 @@ const DrawData = (props) => {
         placeholder="Список участников"
       />
       <DataPlayerList
+        basketTipName={props.basketTipName}
         error={props.error}
         playerList={props.playerList}
         onPlayerClick={props.onDataPlayerClickTC}
